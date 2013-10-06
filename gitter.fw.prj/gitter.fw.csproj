@@ -135,6 +135,11 @@
     <Compile Include="Native\WINDOWPOS.cs" />
     <Compile Include="Native\WNDPROC.cs" />
     <Compile Include="Native\WVR.cs" />
+    <Compile Include="Properties\Resources.ru-RU.Designer.cs">
+      <DependentUpon>Resources.ru-RU.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Styles\MSVS2012LightColors.cs" />
     <Compile Include="Styles\MSVS2012Style.cs" />
     <Compile Include="Styles\MSVS2012LightStyle.cs" />
@@ -626,6 +631,11 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Options\SpellingPage.resx">
       <DependentUpon>SpellingPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.ru-RU.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.ru-RU.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Services\MessageBox\MessageBoxForm.resx">
       <DependentUpon>MessageBoxForm.cs</DependentUpon>

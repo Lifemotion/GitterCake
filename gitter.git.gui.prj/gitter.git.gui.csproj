@@ -101,6 +101,11 @@
     <Compile Include="Notifications\ReferencesChangedNotification.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Properties\Resources.ru-RU.Designer.cs">
+      <DependentUpon>Resources.ru-RU.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="RevisionToolTip.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -859,6 +864,11 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ListBoxes\Extenders\UserColumnExtender.resx">
       <DependentUpon>UserColumnExtender.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.ru-RU.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.ru-RU.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\BlameView.resx">
       <DependentUpon>BlameView.cs</DependentUpon>
