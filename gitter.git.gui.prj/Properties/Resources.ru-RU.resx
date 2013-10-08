@@ -161,7 +161,7 @@
     <value>..\Resources\push.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StrAuthor" xml:space="preserve">
-    <value>Author</value>
+    <value>Автор</value>
   </data>
   <data name="StrAuthorDate" xml:space="preserve">
     <value>Author Date</value>
@@ -378,7 +378,7 @@
     <value>..\Resources\remote.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StrAuthorEmail" xml:space="preserve">
-    <value>Author Email</value>
+    <value>Email автора</value>
   </data>
   <data name="StrCommitterEmail" xml:space="preserve">
     <value>Committer Email</value>
@@ -408,7 +408,7 @@
     <value>Abbreviate</value>
   </data>
   <data name="StrAlignToGraph" xml:space="preserve">
-    <value>Align to Graph</value>
+    <value>Выровнять по графу</value>
   </data>
   <data name="StrShowEmail" xml:space="preserve">
     <value>Show Email</value>
@@ -474,7 +474,7 @@
     <value>..\Resources\diff.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StrAdded" xml:space="preserve">
-    <value>Added</value>
+    <value>Добавлено</value>
   </data>
   <data name="StrModified" xml:space="preserve">
     <value>Modified</value>
@@ -516,7 +516,7 @@
     <value>Merge Multiple Branches</value>
   </data>
   <data name="StrAddRemote" xml:space="preserve">
-    <value>Add Remote</value>
+    <value>Добавить удаленный</value>
   </data>
   <data name="StrRemoveRemote" xml:space="preserve">
     <value>Remove Remote</value>
@@ -791,7 +791,7 @@ such as "&lt;branchname&gt;@{yesterday}". Note that in non-bare repositories, re
 by the core.logallrefupdates config option.</value>
   </data>
   <data name="StrAdd" xml:space="preserve">
-    <value>Add</value>
+    <value>Добавить</value>
   </data>
   <data name="TipCheckoutAfterCreation" xml:space="preserve">
     <value>Switch HEAD to newly created branch.</value>
@@ -837,10 +837,10 @@ share many of the same objects in common. Enabled by default.</value>
     <value>Clone Repository</value>
   </data>
   <data name="StrInit" xml:space="preserve">
-    <value>Init</value>
+    <value>Новый</value>
   </data>
   <data name="StrInitRepository" xml:space="preserve">
-    <value>Init Repository</value>
+    <value>Иниуиализировать новый репозиторий</value>
   </data>
   <data name="StrPath" xml:space="preserve">
     <value>Path</value>
@@ -900,7 +900,7 @@ share many of the same objects in common. Enabled by default.</value>
     <value>..\Resources\user.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StrAdvancedOptions" xml:space="preserve">
-    <value>Advanced Options</value>
+    <value>Расширенные настройки</value>
   </data>
   <data name="ErrFailedToRemoveTag" xml:space="preserve">
     <value>Unable to remove tag '{0}'</value>
@@ -1038,10 +1038,10 @@ share many of the same objects in common. Enabled by default.</value>
     <value>..\Resources\unstage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StrAddParameter" xml:space="preserve">
-    <value>Add Parameter</value>
+    <value>Добавить параметры</value>
   </data>
   <data name="StrAddSubmodule" xml:space="preserve">
-    <value>Add Submodule</value>
+    <value>Добавить субмодуль</value>
   </data>
   <data name="StrLessContext" xml:space="preserve">
     <value>Less Context</value>
@@ -1126,7 +1126,7 @@ Are you sure you want to delete it?</value>
     <value>Unable to pop stashed state</value>
   </data>
   <data name="StrApply" xml:space="preserve">
-    <value>Apply</value>
+    <value>Применить</value>
   </data>
   <data name="StrPop" xml:space="preserve">
     <value>Pop</value>
@@ -1217,7 +1217,7 @@ Proceed?</value>
     <value>Conflicts</value>
   </data>
   <data name="StrAmend" xml:space="preserve">
-    <value>Amend</value>
+    <value>Исправить</value>
   </data>
   <data name="StrDiff" xml:space="preserve">
     <value>Diff</value>
@@ -1355,7 +1355,7 @@ Proceed?</value>
     <value>..\Resources\remote-properties.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StrAll" xml:space="preserve">
-    <value>All</value>
+    <value>Все</value>
   </data>
   <data name="StrNone" xml:space="preserve">
     <value>None</value>
@@ -1394,7 +1394,7 @@ Proceed?</value>
     <value>Git Version Check</value>
   </data>
   <data name="StrInstalledVersion" xml:space="preserve">
-    <value>Installed git Version</value>
+    <value>Установленная версия git</value>
   </data>
   <data name="StrlDownload" xml:space="preserve">
     <value>download</value>
@@ -1514,7 +1514,7 @@ with the remote with the git-remote-&lt;vcs&gt; helper.</value>
     <value>..\Resources\sticky-note--pencil.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StrAddNote" xml:space="preserve">
-    <value>Add Note</value>
+    <value>Добавить заметку</value>
   </data>
   <data name="StrMergeTool" xml:space="preserve">
     <value>Merge Tool</value>
@@ -1616,13 +1616,13 @@ with the remote with the git-remote-&lt;vcs&gt; helper.</value>
     <value>Unable to remove branch '{0}' from '{1}'</value>
   </data>
   <data name="StrIntegration" xml:space="preserve">
-    <value>Integration</value>
+    <value>Интеграция</value>
   </data>
   <data name="StrAccessMethod" xml:space="preserve">
-    <value>Access Method</value>
+    <value>Метод доступа</value>
   </data>
   <data name="StrAutodetect" xml:space="preserve">
-    <value>Autodetect</value>
+    <value>Автоопределение</value>
   </data>
   <data name="StrFoundVersion" xml:space="preserve">
     <value>Found Version</value>
@@ -2094,7 +2094,7 @@ a new history totally disconnected from all the other branches and commits.</val
     <value>..\Resources\rebase-skip.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StrAbort" xml:space="preserve">
-    <value>Abort</value>
+    <value>Прервать</value>
   </data>
   <data name="StrContinue" xml:space="preserve">
     <value>Continue</value>
@@ -2154,7 +2154,7 @@ a new history totally disconnected from all the other branches and commits.</val
     <value>Working directory clean</value>
   </data>
   <data name="StrAddedFiles" xml:space="preserve">
-    <value>Added Files</value>
+    <value>Добавлены файлы</value>
   </data>
   <data name="StrModifiedFiles" xml:space="preserve">
     <value>Modified Files</value>
@@ -2211,7 +2211,7 @@ a new history totally disconnected from all the other branches and commits.</val
     <value>Resolve Conflict</value>
   </data>
   <data name="StrApplyPatches" xml:space="preserve">
-    <value>Apply Patches</value>
+    <value>Применить патчи</value>
   </data>
   <data name="StrPatch" xml:space="preserve">
     <value>Patch</value>
@@ -2291,10 +2291,10 @@ Proceed?</value>
     <value>Reverse</value>
   </data>
   <data name="StrApplyTo" xml:space="preserve">
-    <value>Apply to</value>
+    <value>Применить к</value>
   </data>
   <data name="StrIndex" xml:space="preserve">
-    <value>Index</value>
+    <value>Индекс</value>
   </data>
   <data name="StrsIndexAndWorkingDirectory" xml:space="preserve">
     <value>Index and working directory</value>
@@ -2309,10 +2309,10 @@ Proceed?</value>
     <value>..\Resources\patch.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StrAddFiles" xml:space="preserve">
-    <value>Add Files</value>
+    <value>Добавить файлы</value>
   </data>
   <data name="StrAddFromClipboard" xml:space="preserve">
-    <value>Add From Clipboard</value>
+    <value>Добавить из буфера обмена</value>
   </data>
   <data name="StrsIncludeUntrackedFiles" xml:space="preserve">
     <value>Include untracked files</value>
@@ -2438,7 +2438,7 @@ Proceed?</value>
     <value>..\Resources\folder-zipper.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StrArchive" xml:space="preserve">
-    <value>Archive</value>
+    <value>Архивировать</value>
   </data>
   <data name="ErrFailedToArchive" xml:space="preserve">
     <value>Unable to create archive</value>

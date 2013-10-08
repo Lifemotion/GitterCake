@@ -56,11 +56,11 @@
 			// 
 			label1.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			label1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			label1.Location = new System.Drawing.Point(239, 93);
+			label1.Location = new System.Drawing.Point(279, 93);
 			label1.Name = "label1";
-			label1.Size = new System.Drawing.Size(171, 23);
+			label1.Size = new System.Drawing.Size(191, 23);
 			label1.TabIndex = 2;
-			label1.Text = "Local repositories";
+            label1.Text = Properties.Resources.StrLocalRepositories;
 			// 
 			// label2
 			// 
@@ -70,7 +70,7 @@
 			label2.Name = "label2";
 			label2.Size = new System.Drawing.Size(219, 23);
 			label2.TabIndex = 2;
-			label2.Text = "Recent repositories";
+			label2.Text = Properties.Resources.StrRecentRepositories;
 			// 
 			// _picLogo
 			// 
@@ -99,14 +99,14 @@
 			// 
 			this._separator1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-			this._separator1.Location = new System.Drawing.Point(232, 103);
+			this._separator1.Location = new System.Drawing.Point(272, 103);
 			this._separator1.Name = "_separator1";
 			this._separator1.Size = new System.Drawing.Size(1, 418);
 			this._separator1.TabIndex = 9;
 			// 
 			// panel2
 			// 
-			this._separator2.Location = new System.Drawing.Point(147, 234);
+			this._separator2.Location = new System.Drawing.Point(187, 234);
 			this._separator2.Name = "_separator2";
 			this._separator2.Size = new System.Drawing.Size(80, 1);
 			this._separator2.TabIndex = 10;
@@ -120,7 +120,7 @@
 			this._lstRecentRepositories.Location = new System.Drawing.Point(3, 247);
 			this._lstRecentRepositories.MaximumSize = new System.Drawing.Size(500, 9000);
 			this._lstRecentRepositories.Name = "_lstRecentRepositories";
-			this._lstRecentRepositories.Size = new System.Drawing.Size(225, 241);
+			this._lstRecentRepositories.Size = new System.Drawing.Size(255, 241);
 			this._lstRecentRepositories.TabIndex = 4;
 			// 
 			// _lstLocalRepositories
@@ -131,12 +131,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._lstLocalRepositories.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this._lstLocalRepositories.HeaderStyle = gitter.Framework.Controls.HeaderStyle.Hidden;
-			this._lstLocalRepositories.Location = new System.Drawing.Point(234, 119);
+			this._lstLocalRepositories.Location = new System.Drawing.Point(274, 119);
 			this._lstLocalRepositories.MaximumSize = new System.Drawing.Size(500, 9000);
 			this._lstLocalRepositories.Name = "_lstLocalRepositories";
 			this._lstLocalRepositories.Size = new System.Drawing.Size(457, 417);
 			this._lstLocalRepositories.TabIndex = 1;
-			this._lstLocalRepositories.Text = "No repositories found";
+            this._lstLocalRepositories.Text = Properties.Resources.StrNoRepositoriesFound;
 			// 
 			// _btnAddLocalRepo
 			// 
@@ -145,9 +145,9 @@
 			this._btnAddLocalRepo.Location = new System.Drawing.Point(20, 121);
 			this._btnAddLocalRepo.Margin = new System.Windows.Forms.Padding(1);
 			this._btnAddLocalRepo.Name = "_btnAddLocalRepo";
-			this._btnAddLocalRepo.Size = new System.Drawing.Size(208, 28);
+			this._btnAddLocalRepo.Size = new System.Drawing.Size(238, 28);
 			this._btnAddLocalRepo.TabIndex = 8;
-			this._btnAddLocalRepo.Text = "Add Local Repository...";
+			this._btnAddLocalRepo.Text = Properties.Resources.StrAddLocalRepository;
 			this._btnAddLocalRepo.LinkClicked += new System.EventHandler(this._btnAddLocalRepo_LinkClicked);
 			// 
 			// _btnScanLocalRepo
@@ -157,9 +157,9 @@
 			this._btnScanLocalRepo.Location = new System.Drawing.Point(20, 93);
 			this._btnScanLocalRepo.Margin = new System.Windows.Forms.Padding(1);
 			this._btnScanLocalRepo.Name = "_btnScanLocalRepo";
-			this._btnScanLocalRepo.Size = new System.Drawing.Size(208, 28);
+			this._btnScanLocalRepo.Size = new System.Drawing.Size(238, 28);
 			this._btnScanLocalRepo.TabIndex = 8;
-			this._btnScanLocalRepo.Text = "Scan Local Repositories...";
+			this._btnScanLocalRepo.Text = Properties.Resources.StrScanLocalRepository;
 			this._btnScanLocalRepo.Visible = false;
 			this._btnScanLocalRepo.LinkClicked += new System.EventHandler(this._btnScanLocalRepo_LinkClicked);
 			// 
@@ -170,9 +170,9 @@
 			this._btnInitLocalRepo.Location = new System.Drawing.Point(20, 151);
 			this._btnInitLocalRepo.Margin = new System.Windows.Forms.Padding(1);
 			this._btnInitLocalRepo.Name = "_btnInitLocalRepo";
-			this._btnInitLocalRepo.Size = new System.Drawing.Size(208, 28);
+			this._btnInitLocalRepo.Size = new System.Drawing.Size(238, 28);
 			this._btnInitLocalRepo.TabIndex = 8;
-			this._btnInitLocalRepo.Text = "Init Local Repository...";
+			this._btnInitLocalRepo.Text = Properties.Resources.StrInitLocalRepository;
 			this._btnInitLocalRepo.LinkClicked += new System.EventHandler(this._btnInitLocalRepo_LinkClicked);
 			// 
 			// _btnCloneRemoteRepo
@@ -182,9 +182,9 @@
 			this._btnCloneRemoteRepo.Location = new System.Drawing.Point(20, 181);
 			this._btnCloneRemoteRepo.Margin = new System.Windows.Forms.Padding(1);
 			this._btnCloneRemoteRepo.Name = "_btnCloneRemoteRepo";
-			this._btnCloneRemoteRepo.Size = new System.Drawing.Size(208, 28);
+			this._btnCloneRemoteRepo.Size = new System.Drawing.Size(250, 28);
 			this._btnCloneRemoteRepo.TabIndex = 8;
-			this._btnCloneRemoteRepo.Text = "Clone Remote Repository...";
+			this._btnCloneRemoteRepo.Text = Properties.Resources.StrCloneRemoteRepository;
 			this._btnCloneRemoteRepo.LinkClicked += new System.EventHandler(this._btnCloneRemoteRepo_LinkClicked);
 			// 
 			// StartPageView

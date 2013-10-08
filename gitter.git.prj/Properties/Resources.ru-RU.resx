@@ -193,7 +193,7 @@
     <value>URL</value>
   </data>
   <data name="StrWorkingTree" xml:space="preserve">
-    <value>Working Tree</value>
+    <value>Рабочее дерево</value>
   </data>
   <data name="StrCheckout" xml:space="preserve">
     <value>Checkout</value>
@@ -314,7 +314,7 @@
     <value>Show Commit Details</value>
   </data>
   <data name="StrVerticalSplit" xml:space="preserve">
-    <value>Vertical Split</value>
+    <value>Разделить по вертикали</value>
   </data>
   <data name="StrIgnoreWhitespaces" xml:space="preserve">
     <value>Ignore Whitespaces</value>
@@ -428,7 +428,7 @@
     <value>Use thin pack</value>
   </data>
   <data name="StrUseWithCaution" xml:space="preserve">
-    <value>Use with caution</value>
+    <value>Использовать с осторожностью</value>
   </data>
   <data name="StrShowColors" xml:space="preserve">
     <value>Show Colors</value>
@@ -566,7 +566,7 @@
     <value>Checkout Revision</value>
   </data>
   <data name="StrClone" xml:space="preserve">
-    <value>Clone</value>
+    <value>Клонировать</value>
   </data>
   <data name="StrCloneRepository" xml:space="preserve">
     <value>Clone Repository</value>
@@ -662,7 +662,7 @@
     <value>Show All</value>
   </data>
   <data name="StrValue" xml:space="preserve">
-    <value>Value</value>
+    <value>Значение</value>
   </data>
   <data name="StrParameter" xml:space="preserve">
     <value>Parameter</value>
@@ -704,7 +704,7 @@
     <value>More Context</value>
   </data>
   <data name="StrUpdate" xml:space="preserve">
-    <value>Update</value>
+    <value>Обновить</value>
   </data>
   <data name="StrDefault" xml:space="preserve">
     <value>Default</value>
@@ -901,7 +901,7 @@ Commit or stash them and try again.</value>
     <value>Show Stash</value>
   </data>
   <data name="StrUser" xml:space="preserve">
-    <value>User</value>
+    <value>Пользователь</value>
   </data>
   <data name="StrDateFormat" xml:space="preserve">
     <value>Date Format</value>
@@ -910,7 +910,7 @@ Commit or stash them and try again.</value>
     <value>Example</value>
   </data>
   <data name="StrVisibleReferences" xml:space="preserve">
-    <value>Visible References</value>
+    <value>Видимые ссылки</value>
   </data>
   <data name="StrClear" xml:space="preserve">
     <value>Clear</value>
@@ -988,7 +988,7 @@ Commit or stash them and try again.</value>
     <value>To</value>
   </data>
   <data name="StrUsername" xml:space="preserve">
-    <value>Username</value>
+    <value>Имя пользователя</value>
   </data>
   <data name="StrGitVersionCheck" xml:space="preserve">
     <value>Git Version Check</value>
@@ -1096,7 +1096,7 @@ Commit or stash them and try again.</value>
     <value>Use this user name and email</value>
   </data>
   <data name="StrUserIdentification" xml:space="preserve">
-    <value>User Identification</value>
+    <value>Идентификация пользователя</value>
   </data>
   <data name="StrChangedFiles" xml:space="preserve">
     <value>Changed Files</value>
@@ -1159,7 +1159,7 @@ Commit or stash them and try again.</value>
     <value>configure</value>
   </data>
   <data name="StrUsers" xml:space="preserve">
-    <value>Users</value>
+    <value>Пользователи</value>
   </data>
   <data name="StrlBinary" xml:space="preserve">
     <value>binary</value>
@@ -1264,7 +1264,7 @@ Commit or stash them and try again.</value>
     <value>Manage Submodules</value>
   </data>
   <data name="StrWorkingDirectory" xml:space="preserve">
-    <value>Working Directory</value>
+    <value>Рабочая папка</value>
   </data>
   <data name="StrHistoryDiff" xml:space="preserve">
     <value>History Diff</value>
@@ -1285,7 +1285,7 @@ Commit or stash them and try again.</value>
     <value>Refreshing references</value>
   </data>
   <data name="StrViewReflog" xml:space="preserve">
-    <value>View Reflog</value>
+    <value>Просмотр Reflog</value>
   </data>
   <data name="StrHeads" xml:space="preserve">
     <value>Heads</value>
@@ -1363,10 +1363,10 @@ Commit or stash them and try again.</value>
     <value>Tree</value>
   </data>
   <data name="StrViewDiff" xml:space="preserve">
-    <value>View Diff</value>
+    <value>Просмотр изменений</value>
   </data>
   <data name="StrViewTree" xml:space="preserve">
-    <value>View Tree</value>
+    <value>Просмотр дерева</value>
   </data>
   <data name="ErrfFailedToQueryBlob" xml:space="preserve">
     <value>Unable to extract file '{0}'</value>
@@ -1522,7 +1522,7 @@ Commit or stash them and try again.</value>
     <value>Merge tool is running</value>
   </data>
   <data name="StrWaitingMergeTool" xml:space="preserve">
-    <value>Waiting for merge tool to close</value>
+    <value>Ожидание заврешения работы утилиты слияния</value>
   </data>
   <data name="StrCollapseAll" xml:space="preserve">
     <value>Collapse All</value>

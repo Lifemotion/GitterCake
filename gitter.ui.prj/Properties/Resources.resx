@@ -283,4 +283,31 @@
   <data name="ImgStartPageLogoGradientDark" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\start-page-logo-gradient-dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="StrAddLocalRepository" xml:space="preserve">
+    <value>Add Local Repository...</value>
+  </data>
+  <data name="StrCloneRemoteRepository" xml:space="preserve">
+    <value>Clone Remote Repository...</value>
+  </data>
+  <data name="StrClosePageAfterRepositoryLoad" xml:space="preserve">
+    <value>Close page after repository load</value>
+  </data>
+  <data name="StrInitLocalRepository" xml:space="preserve">
+    <value>Init Local Repository...</value>
+  </data>
+  <data name="StrLocalRepositories" xml:space="preserve">
+    <value>Local Repositories</value>
+  </data>
+  <data name="StrNoRepositoriesFound" xml:space="preserve">
+    <value>No repositories found</value>
+  </data>
+  <data name="StrRecentRepositories" xml:space="preserve">
+    <value>Recent repositories</value>
+  </data>
+  <data name="StrScanLocalRepository" xml:space="preserve">
+    <value>Scan Local Repositories...</value>
+  </data>
+  <data name="StrShowPageOnStartup" xml:space="preserve">
+    <value>Show page on startup</value>
+  </data>
 </root>

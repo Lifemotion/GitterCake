@@ -66,16 +66,16 @@ namespace gitter
 			_lstRecentRepositories.KeyDown += OnRecentRepositoriesKeyDown;
 
 			_chkClosePageAfterRepositoryLoad = GitterApplication.Style.CreateCheckBox();
-			_chkClosePageAfterRepositoryLoad.Text = "Close page after repository load";
-			_chkClosePageAfterRepositoryLoad.Control.Bounds = new Rectangle(9, 491, 199, 20);
+            _chkClosePageAfterRepositoryLoad.Text = Resources.StrClosePageAfterRepositoryLoad;
+			_chkClosePageAfterRepositoryLoad.Control.Bounds = new Rectangle(9, 491, 230, 20);
 			_chkClosePageAfterRepositoryLoad.Control.Anchor = AnchorStyles.Left | AnchorStyles.Bottom;
 			_chkClosePageAfterRepositoryLoad.Control.Parent = this;
 			_chkClosePageAfterRepositoryLoad.IsChecked = _factory.CloseAfterRepositoryLoad;
 			_chkClosePageAfterRepositoryLoad.IsCheckedChanged += _chkClosePageAfterRepositoryLoad_CheckedChanged;
 
 			_chkShowPageAtStartup = GitterApplication.Style.CreateCheckBox();
-			_chkShowPageAtStartup.Text = "Show page on startup";
-			_chkShowPageAtStartup.Control.Bounds = new Rectangle(9, 511, 199, 20);
+			_chkShowPageAtStartup.Text = Resources.StrShowPageOnStartup;
+			_chkShowPageAtStartup.Control.Bounds = new Rectangle(9, 511, 230, 20);
 			_chkShowPageAtStartup.Control.Anchor = AnchorStyles.Left | AnchorStyles.Bottom;
 			_chkShowPageAtStartup.Control.Parent = this;
 			_chkShowPageAtStartup.IsChecked = _factory.ShowOnStartup;
