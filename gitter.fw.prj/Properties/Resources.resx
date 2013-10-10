@@ -562,4 +562,22 @@
   <data name="StrScrollRight" xml:space="preserve">
     <value>Scroll Right</value>
   </data>
+  <data name="StrEssential" xml:space="preserve">
+    <value>Essential</value>
+  </data>
+  <data name="StrAdvanced" xml:space="preserve">
+    <value>Advanced</value>
+  </data>
+  <data name="StrApplicationMode" xml:space="preserve">
+    <value>Application Mode</value>
+  </data>
+  <data name="StrApplicationMustBeRestartedToApply" xml:space="preserve">
+    <value>Application must be restarted to apply changes</value>
+  </data>
+  <data name="StrSimple" xml:space="preserve">
+    <value>Simple</value>
+  </data>
+  <data name="StrStandard" xml:space="preserve">
+    <value>Standard</value>
+  </data>
 </root>

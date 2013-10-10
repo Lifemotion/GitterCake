@@ -88,6 +88,7 @@
     <Compile Include="CLI\AsyncTextReader.cs" />
     <Compile Include="CLI\IOutputReceiver.cs" />
     <Compile Include="CLI\ProcessExecutor.cs" />
+    <Compile Include="ComplexityMode.cs" />
     <Compile Include="Controls\Button\CustomButtonAdapter.cs" />
     <Compile Include="Controls\Button\CustomButton.cs">
       <SubType>Component</SubType>
@@ -135,6 +136,12 @@
     <Compile Include="Native\WINDOWPOS.cs" />
     <Compile Include="Native\WNDPROC.cs" />
     <Compile Include="Native\WVR.cs" />
+    <Compile Include="Options\EssentialOptionsPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Options\EssentialOptionsPage.Designer.cs">
+      <DependentUpon>EssentialOptionsPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Resources.ru-RU.Designer.cs">
       <DependentUpon>Resources.ru-RU.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -631,6 +638,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Options\SpellingPage.resx">
       <DependentUpon>SpellingPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Options\EssentialOptionsPage.resx">
+      <DependentUpon>EssentialOptionsPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.ru-RU.resx">
       <Generator>ResXFileCodeGenerator</Generator>

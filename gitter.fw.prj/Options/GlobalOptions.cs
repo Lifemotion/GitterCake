@@ -48,6 +48,13 @@ namespace gitter.Framework
 			_colorCategories = new Dictionary<string, SelectableColorCategory>();
 			_colors = new Dictionary<string, SelectableColor>();
 
+            RegisterPropertyPageFactory(new PropertyPageFactory(
+                EssentialOptionsPage.Guid,
+                Resources.StrEssential,
+                null,
+                PropertyPageFactory.RootGroupGuid,
+                env => new EssentialOptionsPage()));
+
 			RegisterPropertyPageFactory(new PropertyPageFactory(
 				IntegrationOptionsPage.Guid,
 				Resources.StrIntegration,

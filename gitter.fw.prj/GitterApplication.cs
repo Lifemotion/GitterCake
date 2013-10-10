@@ -59,7 +59,7 @@ namespace gitter.Framework
 		private static IGitterStyle _defaultStyle;
 		private static IGitterStyle _style;
 		private static IGitterStyle _styleOnNextStartup;
-
+        private static ComplexityMode _complexityMode=new ComplexityMode();
 		/// <summary>Returns the selected text renderer for application.</summary>
 		public static ITextRenderer TextRenderer
 		{
@@ -121,6 +121,11 @@ namespace gitter.Framework
 		{
 			get { return _gdiTextRenderer; }
 		}
+
+        public static ComplexityMode ComplexityMode
+        {
+            get { return _complexityMode; }
+        }
 
 		public static ITextRenderer GdiPlusTextRenderer
 		{
@@ -217,6 +222,16 @@ namespace gitter.Framework
 			Style = style;
 		}
 
+        private static void SelectComplexityMode()
+        {
+            var modeName = _configurationService.GuiSection.GetValue<string>("ComplexityMode", string.Empty);
+            ComplextyModeVariants mode = ComplextyModeVariants.simple;
+            if (modeName=="simple"){mode=ComplextyModeVariants.simple;}
+            if (modeName == "standard") { mode = ComplextyModeVariants.standard; }
+            if (modeName == "advanced") { mode = ComplextyModeVariants.advanced; }
+            ComplexityMode.Mode = mode;
+        }
+
 		public static void Run<T>()
 			where T: FormEx, IWorkingEnvironment, new()
 		{
@@ -239,6 +254,7 @@ namespace gitter.Framework
 			Application.SetCompatibleTextRenderingDefault(false);
 
 			SelectStyle();
+            SelectComplexityMode();
 
 			if(Utility.IsOSWindows7OrNewer)
 			{
@@ -269,6 +285,7 @@ namespace gitter.Framework
 
 			GlobalOptions.SaveTo(_configurationService.GlobalSection);
 			_configurationService.GuiSection.SetValue<string>("Style", StyleOnNextStartup.Name);
+            _configurationService.GuiSection.SetValue<string>("ComplexityMode", ComplexityMode.Name);
 			_fontManager.Save();
 			_configurationService.Save();
 
