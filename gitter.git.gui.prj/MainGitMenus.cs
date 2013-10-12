@@ -45,11 +45,17 @@ namespace gitter.Git.Gui
 
 			var repository = guiProvider.Repository;
 
-			_menus = new ToolStripMenuItem[]
-			{
-				_gitMenu = new ToolStripMenuItem(
-					Resources.StrGit),
-			};
+            _menus = new ToolStripMenuItem[]
+			    {
+				    _gitMenu = new ToolStripMenuItem(
+					    Resources.StrGit),
+			    };
+
+            if (!gitter.Framework.GitterApplication.ComplexityMode.IsItemVisible(Framework.Complexty.advanced))
+            {
+            _gitMenu.Visible=false;
+
+            }
 
 			//_gitMenu.DropDownItems.Add(new ToolStripMenuItem(
 			//    Resources.StrCheckout.AddEllipsis(), CachedResources.Bitmaps["ImgCheckout"], OnCheckoutClick));

@@ -140,10 +140,10 @@
     <value>..\Resources\repositories.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StrOptions" xml:space="preserve">
-    <value>Настройки</value>
+    <value>Параметры</value>
   </data>
   <data name="StrRepositories" xml:space="preserve">
-    <value>Репозитории</value>
+    <value>Хранилища</value>
   </data>
   <data name="StrDescription" xml:space="preserve">
     <value>Описание</value>
@@ -158,7 +158,7 @@
     <value>..\Resources\repository-remove.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StrAddRepository" xml:space="preserve">
-    <value>Добавить репозиторий</value>
+    <value>Добавить хранилище</value>
   </data>
   <data name="StrAdd" xml:space="preserve">
     <value>Добавить</value>
@@ -176,19 +176,19 @@
     <value>Версия</value>
   </data>
   <data name="ErrFailedToOpenRepository" xml:space="preserve">
-    <value>Не удалось открыть репозиторий</value>
+    <value>Не удалось открыть хранилище</value>
   </data>
   <data name="ErrPathIsNotValidRepository" xml:space="preserve">
-    <value>'{0}' не является корректным репозиторием</value>
+    <value>'{0}' не является корректным хранилищем</value>
   </data>
   <data name="ErrInvalidPath" xml:space="preserve">
     <value>Некорректный путь</value>
   </data>
   <data name="ErrSpecifiedPathIsNotValidRepository" xml:space="preserve">
-    <value>Указанный путь  не является корректным репозиторием</value>
+    <value>Указанный путь не является корректным хранилищем</value>
   </data>
   <data name="StrRemoveRepository" xml:space="preserve">
-    <value>Удалить репозиторий</value>
+    <value>Удалить хранилище</value>
   </data>
   <data name="StrHelp" xml:space="preserve">
     <value>Справка</value>
@@ -197,10 +197,10 @@
     <value>недоступно</value>
   </data>
   <data name="StrRepository" xml:space="preserve">
-    <value>Репозиторий</value>
+    <value>Хранилище</value>
   </data>
   <data name="StrTools" xml:space="preserve">
-    <value>Инструменты</value>
+    <value>Сервис</value>
   </data>
   <data name="StrExit" xml:space="preserve">
     <value>Выход</value>
@@ -212,7 +212,7 @@
     <value>Последнее</value>
   </data>
   <data name="StrRepositoryExplorer" xml:space="preserve">
-    <value>Репозитории</value>
+    <value>Обозреватель</value>
   </data>
   <data name="StrToolbars" xml:space="preserve">
     <value>Панели инструментов</value>
@@ -284,30 +284,30 @@
     <value>..\Resources\start-page-logo-gradient-dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StrAddLocalRepository" xml:space="preserve">
-    <value>Добавить локальный репозиторий...</value>
+    <value>Добавить локальное хранилище...</value>
   </data>
   <data name="StrCloneRemoteRepository" xml:space="preserve">
-    <value>Клонировать удаленный репозиторий...</value>
+    <value>Загрузить удаленное хранилище...</value>
   </data>
   <data name="StrClosePageAfterRepositoryLoad" xml:space="preserve">
     <value>Закрыть страницу после выбора </value>
   </data>
   <data name="StrInitLocalRepository" xml:space="preserve">
-    <value>Инициализировать репозиторий...</value>
+    <value>Создать новое хранилище...</value>
   </data>
   <data name="StrLocalRepositories" xml:space="preserve">
-    <value>Локальные репозитории</value>
+    <value>Локальные хранилища</value>
   </data>
   <data name="StrNoRepositoriesFound" xml:space="preserve">
-    <value>Не найдены репозитории</value>
+    <value>Не найдены хранилища</value>
   </data>
   <data name="StrRecentRepositories" xml:space="preserve">
-    <value>Последние репозитории</value>
+    <value>Последние</value>
   </data>
   <data name="StrScanLocalRepository" xml:space="preserve">
-    <value>Искать локальные репозитории...</value>
+    <value>Искать локальные хранилища...</value>
   </data>
   <data name="StrShowPageOnStartup" xml:space="preserve">
-    <value>Показывать страницу при запуске</value>
+    <value>Показывать при запуске</value>
   </data>
 </root>

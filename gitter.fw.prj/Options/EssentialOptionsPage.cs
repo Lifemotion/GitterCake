@@ -39,15 +39,15 @@ namespace gitter.Framework.Options
 		{
 			InitializeComponent();
 
-            if (GitterApplication.ComplexityMode.Mode == ComplextyModeVariants.simple)
+            if (GitterApplication.ComplexityMode.Mode == Complexty.simple)
 			{
 				_levelSimple.Checked = true;
 			}
-            else if (GitterApplication.ComplexityMode.Mode == ComplextyModeVariants.standard)
+            else if (GitterApplication.ComplexityMode.Mode == Complexty.standard)
 			{
                 _levelStandard.Checked = true;
 			}
-            else if (GitterApplication.ComplexityMode.Mode == ComplextyModeVariants.advanced)
+            else if (GitterApplication.ComplexityMode.Mode == Complexty.advanced)
             {
                 _levelAdvanced.Checked = true;
             }
@@ -58,15 +58,15 @@ namespace gitter.Framework.Options
 		{
 			if(_levelSimple.Checked)
 			{
-                GitterApplication.ComplexityMode.Mode = ComplextyModeVariants.simple;
+                GitterApplication.ComplexityMode.Mode = Complexty.simple;
 			}
 			else if(_levelStandard.Checked)
 			{
-                GitterApplication.ComplexityMode.Mode = ComplextyModeVariants.standard;
+                GitterApplication.ComplexityMode.Mode = Complexty.standard;
 			}
             else if (_levelStandard.Checked)
             {
-                GitterApplication.ComplexityMode.Mode = ComplextyModeVariants.advanced;
+                GitterApplication.ComplexityMode.Mode = Complexty.advanced;
             }
 			return true;
 		}

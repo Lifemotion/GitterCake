@@ -83,13 +83,18 @@ namespace gitter
 				_startPageFactory = new StartPageViewFactory());
 			_viewDockService.RegisterFactory(
 				_repositoryExplorerFactory = new RepositoryExplorerViewFactory(this));
+      
+            
 			_viewDockService.RegisterFactory(
 				_logFactory = new LogViewFactory());
 
 			LoadOptions();
 			LoadRecentRepositories();
 
-			_viewDockService.ShowView(Guids.RepositoryExplorerView);
+            if (GitterApplication.ComplexityMode.IsItemVisible(Complexty.standard))
+            {
+                _viewDockService.ShowView(Guids.RepositoryExplorerView);
+            }
 
 			_repositoryProviders = new Dictionary<string, IRepositoryProvider>();
 			_issueTrackerProviders = new Dictionary<string, IRepositoryServiceProvider>();

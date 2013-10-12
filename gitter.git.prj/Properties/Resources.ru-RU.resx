@@ -208,7 +208,7 @@
     <value>Current Branch</value>
   </data>
   <data name="StrFetch" xml:space="preserve">
-    <value>Fetch</value>
+    <value>Забрать</value>
   </data>
   <data name="StrHard" xml:space="preserve">
     <value>Hard</value>
@@ -238,26 +238,26 @@
     <value>Remote</value>
   </data>
   <data name="StrRemotes" xml:space="preserve">
-    <value>Remotes</value>
+    <value>Источники</value>
   </data>
   <data name="StrCreateBranch" xml:space="preserve">
-    <value>Create Branch</value>
+    <value>Создать ветку</value>
   </data>
   <data name="StrCreateTag" xml:space="preserve">
-    <value>Create Tag</value>
+    <value>Чоздать метку</value>
   </data>
   <data name="StrResetBranchHere" xml:space="preserve">
-    <value>Reset '{0}' Here</value>
+    <value>Сбросить '{0}' сюда</value>
     <comment>{0} = branch name</comment>
   </data>
   <data name="StrRemove" xml:space="preserve">
-    <value>Remove</value>
+    <value>Убрать</value>
   </data>
   <data name="StrRemoveBranch" xml:space="preserve">
-    <value>Delete Branch</value>
+    <value>Удалить ветку</value>
   </data>
   <data name="StrRemoveTag" xml:space="preserve">
-    <value>Delete Tag</value>
+    <value>Удалить метку</value>
   </data>
   <data name="StrCommitterEmail" xml:space="preserve">
     <value>Committer Email</value>
@@ -389,7 +389,7 @@
     <value>No fast-forward</value>
   </data>
   <data name="StrOptions" xml:space="preserve">
-    <value>Options</value>
+    <value>Настройки</value>
   </data>
   <data name="StrRenameBranch" xml:space="preserve">
     <value>Rename Branch</value>
@@ -934,7 +934,7 @@ Commit or stash them and try again.</value>
     <value>Stash Drop</value>
   </data>
   <data name="StrStatus" xml:space="preserve">
-    <value>Status</value>
+    <value>Состояние</value>
   </data>
   <data name="StrlNone" xml:space="preserve">
     <value>none</value>
@@ -1731,7 +1731,7 @@ Proceed?</value>
     <value>Switch Branch</value>
   </data>
   <data name="StrContributors" xml:space="preserve">
-    <value>Contributors</value>
+    <value>Участники</value>
   </data>
   <data name="ErrFailedToArchive" xml:space="preserve">
     <value>Unable to create archive</value>

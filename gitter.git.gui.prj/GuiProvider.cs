@@ -335,10 +335,12 @@ namespace gitter.Git.Gui
 			{
 				environment.ProvideStatusBarObject(_statusbar.RightAlignedItems[i], false);
 			}
+
 			foreach(var menu in _menus.Menus)
 			{
 				environment.ProvideMainMenuItem(menu);
 			}
+
 			foreach(var item in _menus.ViewMenuItems)
 			{
 				environment.ProvideViewMenuItem(item);

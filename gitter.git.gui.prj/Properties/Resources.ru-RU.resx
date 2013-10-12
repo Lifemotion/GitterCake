@@ -170,19 +170,19 @@
     <value>Body</value>
   </data>
   <data name="StrBranch" xml:space="preserve">
-    <value>Branch</value>
+    <value>Ветка</value>
   </data>
   <data name="StrBranches" xml:space="preserve">
-    <value>Branches</value>
+    <value>Ветки</value>
   </data>
   <data name="StrCommit" xml:space="preserve">
-    <value>Commit</value>
+    <value>Коммит</value>
   </data>
   <data name="StrCommitDate" xml:space="preserve">
-    <value>Commit Date</value>
+    <value>Дата коммита</value>
   </data>
   <data name="StrCommits" xml:space="preserve">
-    <value>Commits</value>
+    <value>Коммиты</value>
   </data>
   <data name="StrCommitter" xml:space="preserve">
     <value>Committer</value>
@@ -191,55 +191,55 @@
     <value>Committers</value>
   </data>
   <data name="StrDate" xml:space="preserve">
-    <value>Date</value>
+    <value>Дата</value>
   </data>
   <data name="StrEmail" xml:space="preserve">
-    <value>Email</value>
+    <value>Почта</value>
   </data>
   <data name="StrFetchUrl" xml:space="preserve">
     <value>Fetch URL</value>
   </data>
   <data name="StrGraph" xml:space="preserve">
-    <value>Graph</value>
+    <value>Дерево</value>
   </data>
   <data name="StrHash" xml:space="preserve">
-    <value>Hash</value>
+    <value>Хеш</value>
   </data>
   <data name="StrLocalBranches" xml:space="preserve">
-    <value>Local Branches</value>
+    <value>Локальные ветки</value>
   </data>
   <data name="StrName" xml:space="preserve">
-    <value>Name</value>
+    <value>Имя</value>
   </data>
   <data name="StrPushUrl" xml:space="preserve">
     <value>Push URL</value>
   </data>
   <data name="StrReferences" xml:space="preserve">
-    <value>References</value>
+    <value>Ссылки</value>
   </data>
   <data name="StrRemoteBranches" xml:space="preserve">
-    <value>Remote Branches</value>
+    <value>Удаленные ветки</value>
   </data>
   <data name="StrSize" xml:space="preserve">
-    <value>Size</value>
+    <value>Размер</value>
   </data>
   <data name="StrStash" xml:space="preserve">
-    <value>Stash</value>
+    <value>Спрятать</value>
   </data>
   <data name="StrSubject" xml:space="preserve">
-    <value>Subject</value>
+    <value>Описание</value>
   </data>
   <data name="StrSubmodules" xml:space="preserve">
-    <value>Submodules</value>
+    <value>Сабмодули</value>
   </data>
   <data name="StrTag" xml:space="preserve">
-    <value>Tag</value>
+    <value>Метка</value>
   </data>
   <data name="StrTags" xml:space="preserve">
-    <value>Tags</value>
+    <value>Метки</value>
   </data>
   <data name="StrType" xml:space="preserve">
-    <value>Type</value>
+    <value>Тип</value>
   </data>
   <data name="StrUrl" xml:space="preserve">
     <value>URL</value>
@@ -260,46 +260,46 @@
     <value>..\Resources\users.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StrCheckout" xml:space="preserve">
-    <value>Checkout</value>
+    <value>Выбрать</value>
   </data>
   <data name="StrMerge" xml:space="preserve">
-    <value>Merge</value>
+    <value>Слить</value>
   </data>
   <data name="StrReset" xml:space="preserve">
-    <value>Reset</value>
+    <value>Сброс</value>
   </data>
   <data name="StrCherryPick" xml:space="preserve">
-    <value>Cherry-Pick</value>
+    <value>Отбор лучшего</value>
   </data>
   <data name="StrCurrentBranch" xml:space="preserve">
-    <value>Current Branch</value>
+    <value>Текущая ветка</value>
   </data>
   <data name="StrFetch" xml:space="preserve">
-    <value>Fetch</value>
+    <value>Забрать</value>
   </data>
   <data name="StrHard" xml:space="preserve">
-    <value>Hard</value>
+    <value>Жестко</value>
   </data>
   <data name="StrMixed" xml:space="preserve">
-    <value>Mixed</value>
+    <value>Смешано</value>
   </data>
   <data name="StrPull" xml:space="preserve">
-    <value>Pull</value>
+    <value>Вытянуть</value>
   </data>
   <data name="StrPush" xml:space="preserve">
-    <value>Push</value>
+    <value>Выложить</value>
   </data>
   <data name="StrRevert" xml:space="preserve">
-    <value>Revert</value>
+    <value>Откатить</value>
   </data>
   <data name="StrRevision" xml:space="preserve">
-    <value>Revision</value>
+    <value>Ревизия</value>
   </data>
   <data name="StrRevisions" xml:space="preserve">
-    <value>Revisions</value>
+    <value>Ревизии</value>
   </data>
   <data name="StrSoft" xml:space="preserve">
-    <value>Soft</value>
+    <value>Мягко</value>
   </data>
   <data name="ImgClean" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\clean.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -350,29 +350,29 @@
     <value>Remote</value>
   </data>
   <data name="StrRemotes" xml:space="preserve">
-    <value>Remotes</value>
+    <value>Удаленные источники</value>
   </data>
   <data name="StrCreateBranch" xml:space="preserve">
-    <value>Create Branch</value>
+    <value>Создать ветку</value>
   </data>
   <data name="ImgRevert" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\revert.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StrCreateTag" xml:space="preserve">
-    <value>Create Tag</value>
+    <value>Создать метку</value>
   </data>
   <data name="StrResetBranchHere" xml:space="preserve">
-    <value>Reset '{0}' Here</value>
+    <value>Сбросить '{0}' сюда</value>
     <comment>{0} = branch name</comment>
   </data>
   <data name="StrRemove" xml:space="preserve">
     <value>Remove</value>
   </data>
   <data name="StrRemoveBranch" xml:space="preserve">
-    <value>Delete Branch</value>
+    <value>Удалить ветку</value>
   </data>
   <data name="StrRemoveTag" xml:space="preserve">
-    <value>Delete Tag</value>
+    <value>Удалить метку</value>
   </data>
   <data name="ImgRemote" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\remote.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -432,16 +432,16 @@
     <value>Git</value>
   </data>
   <data name="StrRefresh" xml:space="preserve">
-    <value>Refresh</value>
+    <value>Обновить</value>
   </data>
   <data name="StrHistory" xml:space="preserve">
-    <value>History</value>
+    <value>История версий</value>
   </data>
   <data name="StrHead" xml:space="preserve">
-    <value>Head</value>
+    <value>Ветка</value>
   </data>
   <data name="StrNoBranch" xml:space="preserve">
-    <value>(no branch)</value>
+    <value>(нет)</value>
   </data>
   <data name="ImgSplitPanelVertical" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ui-split-panel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -453,7 +453,7 @@
     <value>..\Resources\search.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StrSearch" xml:space="preserve">
-    <value>Search</value>
+    <value>Поиск</value>
   </data>
   <data name="ImgMinus" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\minus.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -462,10 +462,10 @@
     <value>..\Resources\plus.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StrParent" xml:space="preserve">
-    <value>Parent</value>
+    <value>Родитель</value>
   </data>
   <data name="StrParents" xml:space="preserve">
-    <value>Parents</value>
+    <value>Родители</value>
   </data>
   <data name="StrSHA" xml:space="preserve">
     <value>SHA</value>
@@ -579,7 +579,7 @@
     <value>Message</value>
   </data>
   <data name="StrNewName" xml:space="preserve">
-    <value>New name</value>
+    <value>Новое имя</value>
   </data>
   <data name="StrsNoCommit" xml:space="preserve">
     <value>No commit</value>
@@ -588,10 +588,10 @@
     <value>No fast-forward</value>
   </data>
   <data name="StrOptions" xml:space="preserve">
-    <value>Options</value>
+    <value>Настройки</value>
   </data>
   <data name="StrRenameBranch" xml:space="preserve">
-    <value>Rename Branch</value>
+    <value>Переименовать ветку</value>
   </data>
   <data name="StrRenameRemote" xml:space="preserve">
     <value>Rename Remote</value>
@@ -777,7 +777,7 @@
     <value>Create</value>
   </data>
   <data name="StrRename" xml:space="preserve">
-    <value>Rename</value>
+    <value>Переименовать</value>
   </data>
   <data name="StrRevertCommit" xml:space="preserve">
     <value>Revert Commit</value>
@@ -831,19 +831,19 @@ share many of the same objects in common. Enabled by default.</value>
     <value>Bare</value>
   </data>
   <data name="StrClone" xml:space="preserve">
-    <value>Clone</value>
+    <value>Копировать</value>
   </data>
   <data name="StrCloneRepository" xml:space="preserve">
-    <value>Clone Repository</value>
+    <value>Копировать репозиторий</value>
   </data>
   <data name="StrInit" xml:space="preserve">
     <value>Новый</value>
   </data>
   <data name="StrInitRepository" xml:space="preserve">
-    <value>Иниуиализировать новый репозиторий</value>
+    <value>Создать новое хранилище</value>
   </data>
   <data name="StrPath" xml:space="preserve">
-    <value>Path</value>
+    <value>Путь</value>
   </data>
   <data name="StrSelectRepositoryPath" xml:space="preserve">
     <value>Select repository path</value>
@@ -993,7 +993,7 @@ share many of the same objects in common. Enabled by default.</value>
     <value>Position</value>
   </data>
   <data name="StrResetHere" xml:space="preserve">
-    <value>Reset Here</value>
+    <value>Сбросить сюда</value>
   </data>
   <data name="ErrFailedToCheckout" xml:space="preserve">
     <value>Unable to checkout '{0}'</value>
@@ -1313,7 +1313,7 @@ Proceed?</value>
     <value>..\Resources\document.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StrStatus" xml:space="preserve">
-    <value>Status</value>
+    <value>Состояние</value>
   </data>
   <data name="StrlNone" xml:space="preserve">
     <value>none</value>
@@ -1574,22 +1574,22 @@ with the remote with the git-remote-&lt;vcs&gt; helper.</value>
     <value>Changed Files</value>
   </data>
   <data name="StrlAdded" xml:space="preserve">
-    <value>added</value>
+    <value>добавлено</value>
   </data>
   <data name="StrlCopied" xml:space="preserve">
-    <value>copied</value>
+    <value>скопировано</value>
   </data>
   <data name="StrlDeleted" xml:space="preserve">
-    <value>deleted</value>
+    <value>удалено</value>
   </data>
   <data name="StrlModified" xml:space="preserve">
-    <value>modified</value>
+    <value>изменено</value>
   </data>
   <data name="StrlRenamed" xml:space="preserve">
-    <value>renamed</value>
+    <value>переименовано</value>
   </data>
   <data name="StrlUnmerged" xml:space="preserve">
-    <value>unmerged</value>
+    <value>не слито</value>
   </data>
   <data name="StrNoChangedFiles" xml:space="preserve">
     <value>No changed files</value>
@@ -1764,19 +1764,19 @@ a new history totally disconnected from all the other branches and commits.</val
     <value>Working Directory</value>
   </data>
   <data name="StrAutoShowDiff" xml:space="preserve">
-    <value>Auto Show Diff</value>
+    <value>Показывать изменения</value>
   </data>
   <data name="StrHistoryDiff" xml:space="preserve">
     <value>History Diff</value>
   </data>
   <data name="StrContextualDiff" xml:space="preserve">
-    <value>Contextual Diff</value>
+    <value>Изменения в контексте</value>
   </data>
   <data name="StrReflog" xml:space="preserve">
     <value>Reflog</value>
   </data>
   <data name="StrContext" xml:space="preserve">
-    <value>Context</value>
+    <value>Контекст</value>
   </data>
   <data name="StrManage" xml:space="preserve">
     <value>Manage</value>
@@ -1902,7 +1902,7 @@ a new history totally disconnected from all the other branches and commits.</val
     <value>View Diff</value>
   </data>
   <data name="StrViewTree" xml:space="preserve">
-    <value>View Tree</value>
+    <value>Дерево файлов</value>
   </data>
   <data name="ErrfFailedToQueryBlob" xml:space="preserve">
     <value>Unable to extract file '{0}'</value>
@@ -2365,10 +2365,10 @@ Proceed?</value>
     <value>Resets the index and updates the files in the working tree that are different between commit and HEAD, but keeps those which are different between the index and working tree.</value>
   </data>
   <data name="StrlCommits" xml:space="preserve">
-    <value>commits</value>
+    <value>коммитов</value>
   </data>
   <data name="StrlUnlimited" xml:space="preserve">
-    <value>unlimited</value>
+    <value>сколько угодно</value>
   </data>
   <data name="StrAskRevertPaths" xml:space="preserve">
     <value>You are about to lose changes made to selected files.
@@ -2432,7 +2432,7 @@ Proceed?</value>
     <value>..\Resources\folder-history.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StrContributors" xml:space="preserve">
-    <value>Contributors</value>
+    <value>Участники</value>
   </data>
   <data name="ImgArchive" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\folder-zipper.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -2545,16 +2545,16 @@ Reset existing branch instead of creating a new one?</value>
     <value>Copied</value>
   </data>
   <data name="StrRenamed" xml:space="preserve">
-    <value>Renamed</value>
+    <value>Переименовано</value>
   </data>
   <data name="StrlChanges" xml:space="preserve">
-    <value>changes</value>
+    <value>всего</value>
   </data>
   <data name="StrlChmod" xml:space="preserve">
     <value>chmod</value>
   </data>
   <data name="StrlRemoved" xml:space="preserve">
-    <value>removed</value>
+    <value>удалено</value>
   </data>
   <data name="StrlChange" xml:space="preserve">
     <value>change</value>
@@ -2606,5 +2606,8 @@ Reset existing branch instead of creating a new one?</value>
   </data>
   <data name="StrsFetchRemote" xml:space="preserve">
     <value>Fetch remote</value>
+  </data>
+  <data name="StrAdditional" xml:space="preserve">
+    <value>Дополнительно</value>
   </data>
 </root>

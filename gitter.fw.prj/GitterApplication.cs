@@ -225,10 +225,10 @@ namespace gitter.Framework
         private static void SelectComplexityMode()
         {
             var modeName = _configurationService.GuiSection.GetValue<string>("ComplexityMode", string.Empty);
-            ComplextyModeVariants mode = ComplextyModeVariants.simple;
-            if (modeName=="simple"){mode=ComplextyModeVariants.simple;}
-            if (modeName == "standard") { mode = ComplextyModeVariants.standard; }
-            if (modeName == "advanced") { mode = ComplextyModeVariants.advanced; }
+            Complexty mode = Complexty.simple;
+            if (modeName=="simple"){mode=Complexty.simple;}
+            if (modeName == "standard") { mode = Complexty.standard; }
+            if (modeName == "advanced") { mode = Complexty.advanced; }
             ComplexityMode.Mode = mode;
         }
 

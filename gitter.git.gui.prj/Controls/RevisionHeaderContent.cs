@@ -953,7 +953,23 @@ namespace gitter.Git.Gui
 
 		public RevisionHeaderContent()
 		{
-			_elements = new IRevisionHeaderElement[]
+            if (!GitterApplication.ComplexityMode.IsItemVisible(Complexty.standard))
+            {
+                _elements = new IRevisionHeaderElement[]
+			{
+				//new HashElement(this),
+				//new ParentsElement(this),
+				new AuthorElement(this),
+				new CommitterElement(this),
+				new CommitDateElement(this),
+				new SubjectElement(this),
+				new BodyElement(this),
+				//new ReferencesElement(this),
+			};
+            }
+            else
+            {
+                _elements = new IRevisionHeaderElement[]
 			{
 				new HashElement(this),
 				new ParentsElement(this),
@@ -964,6 +980,9 @@ namespace gitter.Git.Gui
 				new BodyElement(this),
 				new ReferencesElement(this),
 			};
+            }
+
+  
 			foreach(var e in _elements)
 			{
 				e.InvalidateRequired +=

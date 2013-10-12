@@ -61,6 +61,11 @@ namespace gitter.Git.Gui
 
 		private readonly GuiProvider _guiProvider;
 		private Repository _repository;
+        private ToolStripSeparator _separatorAfterCommit;
+        private ToolStripSeparator _separatorAfterCommitsButtons;
+        private ToolStripSeparator _separatorAfterOparations;
+        private ToolStripSeparator _separatorAfterHistory;
+        private ToolStripSeparator _separatorAfterRepoOperations;
 
 		public MainToolbar(GuiProvider guiProvider)
 		{
@@ -75,11 +80,12 @@ namespace gitter.Git.Gui
 
 			Items.AddRange(new ToolStripItem[]
 				{
+                    
 					_initButton = new ToolStripButton(Resources.StrInit, CachedResources.Bitmaps["ImgInit"], OnInitClick)
 						{ TextImageRelation = tir, DisplayStyle = ds, ToolTipText = Resources.TipInit },
 					_cloneButton = new ToolStripButton(Resources.StrClone, CachedResources.Bitmaps["ImgClone"], OnCloneClick)
 						{ TextImageRelation = tir, DisplayStyle = ds, ToolTipText = Resources.TipClone },
-					new ToolStripSeparator(),
+					_separatorAfterRepoOperations=new ToolStripSeparator(),
 					_fetchButton = new ToolStripSplitButton(Resources.StrFetch, CachedResources.Bitmaps["ImgFetch"])
 						{ TextImageRelation = tir, DisplayStyle = ds, ToolTipText = Resources.TipFetch },
 					_pullButton = new ToolStripSplitButton(Resources.StrPull, CachedResources.Bitmaps["ImgPull"])
@@ -89,7 +95,7 @@ namespace gitter.Git.Gui
 					new ToolStripSeparator(),
 					_historyButton = new ToolStripButton(Resources.StrHistory, CachedResources.Bitmaps["ImgHistory"], OnHistoryClick)
 						{ TextImageRelation = tir, DisplayStyle = ds, ToolTipText = Resources.TipHistory },
-					new ToolStripSeparator(),
+					_separatorAfterHistory=new ToolStripSeparator(),
 					_commitButton = new ToolStripButton(Resources.StrCommit, CachedResources.Bitmaps["ImgCommit"], OnCommitClick)
 						{ TextImageRelation = tir, DisplayStyle = ds, ToolTipText = Resources.TipCommit },
 					_applyPatchButton = new ToolStripButton(Resources.StrPatch, CachedResources.Bitmaps["ImgPatchApply"], OnApplyPatchClick)
@@ -98,20 +104,41 @@ namespace gitter.Git.Gui
 						{ TextImageRelation = tir, DisplayStyle = ds, ToolTipText = Resources.TipStash },
 					_cleanButton = new ToolStripButton(Resources.StrClean, CachedResources.Bitmaps["ImgClean"], OnCleanClick)
 						{ TextImageRelation = tir, DisplayStyle = ds, ToolTipText = Resources.TipClean },
-					new ToolStripSeparator(),
+					_separatorAfterOparations=new ToolStripSeparator(),
 					_checkoutButton = new ToolStripButton(Resources.StrCheckout, CachedResources.Bitmaps["ImgCheckout"], OnCheckoutClick)
 						{ TextImageRelation = tir, DisplayStyle = ds, ToolTipText = Resources.TipCheckoutBranch },
 					_branchButton = new ToolStripButton(Resources.StrBranch, CachedResources.Bitmaps["ImgBranch"], OnBranchClick)
 						{ TextImageRelation = tir, DisplayStyle = ds, ToolTipText = Resources.TipCreateBranch },
 					_mergeButton = new ToolStripSplitButton(Resources.StrMerge, CachedResources.Bitmaps["ImgMerge"])
 						{ TextImageRelation = tir, DisplayStyle = ds, ToolTipText = Resources.TipMerge },
-					new ToolStripSeparator(),
-					_tagButton = new ToolStripButton(Resources.StrTag, CachedResources.Bitmaps["ImgTag"], OnTagClick)
+					_separatorAfterCommitsButtons=new ToolStripSeparator(),
+                    _tagButton = new ToolStripButton(Resources.StrTag, CachedResources.Bitmaps["ImgTag"], OnTagClick)
 						{ TextImageRelation = tir, DisplayStyle = ds, ToolTipText = Resources.TipCreateTag },
 					_noteButton = new ToolStripButton(Resources.StrNote, CachedResources.Bitmaps["ImgNote"], OnNoteClick)
 						{ TextImageRelation = tir, DisplayStyle = ds, Available = false /* GitFeatures.AdvancedNotesCommands.IsAvailable */ },
 				});
 
+            if (!GitterApplication.ComplexityMode.IsItemVisible(Complexty.advanced))
+            {
+                _initButton.Visible = false;
+                _cloneButton.Visible = false;
+                _pullButton.Visible = false;
+                _applyPatchButton.Visible = false;
+                _cleanButton.Visible = false;
+                _tagButton.Visible = false;
+                _branchButton.Visible = false;
+                _checkoutButton.Visible = false;
+                _separatorAfterHistory.Visible = false;
+                _separatorAfterOparations.Visible = false;
+                _separatorAfterCommitsButtons.Visible = false;
+                _separatorAfterRepoOperations.Visible = false;
+            }
+
+            if (!GitterApplication.ComplexityMode.IsItemVisible(Complexty.standard))
+            {
+                _stashButton.Visible = false;
+                _mergeButton.Visible = false;
+            }
 			_fetchButton.ButtonClick += OnFetchClick;
 			_pullButton.ButtonClick += OnPullClick;
 			_pushButton.Click += OnPushClick;

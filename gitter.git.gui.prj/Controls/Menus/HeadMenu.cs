@@ -24,6 +24,7 @@ namespace gitter.Git.Gui.Controls
 	using System.IO;
 	using System.ComponentModel;
 	using System.Windows.Forms;
+    using Framework;
 
 	using Resources = gitter.Git.Gui.Properties.Resources;
 
@@ -38,7 +39,7 @@ namespace gitter.Git.Gui.Controls
 
 			_head = head;
 
-			Items.Add(GuiItemFactory.GetViewReflogItem<ToolStripMenuItem>(head));
+            if (GitterApplication.ComplexityMode.IsItemVisible(Complexty.standard)) Items.Add(GuiItemFactory.GetViewReflogItem<ToolStripMenuItem>(head));
 		}
 
 		public Head Head
