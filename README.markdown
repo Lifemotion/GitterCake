@@ -1,91 +1,47 @@
-# Gitter
+# GitterCake
+- that is amgine gitter with little modifications.
 
 ## Introduction
 
+GitterCake is fork of great Amgine Gitter (https://github.com/amgine/gitter) with some UI improvements and translation into Russian.
+
+Goals of this fork  are:
+1. Make Gitter more simple and appropriate for novice.
+2. Translate UI into Russian (and improve multilingual support in general).
+3. Improve UI and usability as I understand it.
+
+If you don't need that you should better use and contribute to Amgine Gitter.
+
+## Gitter
+
+GitterCake was forked from Gitter. 
+
 Gitter was originally developed as a standalone repository management tool for Windows with powerful GUI.
-
 It is written completely in C# and targets .NET FW 4.0 Client Profile.
-
 Application is mainly tested on Win7, but should work on Vista/XP without any problems.
 
 ## License
 
-Gitter is under GNU GPL3.
-
+GitterCake is under GNU GPL3.
 See the LICENSE file for the full license text.
 
-## Repository access options
+## Введение
+GitterCake - форк великолепного Amgine Gitter (https://github.com/amgine/gitter) с некоторыми улучшениями интерфейса
+и переводом на русский язык.
 
-Currently, gitter supports interaction with repository through comand-line interface only, so you'll need git installation to work with gitter.
-Gitter was tested with MSysGit installations.
+Основные цели форка:
+1. Сделать Gitter более простым и более подходящим для новичков.
+2. Выполнить перевод интерфейса на русский язык (и, в общем, доработать поддержку других языков).
+3. Улучшить интерфейс и удобство пользования так, как я это понимаю.
 
-Get MSysGit: <http://code.google.com/p/msysgit/downloads/list>
+Если эти моменты вам не очень важны, вам будет лучше использовать и дорабатывать оригинальный Amgine Gitter.
 
-Minimum supported git version: 1.7.0.2
+## Gitter
+GitterCake - форк от Gitter.
+Gitter был разработан как самостоятельное средство управления репозиториями под Windows с мощным интерфейсом.
+Он целиком написан на C# и использует .NET FW 4.0 Client Profile.
+Приложение в основном тестировалось под Windows 7, но должно без проблем работать под Vista/XP.
 
-## Prerequisites required to build and run gitter
-
-The only thing you need is .NET FW 4.0 Full or Client-Profile:
-
-Get .NET FW 4.0 Client-Profile: <http://www.microsoft.com/download/en/details.aspx?id=24872>
-
-## How to build gitter
-
-If you don't have MS Visual Studio 2010:
-
-1. Ensure that you have .NET FW 4.0 installed (full or client-profile)
-2. Clone gitter repository
-3. Run 'build.cmd'
-4. Binaries can be found in 'output/Release' directory
-
-If you have MSVS2010 installed, you can also open 'gitter.sln' solution file and build it.
-
-## Features
-
-Gitter supports most fetures that you can expect from git GUI application:
-
-### History browser
-
-* Applies topological sort or sorts by commit date
-* Can limit displayed commit number
-* Can filter displayed references
-
-### Commit tool
-
-* Allows staging/unstaging files and directories
-* Can launch merge tool for conflicted files
-* Supports --amend
-
-### Branches
-
-Can show, create, rename, delete (including remote tracking branches), checkout
-
-### Tags
-
-Can show, create and delete (annotated, lightweight and signed)
-
-### Synchronization with remotes
-
-* Fetch
-* Pull
-* Push: knows about --force flag, allows to push multiple branches at once
-* Can add, remove and rename remotes
-* Shows references for selected remote and allows to remove them
-
-### Submodules
-
-* Can show list of submodules
-* Allows some basic operations: add and update
-
-### Other git operations
-
-* Merge: one or multiple branches, knows about --squash, --no-ff and --no-commit options, allows custom merge commit message
-* Rebase: detects state, allows to continue, skip or abort conflicting commit
-* Revert
-* Cherry-pick
-
-### Other features
-
-* Spellchecker included (commit messages, tag messages)
-* Can download and show avatars from gravatar.com
-* Real-time tracking changes in repository made by other processes (detects all kinds of working directory changes and some basic changes of git directory, like creating/removing branches, tags and remotes, changing configuration, etc)
+##Лицензия
+GitterCake находится под лицензией GNU GPL3.
+Более подробная информация в файле LICENSE.
