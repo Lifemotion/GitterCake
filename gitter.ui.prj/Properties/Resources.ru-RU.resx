@@ -209,7 +209,7 @@
     <value>Открыть</value>
   </data>
   <data name="StrRecent" xml:space="preserve">
-    <value>Последнее</value>
+    <value>Последние</value>
   </data>
   <data name="StrRepositoryExplorer" xml:space="preserve">
     <value>Обозреватель</value>

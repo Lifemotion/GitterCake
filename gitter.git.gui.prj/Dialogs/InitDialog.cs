@@ -52,6 +52,16 @@ namespace gitter.Git.Gui.Dialogs
 			_chkUseTemplate.Text = Resources.StrTemplate.AddColon();
 			_chkBare.Text = Resources.StrBare;
 
+            if (!GitterApplication.ComplexityManager.CurrentModeBiggerThan(Complexty.standard))
+            {
+                _chkBare.Visible = false;
+                _chkUseTemplate.Visible = false;
+                _txtTemplate.Visible = false;
+                _btnSelectTemplate.Visible = false;
+                _grpOptions.Visible = false;
+            }
+
+
 			GitterApplication.FontManager.InputFont.Apply(_txtPath, _txtTemplate);
 		}
 

@@ -23,7 +23,7 @@ using System.Resources;
 using System.Reflection;
 
 [assembly: AssemblyCompany("amgine")]
-[assembly: AssemblyProduct("gitter")]
+[assembly: AssemblyProduct("GitterCake")]
 [assembly: AssemblyCopyright("Copyright © amgine 2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

@@ -70,6 +70,14 @@ namespace gitter.Git.Gui.Dialogs
 			_lstReferences.LoadData(_repository, ReferenceType.LocalBranch, false, false, null);
 			_lstReferences.EnableCheckboxes();
 
+            if (!GitterApplication.ComplexityManager.CurrentModeBiggerThan(Complexty.advanced))
+            {
+                _chkForceOverwriteBranches.Visible = false;
+                _lblUseWithCaution.Visible = false;
+                _chkUseThinPack.Visible = false;
+            }
+
+
 			if(!_repository.Head.IsDetached)
 			{
 				foreach(BranchListItem item in _lstReferences.Items)

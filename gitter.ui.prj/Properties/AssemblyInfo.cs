@@ -23,7 +23,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Resources;
 
-[assembly: AssemblyTitle("gitter")]
+[assembly: AssemblyTitle("GitterCake")]
 [assembly: AssemblyDescription("Graphical interface for git content tracker")]
 
 [assembly: ComVisible(false)]

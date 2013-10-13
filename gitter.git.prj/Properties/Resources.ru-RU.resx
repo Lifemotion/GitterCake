@@ -235,7 +235,7 @@
     <value>Soft</value>
   </data>
   <data name="StrRemote" xml:space="preserve">
-    <value>Remote</value>
+    <value>Источник</value>
   </data>
   <data name="StrRemotes" xml:space="preserve">
     <value>Источники</value>
@@ -377,10 +377,10 @@
     <value>Create branch reflog</value>
   </data>
   <data name="StrMessage" xml:space="preserve">
-    <value>Message</value>
+    <value>Сообщение</value>
   </data>
   <data name="StrNewName" xml:space="preserve">
-    <value>New name</value>
+    <value>Новое имя</value>
   </data>
   <data name="StrNoCommit" xml:space="preserve">
     <value>No commit</value>
@@ -398,7 +398,7 @@
     <value>Rename Remote</value>
   </data>
   <data name="StrSendTags" xml:space="preserve">
-    <value>Send tags</value>
+    <value>Отправить метки</value>
   </data>
   <data name="StrStartingRevision" xml:space="preserve">
     <value>Starting revision</value>
@@ -416,10 +416,10 @@
     <value>Unable to remove remote '{0}'</value>
   </data>
   <data name="StrFetchingDataFrom" xml:space="preserve">
-    <value>Fetching data from '{0}'...</value>
+    <value>Забираем данные из '{0}'...</value>
   </data>
   <data name="StrFetchingDataFromRemoteRepository" xml:space="preserve">
-    <value>Fetching data from remote repository...</value>
+    <value>Забираем данные из удаленного источника...</value>
   </data>
   <data name="StrForceOverwriteRemoteBranches" xml:space="preserve">
     <value>Force overwrite remote branches</value>
@@ -527,7 +527,7 @@
     <value>No remotes</value>
   </data>
   <data name="StrNoStagedChanges" xml:space="preserve">
-    <value>No staged changes</value>
+    <value>Нет подготовленных изменений</value>
   </data>
   <data name="StrNoUnstagedChanges" xml:space="preserve">
     <value>No unstaged changes</value>
@@ -578,7 +578,7 @@
     <value>Select repository path</value>
   </data>
   <data name="StrTemplate" xml:space="preserve">
-    <value>Template</value>
+    <value>Шаблон</value>
   </data>
   <data name="StrUseTemplateDirectory" xml:space="preserve">
     <value>Use template directory</value>
@@ -623,7 +623,7 @@
     <value>You must specify a valid GPG key ID</value>
   </data>
   <data name="ErrMessageCannotBeEmpty" xml:space="preserve">
-    <value>Message cannot be empty</value>
+    <value>Сообщение не должно быть пустым</value>
   </data>
   <data name="ErrNoKeyIdSpecified" xml:space="preserve">
     <value>No key ID specified</value>
@@ -653,13 +653,13 @@
     <value>Pattern</value>
   </data>
   <data name="StrStageAll" xml:space="preserve">
-    <value>Stage All</value>
+    <value>Подготовить все</value>
   </data>
   <data name="StrUnstageAll" xml:space="preserve">
-    <value>Unstage All</value>
+    <value>Отменить все</value>
   </data>
   <data name="StrShowAll" xml:space="preserve">
-    <value>Show All</value>
+    <value>Показать все</value>
   </data>
   <data name="StrValue" xml:space="preserve">
     <value>Значение</value>
@@ -862,10 +862,10 @@ Commit or stash them and try again.</value>
     <value>Diff</value>
   </data>
   <data name="StrStagedChanges" xml:space="preserve">
-    <value>Staged Changes</value>
+    <value>Подготовленные изменения</value>
   </data>
   <data name="StrUnstagedChanges" xml:space="preserve">
-    <value>Unstaged Changes</value>
+    <value>Неподготовленные изменения</value>
   </data>
   <data name="StrStageFiles" xml:space="preserve">
     <value>Stage Files</value>
@@ -1189,10 +1189,10 @@ Commit or stash them and try again.</value>
     <value>Depth</value>
   </data>
   <data name="StrNoCheckout" xml:space="preserve">
-    <value>No Checkout</value>
+    <value>Не выбирать коммит</value>
   </data>
   <data name="StrRecursive" xml:space="preserve">
-    <value>Recursive</value>
+    <value>Рекурсивно</value>
   </data>
   <data name="StrRemoteName" xml:space="preserve">
     <value>Remote Name</value>
@@ -1357,7 +1357,7 @@ Commit or stash them and try again.</value>
     <value>Merge is in process</value>
   </data>
   <data name="StrShowDirectoryTree" xml:space="preserve">
-    <value>Show Directory Tree</value>
+    <value>Показать в виде дерева папок</value>
   </data>
   <data name="StrTree" xml:space="preserve">
     <value>Tree</value>
@@ -1411,7 +1411,7 @@ Commit or stash them and try again.</value>
     <value>Unable to clean</value>
   </data>
   <data name="StrOptionalMessage" xml:space="preserve">
-    <value>Message (optional)</value>
+    <value>Сообщение (необязательно)</value>
   </data>
   <data name="StrsSearchingStaleBranches" xml:space="preserve">
     <value>Searching for stale branches</value>
@@ -1543,7 +1543,7 @@ Commit or stash them and try again.</value>
     <value>Enter at least {0} symbols as commit message</value>
   </data>
   <data name="ErrShortCommitMessage" xml:space="preserve">
-    <value>Message is too short</value>
+    <value>Сообщение слишком короткое</value>
   </data>
   <data name="StrlCopy" xml:space="preserve">
     <value>copy</value>

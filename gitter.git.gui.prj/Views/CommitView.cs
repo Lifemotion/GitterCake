@@ -60,7 +60,7 @@ namespace gitter.Git.Gui.Views
 			_splitContainer.Panel2.BackColor = GitterApplication.Style.Colors.Window;
 
 			_chkAmend = GitterApplication.Style.CreateCheckBox();
-			_chkAmend.Control.Bounds = new Rectangle(477, 67, 71, 20);
+			_chkAmend.Control.Bounds = new Rectangle(477, 67, 90, 20);
 			_chkAmend.Control.Anchor = AnchorStyles.Right | AnchorStyles.Bottom;
 			_chkAmend.Control.Parent = _splitContainer.Panel2;
 			_chkAmend.Control.Enabled = false;

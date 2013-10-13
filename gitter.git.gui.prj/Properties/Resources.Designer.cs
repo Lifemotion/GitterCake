@@ -6320,7 +6320,7 @@ namespace gitter.Git.Gui.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Remote name.
+        ///   Ищет локализованную строку, похожую на Имя источника.
         /// </summary>
         internal static string StrsRemoteName {
             get {
@@ -6779,7 +6779,7 @@ namespace gitter.Git.Gui.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Template.
+        ///   Ищет локализованную строку, похожую на Шаблон.
         /// </summary>
         internal static string StrTemplate {
             get {

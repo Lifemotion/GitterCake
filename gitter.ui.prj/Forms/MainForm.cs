@@ -75,7 +75,7 @@ namespace gitter
 		public MainForm()
 		{
 			InitializeComponent();
-
+            Text = Application.ProductName;
 			_configurationService = GitterApplication.ConfigurationService;
 
 			_viewDockService = new ViewDockService(this, _toolDockGrid, _configurationService.ViewsSection);
@@ -512,7 +512,7 @@ namespace gitter
 			if(_currentProvider != repositoryProvider)
 			{
 				CloseRepository();
-				_currentProvider = repositoryProvider;
+     				_currentProvider = repositoryProvider;
 			}
 			else
 			{
@@ -550,8 +550,8 @@ namespace gitter
 				_repositoryGui.AttachToEnvironment(this);
 			}
 			_repositoryGui.ActivateDefaultView();
-
-			Text = _repository.WorkingDirectory + " - " + Application.ProductName;
+            var dir = new System.IO.DirectoryInfo(path);
+            Text = dir .Name + " - " + Application.ProductName;
 
 			repositoryProvider.OnRepositoryLoaded(_repository);
 
@@ -840,5 +840,10 @@ namespace gitter
 		}
 
 		#endregion
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+
+        }
 	}
 }

@@ -197,7 +197,7 @@
     <value>Почта</value>
   </data>
   <data name="StrFetchUrl" xml:space="preserve">
-    <value>Fetch URL</value>
+    <value>URL загрузки</value>
   </data>
   <data name="StrGraph" xml:space="preserve">
     <value>Дерево</value>
@@ -212,7 +212,7 @@
     <value>Имя</value>
   </data>
   <data name="StrPushUrl" xml:space="preserve">
-    <value>Push URL</value>
+    <value>URL выгрузки</value>
   </data>
   <data name="StrReferences" xml:space="preserve">
     <value>Ссылки</value>
@@ -347,7 +347,7 @@
     <value>..\Resources\terminal.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StrRemote" xml:space="preserve">
-    <value>Remote</value>
+    <value>Источник</value>
   </data>
   <data name="StrRemotes" xml:space="preserve">
     <value>Удаленные источники</value>
@@ -366,7 +366,7 @@
     <comment>{0} = branch name</comment>
   </data>
   <data name="StrRemove" xml:space="preserve">
-    <value>Remove</value>
+    <value>Удалить</value>
   </data>
   <data name="StrRemoveBranch" xml:space="preserve">
     <value>Удалить ветку</value>
@@ -480,7 +480,7 @@
     <value>Modified</value>
   </data>
   <data name="StrRemoved" xml:space="preserve">
-    <value>Removed</value>
+    <value>Удалено</value>
   </data>
   <data name="ImgBinary" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\binary.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -501,7 +501,7 @@
     <value>Bottom-aligned Details</value>
   </data>
   <data name="StrIgnoreWhitespaces" xml:space="preserve">
-    <value>Ignore Whitespaces</value>
+    <value>Игнорировать пробелы</value>
   </data>
   <data name="StrLinesOfContext" xml:space="preserve">
     <value>Lines of Context</value>
@@ -519,7 +519,7 @@
     <value>Добавить удаленный</value>
   </data>
   <data name="StrRemoveRemote" xml:space="preserve">
-    <value>Remove Remote</value>
+    <value>Удалить источник</value>
   </data>
   <data name="StrStage" xml:space="preserve">
     <value>Stage</value>
@@ -564,7 +564,7 @@
     <value>..\Resources\branch-rename.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StrBranchesToPush" xml:space="preserve">
-    <value>Branches to push</value>
+    <value>Выложить следующие ветки</value>
   </data>
   <data name="StrCheckoutAfterCreation" xml:space="preserve">
     <value>Checkout after creation</value>
@@ -576,7 +576,7 @@
     <value>Merge with</value>
   </data>
   <data name="StrMessage" xml:space="preserve">
-    <value>Message</value>
+    <value>Сообщение</value>
   </data>
   <data name="StrNewName" xml:space="preserve">
     <value>Новое имя</value>
@@ -597,7 +597,7 @@
     <value>Rename Remote</value>
   </data>
   <data name="StrSendTags" xml:space="preserve">
-    <value>Send tags</value>
+    <value>Отправить метки</value>
   </data>
   <data name="StrSquash" xml:space="preserve">
     <value>Squash</value>
@@ -621,10 +621,10 @@
     <value>..\Resources\exclamation-shield.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StrFetchingDataFrom" xml:space="preserve">
-    <value>Fetching data from '{0}'...</value>
+    <value>Забираем данные из '{0}'...</value>
   </data>
   <data name="StrFetchingDataFromRemoteRepository" xml:space="preserve">
-    <value>Fetching data from remote repository...</value>
+    <value>Забираем данные из удаленного источника...</value>
   </data>
   <data name="StrForceOverwriteRemoteBranches" xml:space="preserve">
     <value>Force overwrite remote branches</value>
@@ -747,10 +747,10 @@
     <value>No remotes</value>
   </data>
   <data name="StrsNoStagedChanges" xml:space="preserve">
-    <value>No staged changes</value>
+    <value>Нет подготовленных изменений</value>
   </data>
   <data name="StrsNoUnstagedChanges" xml:space="preserve">
-    <value>No unstaged changes</value>
+    <value>Нет неподготовленных изменений</value>
   </data>
   <data name="ErrFailedToRunMergeTool" xml:space="preserve">
     <value>Unable to run merge tool</value>
@@ -765,10 +765,10 @@
     <value>No remote name specified</value>
   </data>
   <data name="ErrRemoteAlreadyExists" xml:space="preserve">
-    <value>Remote already exists</value>
+    <value>Источник уже существует</value>
   </data>
   <data name="ErrRemoteNameCannotBeEmpty" xml:space="preserve">
-    <value>Remote name cannot be empty</value>
+    <value>Имя источника не может быть пустым</value>
   </data>
   <data name="StrTracking" xml:space="preserve">
     <value>Tracking</value>
@@ -834,10 +834,10 @@ share many of the same objects in common. Enabled by default.</value>
     <value>Копировать</value>
   </data>
   <data name="StrCloneRepository" xml:space="preserve">
-    <value>Копировать репозиторий</value>
+    <value>Копировать хранилище</value>
   </data>
   <data name="StrInit" xml:space="preserve">
-    <value>Новый</value>
+    <value>Новое</value>
   </data>
   <data name="StrInitRepository" xml:space="preserve">
     <value>Создать новое хранилище</value>
@@ -849,7 +849,7 @@ share many of the same objects in common. Enabled by default.</value>
     <value>Select repository path</value>
   </data>
   <data name="StrTemplate" xml:space="preserve">
-    <value>Template</value>
+    <value>Шаблон</value>
   </data>
   <data name="StrUseTemplateDirectory" xml:space="preserve">
     <value>Use template directory</value>
@@ -942,7 +942,7 @@ share many of the same objects in common. Enabled by default.</value>
     <value>Include ignored</value>
   </data>
   <data name="StrIncludeUntracked" xml:space="preserve">
-    <value>Include untracked</value>
+    <value>Включить неотслеживаемые</value>
   </data>
   <data name="StrManual" xml:space="preserve">
     <value>Manual</value>
@@ -951,13 +951,13 @@ share many of the same objects in common. Enabled by default.</value>
     <value>Pattern</value>
   </data>
   <data name="StrStageAll" xml:space="preserve">
-    <value>Stage All</value>
+    <value>Подготовить все</value>
   </data>
   <data name="StrUnstageAll" xml:space="preserve">
-    <value>Unstage All</value>
+    <value>Отменить все</value>
   </data>
   <data name="StrShowAll" xml:space="preserve">
-    <value>Show All</value>
+    <value>Показать все</value>
   </data>
   <data name="ImgConfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\config.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -972,7 +972,7 @@ share many of the same objects in common. Enabled by default.</value>
     <value>..\Resources\config-remove.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StrValue" xml:space="preserve">
-    <value>Value</value>
+    <value>Значение</value>
   </data>
   <data name="StrParameter" xml:space="preserve">
     <value>Parameter</value>
@@ -984,7 +984,7 @@ share many of the same objects in common. Enabled by default.</value>
     <value>..\Resources\clipboard-sign.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StrCopyToClipboard" xml:space="preserve">
-    <value>Copy to Clipboard</value>
+    <value>Копировать в буфер обмена</value>
   </data>
   <data name="StrFullName" xml:space="preserve">
     <value>Full Name</value>
@@ -1044,13 +1044,13 @@ share many of the same objects in common. Enabled by default.</value>
     <value>Добавить субмодуль</value>
   </data>
   <data name="StrLessContext" xml:space="preserve">
-    <value>Less Context</value>
+    <value>Меньше контекста</value>
   </data>
   <data name="StrMoreContext" xml:space="preserve">
-    <value>More Context</value>
+    <value>Больше контекста</value>
   </data>
   <data name="StrUpdate" xml:space="preserve">
-    <value>Update</value>
+    <value>Обновить</value>
   </data>
   <data name="StrDefault" xml:space="preserve">
     <value>Default</value>
@@ -1223,10 +1223,10 @@ Proceed?</value>
     <value>Diff</value>
   </data>
   <data name="StrStagedChanges" xml:space="preserve">
-    <value>Staged Changes</value>
+    <value>Подготовленные изменения</value>
   </data>
   <data name="StrUnstagedChanges" xml:space="preserve">
-    <value>Unstaged Changes</value>
+    <value>Неподготовленные изменения</value>
   </data>
   <data name="StrStageFiles" xml:space="preserve">
     <value>Stage Files</value>
@@ -1238,13 +1238,13 @@ Proceed?</value>
     <value>Remote References</value>
   </data>
   <data name="StrBrowse" xml:space="preserve">
-    <value>Browse</value>
+    <value>Обзор</value>
   </data>
   <data name="StrManualStage" xml:space="preserve">
     <value>Manual Stage</value>
   </data>
   <data name="StrUncommitted" xml:space="preserve">
-    <value>uncommitted</value>
+    <value>нет коммита</value>
   </data>
   <data name="StrUncommittedLocalChanges" xml:space="preserve">
     <value>uncommitted staged changes</value>
@@ -1328,7 +1328,7 @@ Proceed?</value>
     <value>Mirror</value>
   </data>
   <data name="StrProperties" xml:space="preserve">
-    <value>Properties</value>
+    <value>Свойства</value>
   </data>
   <data name="StrProxy" xml:space="preserve">
     <value>Proxy</value>
@@ -1346,7 +1346,7 @@ Proceed?</value>
     <value>Upload pack</value>
   </data>
   <data name="StrVCS" xml:space="preserve">
-    <value>VCS</value>
+    <value>СКВ</value>
   </data>
   <data name="ImgBranchProperties" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\branch-properties.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -1376,7 +1376,7 @@ Proceed?</value>
     <value>To</value>
   </data>
   <data name="StrUsername" xml:space="preserve">
-    <value>Username</value>
+    <value>Имя</value>
   </data>
   <data name="ImgWarning48" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ImgWarning48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -1499,7 +1499,7 @@ with the remote with the git-remote-&lt;vcs&gt; helper.</value>
     <value>unstaged removed files</value>
   </data>
   <data name="StrlUnstagedUntrackedFiles" xml:space="preserve">
-    <value>untracked files</value>
+    <value>неотслеживаемые новые файлы</value>
   </data>
   <data name="ImgNote" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\sticky-note.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -1556,19 +1556,19 @@ with the remote with the git-remote-&lt;vcs&gt; helper.</value>
     <value>Invalid user name</value>
   </data>
   <data name="ErrUserNameCannotBeEmpty" xml:space="preserve">
-    <value>User name cannot be empty</value>
+    <value>Имя пользователя не может быть пустым</value>
   </data>
   <data name="StrsForCurrentRepositoryOnly" xml:space="preserve">
-    <value>For current repository only</value>
+    <value>Только для текущего хранилища</value>
   </data>
   <data name="StrsForCurrentWindowsUser" xml:space="preserve">
-    <value>For current Windows user</value>
+    <value>Для текущего пользователя Windows</value>
   </data>
   <data name="StrsUseThisUserNameAndEmail" xml:space="preserve">
-    <value>Use this user name and email</value>
+    <value>Использовать эти данные</value>
   </data>
   <data name="StrUserIdentification" xml:space="preserve">
-    <value>User Identification</value>
+    <value>Информация о пользователе</value>
   </data>
   <data name="StrChangedFiles" xml:space="preserve">
     <value>Changed Files</value>
@@ -1595,7 +1595,7 @@ with the remote with the git-remote-&lt;vcs&gt; helper.</value>
     <value>No changed files</value>
   </data>
   <data name="StrRemoveObject" xml:space="preserve">
-    <value>Remove '{0}'</value>
+    <value>Удалить '{0}'</value>
   </data>
   <data name="StrsRemoveBranchFrom" xml:space="preserve">
     <value>Remove branch '{0}' from</value>
@@ -1649,10 +1649,10 @@ with the remote with the git-remote-&lt;vcs&gt; helper.</value>
     <value>configure</value>
   </data>
   <data name="StrUsers" xml:space="preserve">
-    <value>Users</value>
+    <value>Пользователи</value>
   </data>
   <data name="StrlBinary" xml:space="preserve">
-    <value>binary</value>
+    <value>двоичный</value>
   </data>
   <data name="ErrFailedToAddNote" xml:space="preserve">
     <value>Unable to add note</value>
@@ -1688,10 +1688,10 @@ with the remote with the git-remote-&lt;vcs&gt; helper.</value>
     <value>No checkout</value>
   </data>
   <data name="StrRecursive" xml:space="preserve">
-    <value>Recursive</value>
+    <value>Рекурсивно</value>
   </data>
   <data name="StrsRemoteName" xml:space="preserve">
-    <value>Remote name</value>
+    <value>Имя источника</value>
   </data>
   <data name="StrsShallowClone" xml:space="preserve">
     <value>Shallow clone</value>
@@ -1706,10 +1706,10 @@ with the remote with the git-remote-&lt;vcs&gt; helper.</value>
     <value>no path specified</value>
   </data>
   <data name="StrsAppendRepositoryNameFromURL" xml:space="preserve">
-    <value>Append repository name from URL to path</value>
+    <value>Добавить имя хранилища из URL к пути</value>
   </data>
   <data name="StrsWillBeClonedInto" xml:space="preserve">
-    <value>Will be cloned into</value>
+    <value>Будет скопировано в папку</value>
   </data>
   <data name="StrCloningRepository" xml:space="preserve">
     <value>Cloning Repository</value>
@@ -1785,7 +1785,7 @@ a new history totally disconnected from all the other branches and commits.</val
     <value>Refreshing references</value>
   </data>
   <data name="StrViewReflog" xml:space="preserve">
-    <value>View Reflog</value>
+    <value>Просмотр журнала ссылок</value>
   </data>
   <data name="ImgViewReflog" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\view-reflog-local.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -1854,7 +1854,7 @@ a new history totally disconnected from all the other branches and commits.</val
     <value>Fetch None</value>
   </data>
   <data name="StrlTrackAllBranches" xml:space="preserve">
-    <value>All branches</value>
+    <value>Все ветки</value>
   </data>
   <data name="StrlTrackSpecifiedBranches" xml:space="preserve">
     <value>Specified branches</value>
@@ -1893,7 +1893,7 @@ a new history totally disconnected from all the other branches and commits.</val
     <value>Merge is in process</value>
   </data>
   <data name="StrShowDirectoryTree" xml:space="preserve">
-    <value>Show Directory Tree</value>
+    <value>Показать в виде дерева папок</value>
   </data>
   <data name="StrTree" xml:space="preserve">
     <value>Tree</value>
@@ -1926,7 +1926,7 @@ a new history totally disconnected from all the other branches and commits.</val
     <value>Clean Ignored</value>
   </data>
   <data name="StrCleanUntracked" xml:space="preserve">
-    <value>Clean Untracked</value>
+    <value>Очистить неотслеживаемые</value>
   </data>
   <data name="StrBoth" xml:space="preserve">
     <value>Both</value>
@@ -1944,7 +1944,7 @@ a new history totally disconnected from all the other branches and commits.</val
     <value>Also remove directories</value>
   </data>
   <data name="StrUntracked" xml:space="preserve">
-    <value>Untracked</value>
+    <value>Неотслеживаемые</value>
   </data>
   <data name="StrsNoFilesToRemove" xml:space="preserve">
     <value>No files to remove</value>
@@ -2046,7 +2046,7 @@ a new history totally disconnected from all the other branches and commits.</val
     <value>Rebase Here</value>
   </data>
   <data name="StrPushTo" xml:space="preserve">
-    <value>Push to</value>
+    <value>Место назначения</value>
   </data>
   <data name="StrlRequiredVersionIs" xml:space="preserve">
     <value>required git version {0}</value>
@@ -2181,7 +2181,7 @@ a new history totally disconnected from all the other branches and commits.</val
     <value>copy</value>
   </data>
   <data name="StrlRename" xml:space="preserve">
-    <value>rename</value>
+    <value>переименовать</value>
   </data>
   <data name="StrBlame" xml:space="preserve">
     <value>Blame</value>
@@ -2238,7 +2238,7 @@ a new history totally disconnected from all the other branches and commits.</val
     <value>..\Resources\node.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StrsIgnoreWhitespace" xml:space="preserve">
-    <value>Ignore whitespace</value>
+    <value>Игнорировать пробелы</value>
   </data>
   <data name="StrsUsePatienceDiffAlgorithm" xml:space="preserve">
     <value>Use patience diff algorithm</value>
@@ -2315,7 +2315,7 @@ Proceed?</value>
     <value>Добавить из буфера обмена</value>
   </data>
   <data name="StrsIncludeUntrackedFiles" xml:space="preserve">
-    <value>Include untracked files</value>
+    <value>Включить неотслеживаемые файлы</value>
   </data>
   <data name="ErrFailedToResolveConflict" xml:space="preserve">
     <value>Unable to resolve conflict</value>
@@ -2417,13 +2417,13 @@ Proceed?</value>
     <value>..\Resources\user-silhouette-question.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StrChangeIdentity" xml:space="preserve">
-    <value>Change Identity</value>
+    <value>Изменить информацию о пользователе</value>
   </data>
   <data name="StrlUserIdentityNotConfigured" xml:space="preserve">
-    <value>user identity is not configured</value>
+    <value>информация не указана</value>
   </data>
   <data name="StrSwitchBranch" xml:space="preserve">
-    <value>Switch Branch</value>
+    <value>Выбрать ветку</value>
   </data>
   <data name="ImgFileHistory" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\file-history.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -2566,7 +2566,7 @@ Reset existing branch instead of creating a new one?</value>
     <value>Source File Name</value>
   </data>
   <data name="StrBinary" xml:space="preserve">
-    <value>Binary</value>
+    <value>Двоичный</value>
   </data>
   <data name="StrsCommitLimit" xml:space="preserve">
     <value>Commit limit</value>
@@ -2584,10 +2584,10 @@ Reset existing branch instead of creating a new one?</value>
     <value>The revert is done against the beginning state of your index and no commit is created in process.</value>
   </data>
   <data name="StrsStagedChanges" xml:space="preserve">
-    <value>Staged changes</value>
+    <value>Подготовленные изменения</value>
   </data>
   <data name="StrsUnstagedChanges" xml:space="preserve">
-    <value>Unstaged changes</value>
+    <value>Неподготовленные изменения</value>
   </data>
   <data name="StrlCmd" xml:space="preserve">
     <value>cmd</value>

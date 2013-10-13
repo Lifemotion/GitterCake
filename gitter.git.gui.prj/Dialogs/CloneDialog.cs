@@ -63,6 +63,24 @@ namespace gitter.Git.Gui.Dialogs
 			_lblDepth.Text = Resources.StrDepth.AddColon();
 			_chkNoCheckout.Text = Resources.StrsNoCheckout;
 
+            if (!GitterApplication.ComplexityManager.CurrentModeBiggerThan(Complexty.advanced))
+            {
+                _chkBare.Visible = false;
+                _chkMirror.Visible = false;
+                _chkShallowClone.Visible = false;
+                _lblDepth.Visible = false;
+                _numDepth.Visible = false;
+            }
+
+            if (!GitterApplication.ComplexityManager.CurrentModeBiggerThan(Complexty.standard))
+            {
+                _chkUseTemplate.Visible = false;
+                _chkRecursive.Visible = false;
+                _chkNoCheckout.Visible = false;
+                _txtTemplate.Visible = false;
+                _btnSelectTemplate.Visible = false;
+            }
+
 			UpdateTargetPathText();
 
 			GitterApplication.FontManager.InputFont.Apply(_txtUrl, _txtPath, _txtRemoteName);

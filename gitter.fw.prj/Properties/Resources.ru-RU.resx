@@ -422,7 +422,7 @@
     <value>Лог</value>
   </data>
   <data name="StrMessage" xml:space="preserve">
-    <value>Message</value>
+    <value>Сообщение</value>
   </data>
   <data name="StrTimestamp" xml:space="preserve">
     <value>Timestamp</value>
