@@ -953,7 +953,7 @@ namespace gitter.Git.Gui
 
 		public RevisionHeaderContent()
 		{
-            if (!GitterApplication.ComplexityMode.IsItemVisible(Complexty.standard))
+            if (!GitterApplication.ComplexityManager.CurrentModeBiggerThan(Complexty.standard))
             {
                 _elements = new IRevisionHeaderElement[]
 			{

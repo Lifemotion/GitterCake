@@ -39,7 +39,7 @@ namespace gitter.Git.Gui.Controls
 
 			_head = head;
 
-            if (GitterApplication.ComplexityMode.IsItemVisible(Complexty.standard)) Items.Add(GuiItemFactory.GetViewReflogItem<ToolStripMenuItem>(head));
+            if (GitterApplication.ComplexityManager.CurrentModeBiggerThan(Complexty.standard)) Items.Add(GuiItemFactory.GetViewReflogItem<ToolStripMenuItem>(head));
 		}
 
 		public Head Head

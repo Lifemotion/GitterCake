@@ -51,7 +51,7 @@ namespace gitter.Git.Gui
 					    Resources.StrGit),
 			    };
 
-            if (!gitter.Framework.GitterApplication.ComplexityMode.IsItemVisible(Framework.Complexty.advanced))
+            if (!gitter.Framework.GitterApplication.ComplexityManager.CurrentModeBiggerThan(Framework.Complexty.advanced))
             {
             _gitMenu.Visible=false;
 

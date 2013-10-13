@@ -39,36 +39,43 @@ namespace gitter.Framework.Options
 		{
 			InitializeComponent();
 
-            if (GitterApplication.ComplexityMode.Mode == Complexty.simple)
-			{
-				_levelSimple.Checked = true;
-			}
-            else if (GitterApplication.ComplexityMode.Mode == Complexty.standard)
-			{
-                _levelStandard.Checked = true;
-			}
-            else if (GitterApplication.ComplexityMode.Mode == Complexty.advanced)
-            {
-                _levelAdvanced.Checked = true;
-            }
+            if (GitterApplication.ComplexityManager.Mode == Complexty.simple){_levelSimple.Checked = true;}
+            if (GitterApplication.ComplexityManager.Mode == Complexty.standard){_levelStandard.Checked = true;}
+            if (GitterApplication.ComplexityManager.Mode == Complexty.advanced){_levelAdvanced.Checked = true;}
 
+            if (GitterApplication.Language == "ru") { _langRu.Checked = true; }
+            if (GitterApplication.Language == "en") { _langEn.Checked = true; }
+            if (GitterApplication.Language == "auto") { _langAuto.Checked = true; }
+
+            _langAuto.CheckedChanged += Controls_CheckedChanged;
+            _langEn.CheckedChanged += Controls_CheckedChanged;
+            _langRu.CheckedChanged += Controls_CheckedChanged;
+            _levelSimple.CheckedChanged += Controls_CheckedChanged;
+            _levelStandard.CheckedChanged += Controls_CheckedChanged;
+            _levelAdvanced.CheckedChanged += Controls_CheckedChanged;
     	}
+
+        private void Controls_CheckedChanged(object sender, EventArgs e)
+        {
+            Execute();
+        }
 
 		public bool Execute()
 		{
-			if(_levelSimple.Checked)
-			{
-                GitterApplication.ComplexityMode.Mode = Complexty.simple;
-			}
-			else if(_levelStandard.Checked)
-			{
-                GitterApplication.ComplexityMode.Mode = Complexty.standard;
-			}
-            else if (_levelStandard.Checked)
-            {
-                GitterApplication.ComplexityMode.Mode = Complexty.advanced;
-            }
+
+            if (_levelSimple.Checked) { GitterApplication.ComplexityManager.Mode = Complexty.simple; }
+            if (_levelStandard.Checked) { GitterApplication.ComplexityManager.Mode = Complexty.standard; }
+            if (_levelAdvanced.Checked) { GitterApplication.ComplexityManager.Mode = Complexty.advanced; }
+
+            if (_langRu.Checked) { GitterApplication.Language = "ru"; }
+            if (_langEn.Checked) { GitterApplication.Language = "en"; }
+            if (_langAuto.Checked) { GitterApplication.Language = "auto"; }
+
+            _pnlRestartRequiredWarning.Visible = true;
+
 			return true;
 		}
+
+
 	}
 }

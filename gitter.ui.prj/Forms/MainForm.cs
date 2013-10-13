@@ -91,7 +91,7 @@ namespace gitter
 			LoadOptions();
 			LoadRecentRepositories();
 
-            if (GitterApplication.ComplexityMode.IsItemVisible(Complexty.standard))
+            if (GitterApplication.ComplexityManager.CurrentModeBiggerThan(Complexty.standard))
             {
                 _viewDockService.ShowView(Guids.RepositoryExplorerView);
             }

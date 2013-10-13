@@ -41,7 +41,7 @@ namespace gitter.Git.Gui.Controls
 			Verify.Argument.IsNotNull(revision, "revision");
 
 			_revision = revision;
-            if (GitterApplication.ComplexityMode.Mode == Complexty.simple)
+            if (GitterApplication.ComplexityManager.Mode == Complexty.simple)
             {
                 Items.Add(GuiItemFactory.GetCheckoutRevisionItem<ToolStripMenuItem>(_revision, "{0}"));
                 Items.Add(GuiItemFactory.GetResetHeadHereItem<ToolStripMenuItem>(_revision));

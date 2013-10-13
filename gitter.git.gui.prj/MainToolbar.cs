@@ -56,6 +56,7 @@ namespace gitter.Git.Gui
 		private readonly ToolStripSplitButton _mergeButton;
 		private readonly ToolStripMenuItem _mergeMultipleItem;
 
+        private readonly ToolStripButton _openExplorerButton;
 		private readonly ToolStripButton _tagButton;
 		private readonly ToolStripButton _noteButton;
 
@@ -116,9 +117,11 @@ namespace gitter.Git.Gui
 						{ TextImageRelation = tir, DisplayStyle = ds, ToolTipText = Resources.TipCreateTag },
 					_noteButton = new ToolStripButton(Resources.StrNote, CachedResources.Bitmaps["ImgNote"], OnNoteClick)
 						{ TextImageRelation = tir, DisplayStyle = ds, Available = false /* GitFeatures.AdvancedNotesCommands.IsAvailable */ },
+                    _openExplorerButton = new ToolStripButton(Resources.StrOpenExplorer, CachedResources.Bitmaps["ImgFolder"], OnOpenExplorerClick)
+						{ TextImageRelation = tir, DisplayStyle = ds, ToolTipText = ""},
 				});
 
-            if (!GitterApplication.ComplexityMode.IsItemVisible(Complexty.advanced))
+            if (!GitterApplication.ComplexityManager.CurrentModeBiggerThan(Complexty.advanced))
             {
                 _initButton.Visible = false;
                 _cloneButton.Visible = false;
@@ -134,7 +137,7 @@ namespace gitter.Git.Gui
                 _separatorAfterRepoOperations.Visible = false;
             }
 
-            if (!GitterApplication.ComplexityMode.IsItemVisible(Complexty.standard))
+            if (!GitterApplication.ComplexityManager.CurrentModeBiggerThan(Complexty.standard))
             {
                 _stashButton.Visible = false;
                 _mergeButton.Visible = false;
@@ -482,6 +485,12 @@ namespace gitter.Git.Gui
 					MessageBoxIcon.Error);
 			}
 		}
+
+        private void OnOpenExplorerClick(object sender, EventArgs e)
+        {
+            var url = _repository.WorkingDirectory;
+            Utility.OpenUrl(url);
+        }
 
 		private void OnCheckoutClick(object sender, EventArgs e)
 		{

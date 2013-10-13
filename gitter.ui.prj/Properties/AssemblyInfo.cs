@@ -21,6 +21,7 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Resources;
 
 [assembly: AssemblyTitle("gitter")]
 [assembly: AssemblyDescription("Graphical interface for git content tracker")]
@@ -28,3 +29,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 [assembly: Guid("108380ba-d6b6-4a95-8d17-5339b9a8672b")]
 
+[assembly: NeutralResourcesLanguageAttribute("en-US")]

@@ -59,7 +59,7 @@ namespace gitter.Framework
 		private static IGitterStyle _defaultStyle;
 		private static IGitterStyle _style;
 		private static IGitterStyle _styleOnNextStartup;
-        private static ComplexityMode _complexityMode=new ComplexityMode();
+        private static ComplexityManager _complexityMode=new ComplexityManager();
 		/// <summary>Returns the selected text renderer for application.</summary>
 		public static ITextRenderer TextRenderer
 		{
@@ -71,6 +71,12 @@ namespace gitter.Framework
 				_defaultTextRenderer = value;
 			}
 		}
+
+        public static string Language
+        {
+            get;
+            set;
+        }
 
 		public static IEnumerable<IGitterStyle> Styles
 		{
@@ -122,7 +128,7 @@ namespace gitter.Framework
 			get { return _gdiTextRenderer; }
 		}
 
-        public static ComplexityMode ComplexityMode
+        public static ComplexityManager ComplexityManager
         {
             get { return _complexityMode; }
         }
@@ -229,7 +235,15 @@ namespace gitter.Framework
             if (modeName=="simple"){mode=Complexty.simple;}
             if (modeName == "standard") { mode = Complexty.standard; }
             if (modeName == "advanced") { mode = Complexty.advanced; }
-            ComplexityMode.Mode = mode;
+            ComplexityManager.Mode = mode;
+        }
+
+        private static void SelectLanguage()
+        {
+            var langName = _configurationService.GuiSection.GetValue<string>("Language", string.Empty);
+            Language = "auto";
+            if (langName == "ru") { Language = "ru"; }
+            if (langName == "en") { Language = "en"; }
         }
 
 		public static void Run<T>()
@@ -253,8 +267,14 @@ namespace gitter.Framework
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 
+         
+            SelectLanguage();
+            if (Language == "ru") { Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo("ru-RU"); }
+            if (Language == "en") { Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo("en-US"); }
+
 			SelectStyle();
             SelectComplexityMode();
+         
 
 			if(Utility.IsOSWindows7OrNewer)
 			{
@@ -285,7 +305,8 @@ namespace gitter.Framework
 
 			GlobalOptions.SaveTo(_configurationService.GlobalSection);
 			_configurationService.GuiSection.SetValue<string>("Style", StyleOnNextStartup.Name);
-            _configurationService.GuiSection.SetValue<string>("ComplexityMode", ComplexityMode.Name);
+            _configurationService.GuiSection.SetValue<string>("ComplexityMode", ComplexityManager.Name);
+            _configurationService.GuiSection.SetValue<string>("Language", Language);
 			_fontManager.Save();
 			_configurationService.Save();
 

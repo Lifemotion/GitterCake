@@ -2610,4 +2610,7 @@ Reset existing branch instead of creating a new one?</value>
   <data name="StrAdditional" xml:space="preserve">
     <value>Дополнительно</value>
   </data>
+  <data name="StrOpenExplorer" xml:space="preserve">
+    <value>Открыть папку</value>
+  </data>
 </root>

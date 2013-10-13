@@ -39,19 +39,19 @@ namespace gitter.Git.Gui.Controls
 
             Items.Add(GuiItemFactory.GetCheckoutRevisionItem<ToolStripMenuItem>(_branch, "{0} '{1}'"));
 
-            if (GitterApplication.ComplexityMode.IsItemVisible(Complexty.advanced)) Items.Add(GuiItemFactory.GetViewReflogItem<ToolStripMenuItem>(_branch));
-            if (GitterApplication.ComplexityMode.IsItemVisible(Complexty.standard))  Items.Add(GuiItemFactory.GetViewTreeItem<ToolStripMenuItem>(_branch));
+            if (GitterApplication.ComplexityManager.CurrentModeBiggerThan(Complexty.advanced)) Items.Add(GuiItemFactory.GetViewReflogItem<ToolStripMenuItem>(_branch));
+            if (GitterApplication.ComplexityManager.CurrentModeBiggerThan(Complexty.standard))  Items.Add(GuiItemFactory.GetViewTreeItem<ToolStripMenuItem>(_branch));
 
-            if (GitterApplication.ComplexityMode.IsItemVisible(Complexty.standard))  Items.Add(new ToolStripSeparator()); // interactive section
+            if (GitterApplication.ComplexityManager.CurrentModeBiggerThan(Complexty.standard))  Items.Add(new ToolStripSeparator()); // interactive section
 		
-            if (GitterApplication.ComplexityMode.IsItemVisible(Complexty.standard)) Items.Add(GuiItemFactory.GetResetHeadHereItem<ToolStripMenuItem>(_branch));
-            if (GitterApplication.ComplexityMode.IsItemVisible(Complexty.advanced)) Items.Add(GuiItemFactory.GetRebaseHeadHereItem<ToolStripMenuItem>(_branch));
-            if (GitterApplication.ComplexityMode.IsItemVisible(Complexty.standard)) Items.Add(GuiItemFactory.GetMergeItem<ToolStripMenuItem>(_branch));
+            if (GitterApplication.ComplexityManager.CurrentModeBiggerThan(Complexty.standard)) Items.Add(GuiItemFactory.GetResetHeadHereItem<ToolStripMenuItem>(_branch));
+            if (GitterApplication.ComplexityManager.CurrentModeBiggerThan(Complexty.advanced)) Items.Add(GuiItemFactory.GetRebaseHeadHereItem<ToolStripMenuItem>(_branch));
+            if (GitterApplication.ComplexityManager.CurrentModeBiggerThan(Complexty.standard)) Items.Add(GuiItemFactory.GetMergeItem<ToolStripMenuItem>(_branch));
 			if(!branch.IsRemote)
 			{
-                if (GitterApplication.ComplexityMode.IsItemVisible(Complexty.standard)) Items.Add(GuiItemFactory.GetRenameBranchItem<ToolStripMenuItem>((Branch)_branch, "{0}"));
+                if (GitterApplication.ComplexityManager.CurrentModeBiggerThan(Complexty.standard)) Items.Add(GuiItemFactory.GetRenameBranchItem<ToolStripMenuItem>((Branch)_branch, "{0}"));
 			}
-            if (GitterApplication.ComplexityMode.IsItemVisible(Complexty.standard)) Items.Add(GuiItemFactory.GetRemoveBranchItem<ToolStripMenuItem>(_branch));
+            if (GitterApplication.ComplexityManager.CurrentModeBiggerThan(Complexty.standard)) Items.Add(GuiItemFactory.GetRemoveBranchItem<ToolStripMenuItem>(_branch));
 			if(!branch.IsRemote)
 			{
 				lock(branch.Repository.Remotes.SyncRoot)
@@ -74,7 +74,7 @@ namespace gitter.Git.Gui.Controls
 			}
 			
 
-            if (GitterApplication.ComplexityMode.IsItemVisible(Complexty.standard))
+            if (GitterApplication.ComplexityManager.CurrentModeBiggerThan(Complexty.standard))
             {
                 Items.Add(new ToolStripSeparator()); // copy to clipboard section
                 var item = new ToolStripMenuItem(Resources.StrCopyToClipboard);
@@ -83,14 +83,14 @@ namespace gitter.Git.Gui.Controls
                 item.DropDownItems.Add(GuiItemFactory.GetCopyHashToClipboardItem<ToolStripMenuItem>(Resources.StrPosition, _branch.Revision.Hash));
 			    Items.Add(item);
             }
-            if (GitterApplication.ComplexityMode.IsItemVisible(Complexty.standard))
+            if (GitterApplication.ComplexityManager.CurrentModeBiggerThan(Complexty.standard))
             {
                 Items.Add(new ToolStripSeparator());
                 Items.Add(GuiItemFactory.GetCreateBranchItem<ToolStripMenuItem>(_branch));
                 Items.Add(GuiItemFactory.GetCreateTagItem<ToolStripMenuItem>(_branch));
             }
 
-            if (!GitterApplication.ComplexityMode.IsItemVisible(Complexty.standard))
+            if (!GitterApplication.ComplexityManager.CurrentModeBiggerThan(Complexty.standard))
             {
                 Items.Add(new ToolStripSeparator()); // copy to clipboard section
                 var item = new ToolStripMenuItem(Resources.StrAdditional);
