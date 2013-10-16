@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="StrApply" xml:space="preserve">
-    <value>Apply</value>
+    <value>Применить</value>
   </data>
   <data name="StrCancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Отмена</value>
   </data>
   <data name="StrOk" xml:space="preserve">
     <value>OK</value>
@@ -248,10 +248,10 @@
     <value>..\Resources\document-xaml.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StrName" xml:space="preserve">
-    <value>Name</value>
+    <value>Имя</value>
   </data>
   <data name="StrOptions" xml:space="preserve">
-    <value>Options</value>
+    <value>Параметры</value>
   </data>
   <data name="StrAddColon" xml:space="preserve">
     <value>{0}:</value>
@@ -272,25 +272,25 @@
     <value>'{0}'</value>
   </data>
   <data name="StrAbort" xml:space="preserve">
-    <value>Abort</value>
+    <value>Прервать</value>
   </data>
   <data name="StrIgnore" xml:space="preserve">
-    <value>Ignore</value>
+    <value>Пропустить</value>
   </data>
   <data name="StrNo" xml:space="preserve">
-    <value>No</value>
+    <value>Нет</value>
   </data>
   <data name="StrYes" xml:space="preserve">
-    <value>Yes</value>
+    <value>Да</value>
   </data>
   <data name="StrRetry" xml:space="preserve">
-    <value>Retry</value>
+    <value>Поатор</value>
   </data>
   <data name="StrFonts" xml:space="preserve">
-    <value>Fonts</value>
+    <value>Шрифты</value>
   </data>
   <data name="StrAntiAlias" xml:space="preserve">
-    <value>AntiAlias</value>
+    <value>Сглаживание</value>
   </data>
   <data name="StrClearType" xml:space="preserve">
     <value>ClearType</value>
@@ -299,46 +299,46 @@
     <value>Contrast</value>
   </data>
   <data name="StrFamily" xml:space="preserve">
-    <value>Family</value>
+    <value>Семейство</value>
   </data>
   <data name="StrInputFont" xml:space="preserve">
-    <value>Input Font</value>
+    <value>Шрифт полей ввода</value>
   </data>
   <data name="StrRenderingOptions" xml:space="preserve">
-    <value>Rendering Options</value>
+    <value>Настройки отображения</value>
   </data>
   <data name="StrRenderingQuality" xml:space="preserve">
-    <value>Rendering Quality</value>
+    <value>Качество отображения</value>
   </data>
   <data name="StrSample" xml:space="preserve">
-    <value>Sample</value>
+    <value>Пример</value>
   </data>
   <data name="StrSize" xml:space="preserve">
-    <value>Size</value>
+    <value>Размер</value>
   </data>
   <data name="StrSystemDefault" xml:space="preserve">
-    <value>System Default</value>
+    <value>Системный</value>
   </data>
   <data name="StrUIFont" xml:space="preserve">
-    <value>UI Font</value>
+    <value>Шрифт интерфейса</value>
   </data>
   <data name="StrViewerFont" xml:space="preserve">
-    <value>Text Viewer Font</value>
+    <value>Шрифт обозревателя текста</value>
   </data>
   <data name="StrAppearance" xml:space="preserve">
-    <value>Appearance</value>
+    <value>Внешний вид</value>
   </data>
   <data name="StrColors" xml:space="preserve">
-    <value>Colors</value>
+    <value>Цвета</value>
   </data>
   <data name="StrFont" xml:space="preserve">
-    <value>Font</value>
+    <value>Шрифт</value>
   </data>
   <data name="StrBold" xml:space="preserve">
-    <value>Bold</value>
+    <value>Полужирный</value>
   </data>
   <data name="StrItalic" xml:space="preserve">
-    <value>Italic</value>
+    <value>Курсив</value>
   </data>
   <data name="StrStrikeout" xml:space="preserve">
     <value>Strikeout</value>
@@ -374,16 +374,16 @@
     <value>Send Bugreport</value>
   </data>
   <data name="StrStack" xml:space="preserve">
-    <value>Stack</value>
+    <value>Стек</value>
   </data>
   <data name="StrClose" xml:space="preserve">
-    <value>Close</value>
+    <value>Закрыть</value>
   </data>
   <data name="StrError" xml:space="preserve">
-    <value>Error</value>
+    <value>Ошибка</value>
   </data>
   <data name="StrBehavior" xml:space="preserve">
-    <value>Behavior</value>
+    <value>Поведение</value>
   </data>
   <data name="ErrFailedToRunElevatedProcess" xml:space="preserve">
     <value>Unable to execute some actions</value>
@@ -392,7 +392,7 @@
     <value>Some options could not be applied because gitter was uable to start an elevated process.</value>
   </data>
   <data name="StrSpelling" xml:space="preserve">
-    <value>Spell Checking</value>
+    <value>Проверка орфографии</value>
   </data>
   <data name="ImgViewHostClose" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\cross-small.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -416,7 +416,7 @@
     <value>..\Resources\tab-scroll-right.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StrException" xml:space="preserve">
-    <value>Exception</value>
+    <value>Исключение</value>
   </data>
   <data name="StrLog" xml:space="preserve">
     <value>Лог</value>
@@ -425,10 +425,10 @@
     <value>Сообщение</value>
   </data>
   <data name="StrTimestamp" xml:space="preserve">
-    <value>Timestamp</value>
+    <value>Метка времени</value>
   </data>
   <data name="StrType" xml:space="preserve">
-    <value>Type</value>
+    <value>Тип</value>
   </data>
   <data name="ImgLog" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\log.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -446,7 +446,7 @@
     <value>..\Resources\exclamation--frame.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StrSource" xml:space="preserve">
-    <value>Source</value>
+    <value>Источник</value>
   </data>
   <data name="ImgMaximize" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\maximize.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -512,7 +512,7 @@
     <value>Download and show user avatars using gravatar.com</value>
   </data>
   <data name="StrIntegration" xml:space="preserve">
-    <value>Integration</value>
+    <value>Интеграция</value>
   </data>
   <data name="StrsExplorerContextMenuFeature" xml:space="preserve">
     <value>Add "Run gitter" item to folder menu in Windows Explorer</value>
@@ -521,7 +521,7 @@
     <value>..\Resources\folder.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StrsIntegrationFeatures" xml:space="preserve">
-    <value>Integration features</value>
+    <value>Возможности интеграции</value>
   </data>
   <data name="StrBottom" xml:space="preserve">
     <value>Bottom</value>

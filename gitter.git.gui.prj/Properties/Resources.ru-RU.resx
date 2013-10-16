@@ -861,7 +861,7 @@ share many of the same objects in common. Enabled by default.</value>
     <value>Unable to init repository</value>
   </data>
   <data name="ErrNoPathSpecified" xml:space="preserve">
-    <value>No path specified</value>
+    <value>Путь не выбран</value>
   </data>
   <data name="ErrPathCannotBeEmpty" xml:space="preserve">
     <value>Path cannot be empty</value>
@@ -1703,7 +1703,7 @@ with the remote with the git-remote-&lt;vcs&gt; helper.</value>
     <value>Invalid URL</value>
   </data>
   <data name="StrlNoPathSpecified" xml:space="preserve">
-    <value>no path specified</value>
+    <value>путь не выбран</value>
   </data>
   <data name="StrsAppendRepositoryNameFromURL" xml:space="preserve">
     <value>Добавить имя хранилища из URL к пути</value>
@@ -1712,10 +1712,10 @@ with the remote with the git-remote-&lt;vcs&gt; helper.</value>
     <value>Будет скопировано в папку</value>
   </data>
   <data name="StrCloningRepository" xml:space="preserve">
-    <value>Cloning Repository</value>
+    <value>Копирование репозитория</value>
   </data>
   <data name="StrfCloning" xml:space="preserve">
-    <value>Cloning {0}</value>
+    <value>Копирование {0}</value>
   </data>
   <data name="StrConflictingFiles" xml:space="preserve">
     <value>Conflicting Files</value>
@@ -2046,7 +2046,7 @@ a new history totally disconnected from all the other branches and commits.</val
     <value>Rebase Here</value>
   </data>
   <data name="StrPushTo" xml:space="preserve">
-    <value>Место назначения</value>
+    <value>Выложить в</value>
   </data>
   <data name="StrlRequiredVersionIs" xml:space="preserve">
     <value>required git version {0}</value>

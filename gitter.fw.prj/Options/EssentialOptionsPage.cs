@@ -39,6 +39,9 @@ namespace gitter.Framework.Options
 		{
 			InitializeComponent();
 
+            groupSeparator1.Text = Properties.Resources.StrApplicationMode;
+
+
             if (GitterApplication.ComplexityManager.Mode == Complexty.simple){_levelSimple.Checked = true;}
             if (GitterApplication.ComplexityManager.Mode == Complexty.standard){_levelStandard.Checked = true;}
             if (GitterApplication.ComplexityManager.Mode == Complexty.advanced){_levelAdvanced.Checked = true;}

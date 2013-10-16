@@ -160,7 +160,7 @@
     <value>Name</value>
   </data>
   <data name="StrPushUrl" xml:space="preserve">
-    <value>Push Url</value>
+    <value>Url выгрузки</value>
   </data>
   <data name="StrReferences" xml:space="preserve">
     <value>References</value>
@@ -220,7 +220,7 @@
     <value>Pull</value>
   </data>
   <data name="StrPush" xml:space="preserve">
-    <value>Push</value>
+    <value>Выгрузить</value>
   </data>
   <data name="StrRevert" xml:space="preserve">
     <value>Revert</value>
@@ -482,7 +482,7 @@
     <value>No tag name specified</value>
   </data>
   <data name="ErrPushFailed" xml:space="preserve">
-    <value>Push to '{0}' failed</value>
+    <value>Выгрузка в '{0}' закончилась ошибкой</value>
   </data>
   <data name="ErrStartingRevisionCannotBeEmpty" xml:space="preserve">
     <value>Starting revision cannot be empty</value>
@@ -590,7 +590,7 @@
     <value>Unable to init repository</value>
   </data>
   <data name="ErrNoPathSpecified" xml:space="preserve">
-    <value>No path specified</value>
+    <value>Путь не выбран</value>
   </data>
   <data name="ErrPathCannotBeEmpty" xml:space="preserve">
     <value>Path cannot be empty</value>
@@ -761,7 +761,7 @@
     <value>Loading remotes</value>
   </data>
   <data name="StrLoadingRepository" xml:space="preserve">
-    <value>Loading repository</value>
+    <value>Загрузка репозитория</value>
   </data>
   <data name="StrLoadingStash" xml:space="preserve">
     <value>Loading stash</value>
@@ -779,7 +779,7 @@
     <value>Refreshing tags</value>
   </data>
   <data name="StrSendingDataTo" xml:space="preserve">
-    <value>Sending data to '{0}'</value>
+    <value>Отправка данных в '{0}'</value>
   </data>
   <data name="StrLoadingReferences" xml:space="preserve">
     <value>Loading refrerences</value>
@@ -1207,7 +1207,7 @@ Commit or stash them and try again.</value>
     <value>Invalid URL</value>
   </data>
   <data name="StrlNoPathSpecified" xml:space="preserve">
-    <value>no path specified</value>
+    <value>nуть не выбран</value>
   </data>
   <data name="StrsAppendRepositoryNameFromURL" xml:space="preserve">
     <value>Append repository name from URL to path</value>
@@ -1216,10 +1216,10 @@ Commit or stash them and try again.</value>
     <value>Will be cloned into</value>
   </data>
   <data name="StrCloningRepository" xml:space="preserve">
-    <value>Cloning Repository</value>
+    <value>Копирование хранилища</value>
   </data>
   <data name="StrfCloning" xml:space="preserve">
-    <value>Cloning {0}</value>
+    <value>Копирование {0}</value>
   </data>
   <data name="StrConflictingFiles" xml:space="preserve">
     <value>Conflicting Files</value>
@@ -1240,7 +1240,7 @@ Commit or stash them and try again.</value>
     <value>Compare With</value>
   </data>
   <data name="StrLoadingSubmodules" xml:space="preserve">
-    <value>Loading Submodules</value>
+    <value>Загрузка сабмодулей</value>
   </data>
   <data name="StrNoSubmodules" xml:space="preserve">
     <value>No submodules</value>
@@ -1444,7 +1444,7 @@ Commit or stash them and try again.</value>
     <value>Rebase Here</value>
   </data>
   <data name="StrPushTo" xml:space="preserve">
-    <value>Push to</value>
+    <value>Выложить в</value>
   </data>
   <data name="StrlRequiredVersionIs" xml:space="preserve">
     <value>required git version {0}</value>

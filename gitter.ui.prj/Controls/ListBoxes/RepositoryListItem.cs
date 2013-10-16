@@ -85,6 +85,29 @@ namespace gitter
 			}
 		}
 
+        private Color ColorFromRepositoryName(string name)
+        {
+            int seed = 7;
+            int startValue = 80;
+            int maxValue = 150;
+            int r=startValue, g=startValue, b=startValue;
+            int k=100;   
+            var bytes = System.Text.Encoding.ASCII.GetBytes(name.ToUpper());
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                var rnd = new Random(bytes[i] + seed);
+                r += rnd.Next(-k, k);
+                g += rnd.Next(-k, k);
+                b += rnd.Next(-k, k);
+                k = (int)((double)k * 0.8);
+                if (r < 0) { r = 0; } if (r > maxValue) { r = maxValue; }
+                if (g < 0) { g = 0; } if (g > maxValue) { g = maxValue; }
+                if (b < 0) { b = 0; } if (b > maxValue) { b = maxValue; }
+            }
+
+           return Color.FromArgb(r, g, b);
+        }
+
 		protected override void OnPaintSubItem(SubItemPaintEventArgs paintEventArgs)
 		{
 			switch(paintEventArgs.SubItemId)
@@ -93,16 +116,18 @@ namespace gitter
 					paintEventArgs.PaintImageAndText(ImgRepositorySmall, DataContext.Path, paintEventArgs.Brush, PathStringFormat);
 					break;
 				case 1:
+                    Brush brush = paintEventArgs.Brush;
+                    brush = new SolidBrush(ColorFromRepositoryName(Name));
 					paintEventArgs.PaintImage(ImgRepositoryLarge);
 					var cy = paintEventArgs.Bounds.Y + 2;
 					GitterApplication.TextRenderer.DrawText(
-						paintEventArgs.Graphics, Name, paintEventArgs.Font, paintEventArgs.Brush, 36, cy);
+                        paintEventArgs.Graphics, Name, paintEventArgs.Font, brush, 36, cy);
 					cy += 16;
 					var rc = new Rectangle(36, cy, paintEventArgs.Bounds.Width - 42, 16);
 					if((paintEventArgs.State & ItemState.Selected) == ItemState.Selected && GitterApplication.Style.Type == GitterStyleType.DarkBackground)
 					{
 						GitterApplication.TextRenderer.DrawText(
-							paintEventArgs.Graphics, DataContext.Path, paintEventArgs.Font, paintEventArgs.Brush, rc, PathStringFormat);
+                            paintEventArgs.Graphics, DataContext.Path, paintEventArgs.Font, brush, rc, PathStringFormat);
 					}
 					else
 					{
