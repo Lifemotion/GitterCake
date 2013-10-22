@@ -42,15 +42,45 @@ namespace gitter
 			}
 
 			Font = SystemFonts.MessageBoxFont;
+            try
+            {
+                var homedir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                 var password = System.IO.File.ReadAllText(System.IO.Path.Combine(homedir, ".git_" +GetPasswordId(_lblPrompt.Text)), System.Text.Encoding.UTF8);
+
+                _txtPassword.Text = password;
+            }
+            catch
+            { }
+
+            
 		}
+
+        private static string GetPasswordId(string prompt)
+        {
+            long code = 0;
+            var bytes = System.Text.Encoding.UTF8.GetBytes(prompt);
+            long multiplier = 1;
+            foreach (byte c in bytes)
+            {
+                code += multiplier*(long)c;
+                multiplier *= 2;
+            }
+            return code.ToString();
+        }
 
 		private static void SendPassword(string password)
 		{
 			Console.Write(password);
 		}
 
+
 		private void _btnOk_Click(object sender, EventArgs e)
 		{
+            if (_cbSave.Checked)
+            {
+                var homedir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                System.IO.File.WriteAllText(System.IO.Path.Combine(homedir,".git_"+GetPasswordId(_lblPrompt.Text)), _txtPassword.Text, System.Text.Encoding.UTF8);
+            }
 			SendPassword(_txtPassword.Text);
 			Close();
 		}
@@ -59,5 +89,10 @@ namespace gitter
 		{
 			Close();
 		}
+
+        private void _cbSave_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
 	}
 }

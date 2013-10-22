@@ -2527,10 +2527,10 @@ Reset existing branch instead of creating a new one?</value>
     <value>New</value>
   </data>
   <data name="StrsEverythingIsUpToDate" xml:space="preserve">
-    <value>Everything is up to date</value>
+    <value>Все находится в актуальном состоянии.</value>
   </data>
   <data name="StrUpdated" xml:space="preserve">
-    <value>Updated</value>
+    <value>Обновлено</value>
   </data>
   <data name="StrfNMoreChangesAreNotShown" xml:space="preserve">
     <value>{0} more changes are not shown</value>
