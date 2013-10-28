@@ -20,95 +20,127 @@
 
 namespace gitter.Git.Gui.Controls
 {
-	using System;
-	using System.ComponentModel;
-	using System.Windows.Forms;
+    using System;
+    using System.ComponentModel;
+    using System.Windows.Forms;
     using Framework;
-	using Resources = gitter.Git.Gui.Properties.Resources;
+    using Resources = gitter.Git.Gui.Properties.Resources;
 
-	[ToolboxItem(false)]
-	public sealed class BranchMenu : ContextMenuStrip
-	{
-		private readonly BranchBase _branch;
+    [ToolboxItem(false)]
+    public sealed class BranchMenu : ContextMenuStrip
+    {
+        private readonly BranchBase _branch;
 
-		public BranchMenu(BranchBase branch)
-		{
-			Verify.Argument.IsValidGitObject(branch, "branch");
+        public BranchMenu(BranchBase branch)
+        {
+            Verify.Argument.IsValidGitObject(branch, "branch");
+            _branch = branch;
 
-			_branch = branch;
-
-            Items.Add(GuiItemFactory.GetCheckoutRevisionItem<ToolStripMenuItem>(_branch, "{0} '{1}'"));
-
-            if (GitterApplication.ComplexityManager.CurrentModeBiggerThan(Complexty.advanced)) Items.Add(GuiItemFactory.GetViewReflogItem<ToolStripMenuItem>(_branch));
-            if (GitterApplication.ComplexityManager.CurrentModeBiggerThan(Complexty.standard))  Items.Add(GuiItemFactory.GetViewTreeItem<ToolStripMenuItem>(_branch));
-
-            if (GitterApplication.ComplexityManager.CurrentModeBiggerThan(Complexty.standard))  Items.Add(new ToolStripSeparator()); // interactive section
-		
-            if (GitterApplication.ComplexityManager.CurrentModeBiggerThan(Complexty.standard)) Items.Add(GuiItemFactory.GetResetHeadHereItem<ToolStripMenuItem>(_branch));
-            if (GitterApplication.ComplexityManager.CurrentModeBiggerThan(Complexty.advanced)) Items.Add(GuiItemFactory.GetRebaseHeadHereItem<ToolStripMenuItem>(_branch));
-            if (GitterApplication.ComplexityManager.CurrentModeBiggerThan(Complexty.standard)) Items.Add(GuiItemFactory.GetMergeItem<ToolStripMenuItem>(_branch));
-			if(!branch.IsRemote)
-			{
-                if (GitterApplication.ComplexityManager.CurrentModeBiggerThan(Complexty.standard)) Items.Add(GuiItemFactory.GetRenameBranchItem<ToolStripMenuItem>((Branch)_branch, "{0}"));
-			}
-            if (GitterApplication.ComplexityManager.CurrentModeBiggerThan(Complexty.standard)) Items.Add(GuiItemFactory.GetRemoveBranchItem<ToolStripMenuItem>(_branch));
-			if(!branch.IsRemote)
-			{
-				lock(branch.Repository.Remotes.SyncRoot)
-				{
-					if(branch.Repository.Remotes.Count != 0)
-					{
-						Items.Add(new ToolStripSeparator());
-						var pushTo = new ToolStripMenuItem(Resources.StrPushTo, CachedResources.Bitmaps["ImgPush"]);
-						foreach(var remote in branch.Repository.Remotes)
-						{
-							pushTo.DropDownItems.Add(GuiItemFactory.GetPushBranchToRemoteItem<ToolStripMenuItem>((Branch)branch, remote));
-						}
-						Items.Add(pushTo);
-					}
-				}
-			}
-			else
-			{
-
-			}
-			
-
-            if (GitterApplication.ComplexityManager.CurrentModeBiggerThan(Complexty.standard))
+            if (GitterApplication.ComplexityManager.Mode == Complexty.simple)
             {
+                Items.Add(GuiItemFactory.GetCheckoutRevisionItem<ToolStripMenuItem>(_branch, "{0} '{1}'"));
+                Items.Add(new ToolStripSeparator()); // additional
+                Items.Add(GuiItemFactory.GetMergeItem<ToolStripMenuItem>(_branch));
+                var pushTo = new ToolStripMenuItem(Resources.StrPushTo, CachedResources.Bitmaps["ImgPush"]);
+                if (!branch.IsRemote)
+                {
+                    lock (branch.Repository.Remotes.SyncRoot)
+                    {
+                        if (branch.Repository.Remotes.Count != 0)
+                        {
+                            Items.Add(new ToolStripSeparator());
+
+                            foreach (var remote in branch.Repository.Remotes)
+                            {
+                                pushTo.DropDownItems.Add(GuiItemFactory.GetPushBranchToRemoteItem<ToolStripMenuItem>((Branch)branch, remote));
+                            }
+                            Items.Add(pushTo);
+                        }
+                    }
+
+
+                }   
+                
+                var item = new ToolStripMenuItem(Resources.StrAdditional);
+               
+                item.DropDownItems.Add(GuiItemFactory.GetViewTreeItem<ToolStripMenuItem>(_branch));
+                item.DropDownItems.Add(GuiItemFactory.GetArchiveItem<ToolStripMenuItem>(_branch));
+                item.DropDownItems.Add(new ToolStripSeparator());
+                item.DropDownItems.Add(GuiItemFactory.GetCreateBranchItem<ToolStripMenuItem>(_branch));
+                item.DropDownItems.Add(GuiItemFactory.GetCreateTagItem<ToolStripMenuItem>(_branch));
+                item.DropDownItems.Add(new ToolStripSeparator());
+                item.DropDownItems.Add(GuiItemFactory.GetResetHeadHereItem<ToolStripMenuItem>(_branch));
+              
+              
+             
+                if (!branch.IsRemote)
+                {
+                    item.DropDownItems.Add(new ToolStripSeparator());
+                    item.DropDownItems.Add(GuiItemFactory.GetRemoveBranchItem<ToolStripMenuItem>(_branch, "{0} '{1}'"));
+                    item.DropDownItems.Add(GuiItemFactory.GetRenameBranchItem<ToolStripMenuItem>((Branch)_branch, "{0} '{1}'"));
+                    item.DropDownItems.Add(new ToolStripSeparator());
+                    item.DropDownItems.Add(pushTo);
+                }
+                Items.Add(item);
+            }
+            // else if (GitterApplication.ComplexityManager.Mode == Complexty.standard)
+            // {
+            // }
+            else
+            {
+                Items.Add(GuiItemFactory.GetViewReflogItem<ToolStripMenuItem>(_branch));
+                Items.Add(GuiItemFactory.GetViewTreeItem<ToolStripMenuItem>(_branch));
+
+                Items.Add(new ToolStripSeparator()); // interactive section
+
+                Items.Add(GuiItemFactory.GetCheckoutRevisionItem<ToolStripMenuItem>(_branch, "{0} '{1}'"));
+                Items.Add(GuiItemFactory.GetResetHeadHereItem<ToolStripMenuItem>(_branch));
+                Items.Add(GuiItemFactory.GetRebaseHeadHereItem<ToolStripMenuItem>(_branch));
+                Items.Add(GuiItemFactory.GetMergeItem<ToolStripMenuItem>(_branch));
+                if (!branch.IsRemote)
+                {
+                    Items.Add(GuiItemFactory.GetRenameBranchItem<ToolStripMenuItem>((Branch)_branch, "{0}"));
+                }
+                Items.Add(GuiItemFactory.GetRemoveBranchItem<ToolStripMenuItem>(_branch));
+                if (!branch.IsRemote)
+                {
+                    lock (branch.Repository.Remotes.SyncRoot)
+                    {
+                        if (branch.Repository.Remotes.Count != 0)
+                        {
+                            Items.Add(new ToolStripSeparator());
+                            var pushTo = new ToolStripMenuItem(Resources.StrPushTo, CachedResources.Bitmaps["ImgPush"]);
+                            foreach (var remote in branch.Repository.Remotes)
+                            {
+                                pushTo.DropDownItems.Add(GuiItemFactory.GetPushBranchToRemoteItem<ToolStripMenuItem>((Branch)branch, remote));
+                            }
+                            Items.Add(pushTo);
+                        }
+                    }
+                }
+                else
+                {
+
+                }
                 Items.Add(new ToolStripSeparator()); // copy to clipboard section
+
                 var item = new ToolStripMenuItem(Resources.StrCopyToClipboard);
                 item.DropDownItems.Add(GuiItemFactory.GetCopyToClipboardItem<ToolStripMenuItem>(Resources.StrName, _branch.Name));
                 item.DropDownItems.Add(GuiItemFactory.GetCopyToClipboardItem<ToolStripMenuItem>(Resources.StrFullName, _branch.FullName));
                 item.DropDownItems.Add(GuiItemFactory.GetCopyHashToClipboardItem<ToolStripMenuItem>(Resources.StrPosition, _branch.Revision.Hash));
-			    Items.Add(item);
-            }
-            if (GitterApplication.ComplexityManager.CurrentModeBiggerThan(Complexty.standard))
-            {
+
+                Items.Add(item);
+
                 Items.Add(new ToolStripSeparator());
+
                 Items.Add(GuiItemFactory.GetCreateBranchItem<ToolStripMenuItem>(_branch));
                 Items.Add(GuiItemFactory.GetCreateTagItem<ToolStripMenuItem>(_branch));
             }
+        }
 
-            if (!GitterApplication.ComplexityManager.CurrentModeBiggerThan(Complexty.standard))
-            {
-                Items.Add(new ToolStripSeparator()); // copy to clipboard section
-                var item = new ToolStripMenuItem(Resources.StrAdditional);
-
-                item.DropDownItems.Add(GuiItemFactory.GetCreateBranchItem<ToolStripMenuItem>(_branch));
-                item.DropDownItems.Add(GuiItemFactory.GetCreateTagItem<ToolStripMenuItem>(_branch));
-                item.DropDownItems.Add(GuiItemFactory.GetViewTreeItem<ToolStripMenuItem>(_branch));
-                if (!branch.IsRemote)
-                {
-                     item.DropDownItems.Add(GuiItemFactory.GetRenameBranchItem<ToolStripMenuItem>((Branch)_branch, "{0}"));
-                }
-                Items.Add(item);
-            }
-		}
-
-		public BranchBase Branch
-		{
-			get { return _branch; }
-		}
-	}
+        public BranchBase Branch
+        {
+            get { return _branch; }
+        }
+    }
 }

@@ -37,7 +37,9 @@ namespace gitter.Git.Gui.Controls
 			Verify.Argument.IsNotNull(repository, "repository");
 
 			_repository = repository;
-
+            Items.Add(GuiItemFactory.GetUpdateItem<ToolStripMenuItem>(repository, Resources.StrUpdate));
+            Items.Add(GuiItemFactory.GetStageAllItem<ToolStripMenuItem>(repository, Resources.StrStageAll));
+            Items.Add(new ToolStripSeparator());
 			Items.Add(GuiItemFactory.GetStashSaveKeepIndexItem<ToolStripMenuItem>(repository));
 
 			if(repository.Status.UnmergedCount != 0)
@@ -49,11 +51,10 @@ namespace gitter.Git.Gui.Controls
 			
 			Items.Add(new ToolStripSeparator());
 
-			Items.Add(GuiItemFactory.GetStageAllItem<ToolStripMenuItem>(repository, Resources.StrStageAll));
-			Items.Add(GuiItemFactory.GetUpdateItem<ToolStripMenuItem>(repository, Resources.StrUpdate));
-			Items.Add(GuiItemFactory.GetManualStageItem<ToolStripMenuItem>(repository, Resources.StrManualStage.AddEllipsis()));
+		
 			
-			Items.Add(new ToolStripSeparator());
+			if (gitter.Framework.GitterApplication.ComplexityManager.CurrentModeBiggerThan(Framework.Complexty.standard)) Items.Add(GuiItemFactory.GetManualStageItem<ToolStripMenuItem>(repository, Resources.StrManualStage.AddEllipsis()));
+			
 
 			Items.Add(GuiItemFactory.GetCleanItem<ToolStripMenuItem>(repository));
 			Items.Add(GuiItemFactory.GetResetItem<ToolStripMenuItem>(repository, ResetMode.Mixed | ResetMode.Hard));

@@ -2613,4 +2613,7 @@ Reset existing branch instead of creating a new one?</value>
   <data name="StrOpenExplorer" xml:space="preserve">
     <value>Explorer</value>
   </data>
+  <data name="StrDeleteTag" xml:space="preserve">
+    <value>Delete Tag</value>
+  </data>
 </root>

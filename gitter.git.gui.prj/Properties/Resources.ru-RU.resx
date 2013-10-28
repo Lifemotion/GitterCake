@@ -263,7 +263,7 @@
     <value>Выбрать</value>
   </data>
   <data name="StrMerge" xml:space="preserve">
-    <value>Слить</value>
+    <value>Слияние</value>
   </data>
   <data name="StrReset" xml:space="preserve">
     <value>Сброс</value>
@@ -1074,9 +1074,6 @@ share many of the same objects in common. Enabled by default.</value>
     <value>The branch '{0}' is not fully merged.
 Are you sure you want to delete it?</value>
   </data>
-  <data name="StrDeleteBranch" xml:space="preserve">
-    <value>Delete Branch</value>
-  </data>
   <data name="ErrBranchNotFound" xml:space="preserve">
     <value>Branch not found.</value>
   </data>
@@ -1192,7 +1189,7 @@ Commit or stash them and try again.</value>
 Proceed?</value>
   </data>
   <data name="StrDelete" xml:space="preserve">
-    <value>Delete</value>
+    <value>Удалить</value>
   </data>
   <data name="ErrFailedToDeletePath" xml:space="preserve">
     <value>Unable to delete '{0}'</value>
@@ -1241,7 +1238,7 @@ Proceed?</value>
     <value>Обзор</value>
   </data>
   <data name="StrManualStage" xml:space="preserve">
-    <value>Manual Stage</value>
+    <value>Выборочная подготовка</value>
   </data>
   <data name="StrUncommitted" xml:space="preserve">
     <value>нет коммита</value>
@@ -1920,7 +1917,7 @@ a new history totally disconnected from all the other branches and commits.</val
     <value>..\Resources\clear.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StrClean" xml:space="preserve">
-    <value>Clean</value>
+    <value>Очистить</value>
   </data>
   <data name="StrCleanIgnored" xml:space="preserve">
     <value>Clean Ignored</value>
@@ -2270,7 +2267,7 @@ Proceed?</value>
     <value>Unable to apply conflict resolution</value>
   </data>
   <data name="StrDeleteFile" xml:space="preserve">
-    <value>Delete File</value>
+    <value>Удалить файл</value>
   </data>
   <data name="StrKeepFile" xml:space="preserve">
     <value>Keep File</value>
@@ -2612,5 +2609,8 @@ Reset existing branch instead of creating a new one?</value>
   </data>
   <data name="StrOpenExplorer" xml:space="preserve">
     <value>Открыть папку</value>
+  </data>
+  <data name="StrDeleteTag" xml:space="preserve">
+    <value>Удалить метку</value>
   </data>
 </root>

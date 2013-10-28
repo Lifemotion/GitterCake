@@ -44,16 +44,21 @@ namespace gitter.Git.Gui.Controls
             if (GitterApplication.ComplexityManager.Mode == Complexty.simple)
             {
                 Items.Add(GuiItemFactory.GetCheckoutRevisionItem<ToolStripMenuItem>(_revision, "{0}"));
-                Items.Add(GuiItemFactory.GetResetHeadHereItem<ToolStripMenuItem>(_revision));
-
+           
                 Items.Add(new ToolStripSeparator()); // copy to clipboard section
                 var item = new ToolStripMenuItem(Resources.StrAdditional);
-                item.DropDownItems.Add(GuiItemFactory.GetArchiveItem<ToolStripMenuItem>(_revision));
-                item.DropDownItems.Add(GuiItemFactory.GetCreateBranchItem<ToolStripMenuItem>(_revision));
                 item.DropDownItems.Add(GuiItemFactory.GetViewTreeItem<ToolStripMenuItem>(_revision));
+                item.DropDownItems.Add(GuiItemFactory.GetArchiveItem<ToolStripMenuItem>(_revision));
+                item.DropDownItems.Add(new ToolStripSeparator());
+                item.DropDownItems.Add(GuiItemFactory.GetCreateBranchItem<ToolStripMenuItem>(_revision));
+                item.DropDownItems.Add(GuiItemFactory.GetCreateTagItem<ToolStripMenuItem>(_revision));
+                item.DropDownItems.Add(new ToolStripSeparator());
+                item.DropDownItems.Add(GuiItemFactory.GetResetHeadHereItem<ToolStripMenuItem>(_revision));
                 Items.Add(item);
             }
-          //  else if (GitterApplication.ComplexityMode.Mode == Complexty.standard)           {         }
+            // else if (GitterApplication.ComplexityManager.Mode == Complexty.standard)
+            // {
+            // }
             else
             {
 

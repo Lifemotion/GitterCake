@@ -49,14 +49,25 @@ namespace gitter.Git.Gui.Views
 		{
 			InitializeComponent();
 
-			_diffViewer.PreviewKeyDown += OnKeyDown;
-			_diffViewer.DiffFileContextMenuRequested += OnDiffFileContextMenuRequested;
-			_diffViewer.UntrackedFileContextMenuRequested += OnUntrackedFileContextMenuRequested;
+			_diffViewerHead.PreviewKeyDown += OnKeyDown;
+            _diffViewerHead.DiffFileContextMenuRequested += OnDiffFileContextMenuRequested;
+            _diffViewerHead.UntrackedFileContextMenuRequested += OnUntrackedFileContextMenuRequested;
+
+            _diffViewerBody.PreviewKeyDown += OnKeyDown;
+            _diffViewerBody.DiffFileContextMenuRequested += OnDiffFileContextMenuRequested;
+            _diffViewerBody.UntrackedFileContextMenuRequested += OnUntrackedFileContextMenuRequested;
+
+            _diffViewerHead.ChangedFileClick += OnHeadChangeFileClick;
 
 			ApplyParameters(parameters);
 
 			AddTopToolStrip(new DiffToolbar(this));
 		}
+
+        private void OnHeadChangeFileClick(DiffFile file)
+        {
+            _diffViewerBody.ShowChangedFile(file);
+        }
 
 		public override bool IsDocument
 		{
@@ -65,15 +76,18 @@ namespace gitter.Git.Gui.Views
 
 		protected override void AttachToRepository(Repository repository)
 		{
-			_diffViewer.Repository = repository;
+            _diffViewerHead.Repository = repository;
+            _diffViewerBody.Repository = repository;
 			base.AttachToRepository(repository);
 		}
 
 		protected override void DetachFromRepository(Repository repository)
 		{
 			base.DetachFromRepository(repository);
-			_diffViewer.Repository = null;
-			_diffViewer.Clear();
+            _diffViewerHead.Repository = null;
+            _diffViewerHead.Clear();
+            _diffViewerBody.Repository = null;
+            _diffViewerBody.Clear();
 		}
 
 		protected override void SaveRepositoryConfig(Section section)
@@ -136,7 +150,8 @@ namespace gitter.Git.Gui.Views
 			else
 			{
 				UpdateText();
-				_diffViewer.Clear();
+                _diffViewerHead.Clear();
+                _diffViewerBody.Clear();
 				if(_source != null)
 				{
 					_source.Updated -= OnSourceUpdated;
@@ -185,11 +200,13 @@ namespace gitter.Git.Gui.Views
 			{
 				if(_source != null)
 				{
-					_diffViewer.LoadAsync(_source, _options);
+					_diffViewerHead.LoadAsync(_source, _options);
+                    _diffViewerBody.LoadAsync(_source, _options);
 				}
 				else
 				{
-					_diffViewer.Clear();
+                    _diffViewerHead.Clear();
+                    _diffViewerBody.Clear();
 				}
 			}
 		}
@@ -234,11 +251,13 @@ namespace gitter.Git.Gui.Views
 		{
 			if(diffSource != null)
 			{
-				_diffViewer.LoadAsync(diffSource, _options);
+                _diffViewerHead.LoadAsync(diffSource, _options);
+                _diffViewerBody.LoadAsync(diffSource, _options);
 			}
 			else
 			{
-				_diffViewer.Clear();
+				_diffViewerHead.Clear();
+                _diffViewerBody.Clear();
 			}
 		}
 

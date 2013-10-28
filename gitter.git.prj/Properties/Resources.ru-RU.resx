@@ -722,7 +722,7 @@
     <value>UNIX Timestamp</value>
   </data>
   <data name="StrDeleteBranch" xml:space="preserve">
-    <value>Delete Branch</value>
+    <value>Удалить ветку</value>
   </data>
   <data name="ErrBranchNotFound" xml:space="preserve">
     <value>Branch not found.</value>
@@ -838,7 +838,7 @@ Commit or stash them and try again.</value>
     <value>Unable to revert '{0}'</value>
   </data>
   <data name="StrDelete" xml:space="preserve">
-    <value>Delete</value>
+    <value>Удалить</value>
   </data>
   <data name="ErrFailedToDeletePath" xml:space="preserve">
     <value>Unable to delete '{0}'</value>
@@ -877,7 +877,7 @@ Commit or stash them and try again.</value>
     <value>Remote References</value>
   </data>
   <data name="StrManualStage" xml:space="preserve">
-    <value>Manual Stage</value>
+    <value>Выборочная подготовка</value>
   </data>
   <data name="StrUncommitted" xml:space="preserve">
     <value>uncommitted</value>
@@ -1378,7 +1378,7 @@ Commit or stash them and try again.</value>
     <value>Go Up One Level</value>
   </data>
   <data name="StrClean" xml:space="preserve">
-    <value>Clean</value>
+    <value>Очистить</value>
   </data>
   <data name="StrCleanIgnored" xml:space="preserve">
     <value>Clean Ignored</value>
@@ -1614,7 +1614,7 @@ Proceed?</value>
     <value>Unable to apply conflict resolution</value>
   </data>
   <data name="StrDeleteFile" xml:space="preserve">
-    <value>Delete File</value>
+    <value>Удалить файл</value>
   </data>
   <data name="StrKeepFile" xml:space="preserve">
     <value>Keep File</value>

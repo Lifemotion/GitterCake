@@ -1425,7 +1425,7 @@ namespace gitter.Git.Gui
 			var item = new T()
 			{
 				Image	= CachedResources.Bitmaps["ImgBranchRename"],
-				Text	= string.Format(nameFormat, Resources.StrRename.AddEllipsis(), branch.Name),
+				Text	= string.Format(nameFormat, Resources.StrRename, branch.Name),
 				Tag		= branch,
 			};
 			item.Click += OnRenameBranchClick;

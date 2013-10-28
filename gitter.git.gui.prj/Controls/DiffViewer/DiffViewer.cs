@@ -78,13 +78,24 @@ namespace gitter.Git.Gui.Controls
 		}
 
 		#endregion
+        public bool ShowHeader
+        {
+            get;
+            set;
+        }
+
+        public bool ShowBody
+        {
+            get;
+            set;
+        }
 
 		#region .ctor
 
 		/// <summary>Create <see cref="DiffViewer"/>.</summary>
 		public DiffViewer()
 		{
-			_allDiffPanels = new List<FileDiffPanel>();
+		_allDiffPanels = new List<FileDiffPanel>();
 		}
 
 		#endregion
@@ -122,10 +133,17 @@ namespace gitter.Git.Gui.Controls
 			if(diff != null)
 			{
 				FlowPanelSeparator separator = null;
-				var changedFilesPanel = new ChangedFilesPanel() { Diff = diff };
-				changedFilesPanel.StatusFilterChanged += OnStatusFilterChanged;
-				Panels.Add(changedFilesPanel);
-				Panels.Add(new FlowPanelSeparator() { SeparatorStyle = FlowPanelSeparatorStyle.Line });
+                if (ShowHeader)
+                {
+                    var changedFilesPanel = new ChangedFilesPanel() { Diff = diff };
+                    changedFilesPanel.StatusFilterChanged += OnStatusFilterChanged;
+                    changedFilesPanel.ChangedFileClick += OnChangedFileClick;
+
+                    Panels.Add(changedFilesPanel);
+                    Panels.Add(new FlowPanelSeparator() { SeparatorStyle = FlowPanelSeparatorStyle.Line });
+                }
+                if (ShowBody)
+                { 
 				foreach(var file in diff)
 				{
 					var fileDiffPanel = new FileDiffPanel(_repository, file, diff.Type);
@@ -133,6 +151,7 @@ namespace gitter.Git.Gui.Controls
 					Panels.Add(fileDiffPanel);
 					Panels.Add(separator = new FlowPanelSeparator() { SeparatorStyle = FlowPanelSeparatorStyle.Simple });
 				}
+            }
 				if(separator != null) separator.Height = 6;
 			}
 			if(scrollPos > MaxVScrollPos)
@@ -142,6 +161,27 @@ namespace gitter.Git.Gui.Controls
 			VScrollPos = scrollPos;
 			EndUpdate();
 		}
+        
+        public event ChangedFileClickHandler ChangedFileClick;
+        public delegate void ChangedFileClickHandler(DiffFile file);
+
+        private void OnChangedFileClick(DiffFile file)
+        {
+            if (ChangedFileClick != null) { ChangedFileClick(file); }
+        }
+
+        public void ShowChangedFile(DiffFile file)
+        {
+            foreach (var panel in Panels)
+            {
+                var diffpanel = panel as FileDiffPanel;
+                if (diffpanel != null && diffpanel.DiffFile.TargetFile == file.TargetFile)
+                {
+                    diffpanel.ScrollIntoView();
+                    break;
+                }
+            }
+        }
 
 		private void OnStatusFilterChanged(object sender, EventArgs e)
 		{
@@ -341,11 +381,11 @@ namespace gitter.Git.Gui.Controls
 			var revisionSource = diffSource as IRevisionDiffSource;
 			if(revisionSource != null)
 			{
-				Panels.Add(new RevisionHeaderPanel() { Revision = revisionSource.Revision.Dereference() });
-				Panels.Add(new FlowPanelSeparator() { SeparatorStyle = FlowPanelSeparatorStyle.Line });
+			    if (ShowHeader) Panels.Add(new RevisionHeaderPanel() { Revision = revisionSource.Revision.Dereference(),Pinned=true });
+                if (ShowHeader) Panels.Add(new FlowPanelSeparator() { SeparatorStyle = FlowPanelSeparatorStyle.Line });
 			}
 			var indexSource = diffSource as IIndexDiffSource;
-			if(indexSource != null && !indexSource.Cached)
+            if (indexSource != null && !indexSource.Cached && ShowHeader) 
 			{
 				var panel = new UntrackedFilesPanel(indexSource.Repository.Status);
 				if(panel.Count != 0)
@@ -354,7 +394,7 @@ namespace gitter.Git.Gui.Controls
 					Panels.Add(new FlowPanelSeparator() { Height = 5 });
 				}
 			}
-			LoadAsyncDiffCore(diffSource.GetDiffAsync(options), scrollPos);
+            LoadAsyncDiffCore(diffSource.GetDiffAsync(options), scrollPos);
 			EndUpdate();
 		}
 

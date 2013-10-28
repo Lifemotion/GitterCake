@@ -438,7 +438,10 @@ namespace gitter.Git.Gui.Controls
 
 		#region Events
 
+        public event ChangedFileClickHandler ChangedFileClick;
 		public event EventHandler StatusFilterChanged;
+
+        public delegate void ChangedFileClickHandler(DiffFile filename);
 
 		private void OnStatusFilterChanged()
 		{
@@ -618,6 +621,7 @@ namespace gitter.Git.Gui.Controls
 						if(id != -1)
 						{
 							var file = _items[id].File;
+                            if (ChangedFileClick != null) { ChangedFileClick(file); }
 							foreach(var panel in FlowControl.Panels)
 							{
 								var diffpanel = panel as FileDiffPanel;
