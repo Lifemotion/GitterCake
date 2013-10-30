@@ -62,7 +62,6 @@ namespace gitter.Git.Gui
 
 		private readonly GuiProvider _guiProvider;
 		private Repository _repository;
-        private ToolStripSeparator _separatorAfterCommit;
         private ToolStripSeparator _separatorAfterCommitsButtons;
         private ToolStripSeparator _separatorAfterOparations;
         private ToolStripSeparator _separatorAfterHistory;

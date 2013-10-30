@@ -20,26 +20,41 @@
 
 namespace gitter.Git.Gui.Controls
 {
-	using System;
-	using System.ComponentModel;
-	using System.Windows.Forms;
+    using System;
+    using System.ComponentModel;
+    using System.Windows.Forms;
 
-	using Resources = gitter.Git.Gui.Properties.Resources;
+    using Resources = gitter.Git.Gui.Properties.Resources;
 
-	[ToolboxItem(false)]
-	public sealed class StashedStateMenu : ContextMenuStrip
-	{
-		private readonly StashedState _stashedState;
+    [ToolboxItem(false)]
+    public sealed class StashedStateMenu : ContextMenuStrip
+    {
+        private readonly StashedState _stashedState;
 
-		public StashedStateMenu(StashedState stashedState)
-		{
-			Verify.Argument.IsValidGitObject(stashedState, "stashedState");
+        public StashedStateMenu(StashedState stashedState)
+        {
+            Verify.Argument.IsValidGitObject(stashedState, "stashedState");
 
-			_stashedState = stashedState;
-
-			Items.AddRange(
-				new ToolStripItem[]
-				{
+            _stashedState = stashedState;
+            if (gitter.Framework.GitterApplication.ComplexityManager.Mode == Framework.Complexty.simple)
+            {
+                Items.AddRange(
+             new ToolStripItem[]
+				{         
+					GuiItemFactory.GetViewTreeItem<ToolStripMenuItem>(StashedState),
+					new ToolStripSeparator(),
+					GuiItemFactory.GetStashPopItem<ToolStripMenuItem>(StashedState),
+					GuiItemFactory.GetStashApplyItem<ToolStripMenuItem>(StashedState),
+					GuiItemFactory.GetStashDropItem<ToolStripMenuItem>(StashedState),
+					new ToolStripSeparator(),
+					GuiItemFactory.GetStashToBranchItem<ToolStripMenuItem>(StashedState),
+			});
+            }
+            else
+            {
+                Items.AddRange(
+             new ToolStripItem[]
+				{         
 					GuiItemFactory.GetViewDiffItem<ToolStripMenuItem>(StashedState.GetDiffSource()),
 					GuiItemFactory.GetViewTreeItem<ToolStripMenuItem>(StashedState),
 					GuiItemFactory.GetSavePatchItem<ToolStripMenuItem>(StashedState),
@@ -57,12 +72,16 @@ namespace gitter.Git.Gui.Controls
 							GuiItemFactory.GetCopyHashToClipboardItem<ToolStripMenuItem>(Resources.StrHash, StashedState.Revision.Hash),
 							GuiItemFactory.GetCopyToClipboardItem<ToolStripMenuItem>(Resources.StrSubject, StashedState.Revision.Subject),
 						}),
+                  
 				});
-		}
+            }
 
-		public StashedState StashedState
-		{
-			get { return _stashedState; }
-		}
-	}
+         
+        }
+
+        public StashedState StashedState
+        {
+            get { return _stashedState; }
+        }
+    }
 }

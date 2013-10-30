@@ -1126,7 +1126,7 @@ Are you sure you want to delete it?</value>
     <value>Применить</value>
   </data>
   <data name="StrPop" xml:space="preserve">
-    <value>Pop</value>
+    <value>Вытолкнуть</value>
   </data>
   <data name="ErrFailedToStashPopState" xml:space="preserve">
     <value>Unable to pop '{0}'</value>
@@ -1138,7 +1138,7 @@ Are you sure you want to delete it?</value>
     <value>Unable to drop '{0}'</value>
   </data>
   <data name="StrDrop" xml:space="preserve">
-    <value>Drop</value>
+    <value>Выбросить</value>
   </data>
   <data name="ErrRevisionIsUnknown" xml:space="preserve">
     <value>Revision is unknown</value>
@@ -1147,7 +1147,7 @@ Are you sure you want to delete it?</value>
     <value>Stash to Branch</value>
   </data>
   <data name="StrToBranch" xml:space="preserve">
-    <value>To Branch</value>
+    <value>В ветку</value>
   </data>
   <data name="AskOverwriteUntracked" xml:space="preserve">
     <value>You have untracked files, which will be overwritten by checking out '{0}'.
@@ -1244,10 +1244,10 @@ Proceed?</value>
     <value>нет коммита</value>
   </data>
   <data name="StrUncommittedLocalChanges" xml:space="preserve">
-    <value>uncommitted staged changes</value>
+    <value>подготовленные изменения, ждут коммита</value>
   </data>
   <data name="StrUnstagedLocalChanges" xml:space="preserve">
-    <value>unstaged local changes</value>
+    <value>новые локальные изменения</value>
   </data>
   <data name="AskRemoveRemoteReference" xml:space="preserve">
     <value>Removing remote reference can be dangerous and lead to loss of data. Proceed?</value>
@@ -1259,7 +1259,7 @@ Proceed?</value>
     <value>unresolved conflicts present</value>
   </data>
   <data name="StrUntrackedFilesPresent" xml:space="preserve">
-    <value>untracked files are present</value>
+    <value>имеются новые файлы</value>
   </data>
   <data name="ImgStashApply" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\stash-apply.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -1749,7 +1749,7 @@ a new history totally disconnected from all the other branches and commits.</val
     <value>Orphan</value>
   </data>
   <data name="StrUntrackedFiles" xml:space="preserve">
-    <value>Untracked Files</value>
+    <value>Новые файлы</value>
   </data>
   <data name="StrManageRemotes" xml:space="preserve">
     <value>Manage Remotes</value>
@@ -2154,10 +2154,10 @@ a new history totally disconnected from all the other branches and commits.</val
     <value>Добавлены файлы</value>
   </data>
   <data name="StrModifiedFiles" xml:space="preserve">
-    <value>Modified Files</value>
+    <value>Изменены файлы</value>
   </data>
   <data name="StrRemovedFiles" xml:space="preserve">
-    <value>Removed Files</value>
+    <value>Удалены файлы</value>
   </data>
   <data name="ErrEnterLongerCommitMessage" xml:space="preserve">
     <value>Enter at least {0} symbols as commit message</value>
@@ -2238,7 +2238,7 @@ a new history totally disconnected from all the other branches and commits.</val
     <value>Игнорировать пробелы</value>
   </data>
   <data name="StrsUsePatienceDiffAlgorithm" xml:space="preserve">
-    <value>Use patience diff algorithm</value>
+    <value>Использовать алгоритм "Patience diff"</value>
   </data>
   <data name="StrOpen" xml:space="preserve">
     <value>Open</value>

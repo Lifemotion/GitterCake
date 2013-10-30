@@ -47,6 +47,7 @@ namespace gitter.Git
 		public DiffOptions()
 		{
 			_context = 3;
+            _ignoreWhitespace = true;
 		}
 
 		#endregion

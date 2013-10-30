@@ -530,7 +530,7 @@
     <value>Нет подготовленных изменений</value>
   </data>
   <data name="StrNoUnstagedChanges" xml:space="preserve">
-    <value>No unstaged changes</value>
+    <value>Нет новых изменений</value>
   </data>
   <data name="ErrFailedToRunMergeTool" xml:space="preserve">
     <value>Unable to run merge tool</value>
@@ -800,7 +800,7 @@
     <value>Unable to pop stashed state</value>
   </data>
   <data name="StrPop" xml:space="preserve">
-    <value>Pop</value>
+    <value>Вытолкнуть</value>
   </data>
   <data name="ErrFailedToStashPopState" xml:space="preserve">
     <value>Unable to pop '{0}'</value>
@@ -812,7 +812,7 @@
     <value>Unable to drop '{0}'</value>
   </data>
   <data name="StrDrop" xml:space="preserve">
-    <value>Drop</value>
+    <value>Выбросить</value>
   </data>
   <data name="ErrRevisionIsUnknown" xml:space="preserve">
     <value>Revision is unknown</value>
@@ -865,7 +865,7 @@ Commit or stash them and try again.</value>
     <value>Подготовленные изменения</value>
   </data>
   <data name="StrUnstagedChanges" xml:space="preserve">
-    <value>Неподготовленные изменения</value>
+    <value>Новые изменения</value>
   </data>
   <data name="StrStageFiles" xml:space="preserve">
     <value>Stage Files</value>
@@ -880,22 +880,22 @@ Commit or stash them and try again.</value>
     <value>Выборочная подготовка</value>
   </data>
   <data name="StrUncommitted" xml:space="preserve">
-    <value>uncommitted</value>
+    <value>ждет коммита</value>
   </data>
   <data name="StrUncommittedLocalChanges" xml:space="preserve">
-    <value>uncommitted staged changes</value>
+    <value>подготовленные изменения, ждут коммита</value>
   </data>
   <data name="StrUnstagedLocalChanges" xml:space="preserve">
-    <value>unstaged local changes</value>
+    <value>новые локальные изменения</value>
   </data>
   <data name="StrRemoveRemoteReference" xml:space="preserve">
     <value>Remove Remote Reference</value>
   </data>
   <data name="StrUnresolvedConflictsPresent" xml:space="preserve">
-    <value>unresolved conflicts present</value>
+    <value>нерешенные конфликты </value>
   </data>
   <data name="StrUntrackedFilesPresent" xml:space="preserve">
-    <value>untracked files are present</value>
+    <value>имеются новые файлы</value>
   </data>
   <data name="StrShowStash" xml:space="preserve">
     <value>Show Stash</value>
@@ -916,10 +916,10 @@ Commit or stash them and try again.</value>
     <value>Clear</value>
   </data>
   <data name="StrStashApply" xml:space="preserve">
-    <value>Stash Apply</value>
+    <value>Применить спрятанное</value>
   </data>
   <data name="StrStashPop" xml:space="preserve">
-    <value>Stash Pop</value>
+    <value>Вытолкнуть впрятанное</value>
   </data>
   <data name="StrPerformingStashApply" xml:space="preserve">
     <value>Applying stashed changes</value>
@@ -931,13 +931,13 @@ Commit or stash them and try again.</value>
     <value>Removing stashed changes</value>
   </data>
   <data name="StrStashDrop" xml:space="preserve">
-    <value>Stash Drop</value>
+    <value>Выбросить спрятанное</value>
   </data>
   <data name="StrStatus" xml:space="preserve">
     <value>Состояние</value>
   </data>
   <data name="StrlNone" xml:space="preserve">
-    <value>none</value>
+    <value>нет</value>
   </data>
   <data name="StrDefaultBehavior" xml:space="preserve">
     <value>Default Behavior</value>
@@ -1054,7 +1054,7 @@ Commit or stash them and try again.</value>
     <value>unstaged removed files</value>
   </data>
   <data name="StrlUnstagedUntrackedFiles" xml:space="preserve">
-    <value>untracked files</value>
+    <value>новые файлы</value>
   </data>
   <data name="StrRun" xml:space="preserve">
     <value>Run</value>
@@ -1255,7 +1255,7 @@ Commit or stash them and try again.</value>
     <value>Orphan</value>
   </data>
   <data name="StrUntrackedFiles" xml:space="preserve">
-    <value>Untracked Files</value>
+    <value>Новые файлы</value>
   </data>
   <data name="StrManageRemotes" xml:space="preserve">
     <value>Manage Remotes</value>
@@ -1585,7 +1585,7 @@ Commit or stash them and try again.</value>
     <value>Ignore whitespace</value>
   </data>
   <data name="StrsUsePatienceDiffAlgorithm" xml:space="preserve">
-    <value>Use patience diff algorithm</value>
+    <value>Использовать алгоритм "Patience diff"</value>
   </data>
   <data name="StrOpen" xml:space="preserve">
     <value>Open</value>

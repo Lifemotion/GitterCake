@@ -856,8 +856,14 @@ namespace gitter.Git.Gui.Controls
                         var branch = data.GetData<Branch>();
                         if (branch.Revision != revItem.DataContext)
                         {
-                            BeginInvoke(new Action<Branch, Revision>(CompleteBranchDragAndDropWithMerge),
-                                branch, revItem.DataContext);
+                            if (drgevent.KeyState == 32)
+                            {
+                                BeginInvoke(new Action<Branch, Revision>(CompleteBranchDragAndDropWithReset), branch, revItem.DataContext);
+                            }
+                            else
+                            {
+                                BeginInvoke(new Action<Branch, Revision>(CompleteBranchDragAndDropWithMerge), branch, revItem.DataContext);
+                            }
                         }
                     }
                 }
