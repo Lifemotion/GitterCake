@@ -59,8 +59,10 @@ namespace gitter.Git.Gui.Views
 			_splitContainer.Panel1.BackColor = GitterApplication.Style.Colors.Window;
 			_splitContainer.Panel2.BackColor = GitterApplication.Style.Colors.Window;
 
+            var dh = new DpiHelper(this);
+           
 			_chkAmend = GitterApplication.Style.CreateCheckBox();
-			_chkAmend.Control.Bounds = new Rectangle(477, 67, 90, 20);
+            _chkAmend.Control.Bounds = dh.ScaleRectangle( new Rectangle(477 ,67, 90, 20));
 			_chkAmend.Control.Anchor = AnchorStyles.Right | AnchorStyles.Bottom;
 			_chkAmend.Control.Parent = _splitContainer.Panel2;
 			_chkAmend.Control.Enabled = false;
@@ -68,7 +70,7 @@ namespace gitter.Git.Gui.Views
 			_chkAmend.IsCheckedChanged += OnAmendCheckedChanged;
 
 			_btnCommit = GitterApplication.Style.CreateButton();
-			_btnCommit.Control.Bounds = new Rectangle(477, 93, 75, 23);
+            _btnCommit.Control.Bounds =  dh.ScaleRectangle( new Rectangle(477 , 93, 75, 23));
 			_btnCommit.Control.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 			_btnCommit.Control.Parent = _splitContainer.Panel2;
 			_btnCommit.Control.TabIndex = 11;

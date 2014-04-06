@@ -113,6 +113,7 @@
     <Compile Include="Controls\CustomListBox\DateColumnExtender.Designer.cs">
       <DependentUpon>DateColumnExtender.cs</DependentUpon>
     </Compile>
+    <Compile Include="DpiHelper.cs" />
     <Compile Include="GuiCommand.cs" />
     <Compile Include="Native\AnimationFlags.cs" />
     <Compile Include="Native\BITMAPINFOHEADER.cs" />
@@ -623,6 +624,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Views\WebBrowserView\WebBrowserView.resx">
       <DependentUpon>WebBrowserView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormEx.resx">
+      <DependentUpon>FormEx.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Options\AppearancePage.resx">
       <DependentUpon>AppearancePage.cs</DependentUpon>
