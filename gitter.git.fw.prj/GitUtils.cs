@@ -85,10 +85,18 @@ namespace gitter.Git
 			{
 				return strArray2[strArray2.Length - 2];
 			}
+            if (".Git".Equals(str))
+            {
+                return strArray2[strArray2.Length - 2];
+            }
 			if(str.EndsWith(".git"))
 			{
 				str = str.Substring(0, str.Length - ".git".Length);
 			}
+            if (str.EndsWith(".Git"))
+            {
+                str = str.Substring(0, str.Length - ".Git".Length);
+            }
 			int p = str.LastIndexOf(':');
 			if(p != -1) str = str.Substring(p + 1);
 			return str;

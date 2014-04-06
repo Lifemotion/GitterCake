@@ -189,7 +189,24 @@ namespace gitter.Git.Gui.Dialogs
 				{
 					string path = _txtPath.Text.Trim();
 					string url = _txtUrl.Text.Trim();
-					return AppendUrlToPath(path, url);
+
+                    if (_chkCapitalizeFolderWords.Checked )
+                    {
+                        StringWriter writer=new StringWriter ();
+                        for (int i = 0; i < url.Length; i++)
+                        {
+                            if ((i > 0) && ((url[i - 1] == '.') || (url[i - 1] == '/') || (url[i - 1] == '\\')))
+                            {
+                                writer.Write(url[i].ToString().ToUpper());
+                            }
+                            else
+                            {
+                                writer.Write(url[i]);
+                            }
+                        }
+                        url = writer.ToString();
+                    }
+                    return AppendUrlToPath(path, url);
 				}
 				return _txtPath.Text.Trim();
 			}
@@ -322,5 +339,10 @@ namespace gitter.Git.Gui.Dialogs
 			_acceptedPath = path;
 			return true;
 		}
+
+        private void _chkCapitalizeFolderWords_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateTargetPathText();
+        }
 	}
 }
