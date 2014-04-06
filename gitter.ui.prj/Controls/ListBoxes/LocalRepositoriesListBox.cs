@@ -38,8 +38,7 @@ namespace gitter
 			{
 				SizeMode = ColumnSizeMode.Fill
 			});
-
-			HeaderStyle = HeaderStyle.Hidden;
+       		HeaderStyle = HeaderStyle.Hidden;          
 			ItemHeight = 36;
 			AllowDrop = true;
 			_dragHelper = new DragHelper();

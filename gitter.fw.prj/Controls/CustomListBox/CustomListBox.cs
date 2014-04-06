@@ -703,13 +703,15 @@ namespace gitter.Framework.Controls
 			InvalidateColumnContent(id);
 		}
 
-		protected int ItemHeight
+       
+
+		public int ItemHeight
 		{
 			get { return _itemHeight; }
 			set
 			{
 				Verify.Argument.IsPositive(value, "value");
-
+              
 				if(_itemHeight != value)
 				{
 					_itemHeight = value;

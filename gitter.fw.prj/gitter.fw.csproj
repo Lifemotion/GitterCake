@@ -625,9 +625,6 @@
     <EmbeddedResource Include="Controls\Views\WebBrowserView\WebBrowserView.resx">
       <DependentUpon>WebBrowserView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormEx.resx">
-      <DependentUpon>FormEx.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Options\AppearancePage.resx">
       <DependentUpon>AppearancePage.cs</DependentUpon>
     </EmbeddedResource>

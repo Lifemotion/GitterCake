@@ -141,10 +141,11 @@ namespace gitter.Git.Gui.Dialogs
 				default:
 					throw new NotSupportedException();
 			}
+            var dh = new DpiHelper(this);
 
 			var btn = new CommandLink()
 			{
-				Size		= new Size(319, 66),
+				Size		= new Size(dh.ScaleIntX( 319), dh.ScaleIntY( 66)),
 				Text		= text,
 				Description	= desc,
 				Tag			= mode,
