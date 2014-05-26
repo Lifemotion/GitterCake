@@ -33,7 +33,7 @@ namespace gitter.Framework
 
 	public partial class ExceptionDialog : DialogBase
 	{
-		private const string ReportUrl = @"https://github.com/amgine/gitter/issues/new";
+        private const string ReportUrl = @"";// @"https://github.com/amgine/gitter/issues/new";
 
 		private Exception _exception;
 		private DateTime _date;
