@@ -101,6 +101,14 @@ namespace gitter.Git.AccessLayer.CLI
 			{
 				return defaultInstallationPath;
 			}
+
+            var localPath = AppDomain.CurrentDomain.BaseDirectory;
+            var localGitCopyPath = Path.Combine(localPath, @"Git\bin", GitExe);
+            if (File.Exists(localGitCopyPath))
+            {
+                return localGitCopyPath;
+            }
+
 			return null;
 		}
 

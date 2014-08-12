@@ -122,6 +122,27 @@ namespace gitter.Git
 
 		#region mergetool
 
+        private void RunMergeToolExternal(IAsyncProgressMonitor monitor)
+        {
+            try
+            {
+                using (Repository.Monitor.BlockNotifications(
+                    RepositoryNotifications.IndexUpdated,
+                    RepositoryNotifications.WorktreeUpdated))
+                {
+                    Repository.Accessor.RunMergeToolExternal(
+                        new RunMergeToolParameters(FullPath)
+                        {
+                            Monitor = monitor,
+                        });
+                }
+            }
+            finally
+            {
+                Repository.Status.Refresh();
+            }
+        }
+
 		private void RunMergeTool(MergeTool mergeTool, IAsyncProgressMonitor monitor)
 		{
 			try
@@ -172,6 +193,23 @@ namespace gitter.Git
 				Resources.StrWaitingMergeTool.AddEllipsis(),
 				true);
 		}
+
+        public IAsyncAction RunMergeToolExternalAsync()
+        {
+            Verify.State.IsFalse(ConflictType == Git.ConflictType.None);
+
+            return AsyncAction.Create(new
+            {
+                File = this,
+            },
+                (data, mon) =>
+                {
+                    data.File.RunMergeToolExternal(mon);
+                },
+                Resources.StrRunningMergeTool,
+                Resources.StrWaitingMergeTool.AddEllipsis(),
+                true);
+        }
 
 		public IAsyncAction RunMergeToolAsync(MergeTool mergeTool)
 		{

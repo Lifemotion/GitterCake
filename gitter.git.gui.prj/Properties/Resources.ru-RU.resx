@@ -185,10 +185,10 @@
     <value>Коммиты</value>
   </data>
   <data name="StrCommitter" xml:space="preserve">
-    <value>Committer</value>
+    <value>Отправитель</value>
   </data>
   <data name="StrCommitters" xml:space="preserve">
-    <value>Committers</value>
+    <value>Отправители</value>
   </data>
   <data name="StrDate" xml:space="preserve">
     <value>Дата</value>
@@ -381,7 +381,7 @@
     <value>Email автора</value>
   </data>
   <data name="StrCommitterEmail" xml:space="preserve">
-    <value>Committer Email</value>
+    <value>Email отправителя</value>
   </data>
   <data name="ImgCheckout" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\checkout.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -756,7 +756,7 @@
     <value>Unable to run merge tool</value>
   </data>
   <data name="StrResolveConflicts" xml:space="preserve">
-    <value>Resolve Conflicts</value>
+    <value>Разрешить конфликты</value>
   </data>
   <data name="ErrInvalidRemoteName" xml:space="preserve">
     <value>Invalid remote name</value>
@@ -774,7 +774,7 @@
     <value>Tracking</value>
   </data>
   <data name="StrCreate" xml:space="preserve">
-    <value>Create</value>
+    <value>Создать</value>
   </data>
   <data name="StrRename" xml:space="preserve">
     <value>Переименовать</value>
@@ -831,22 +831,22 @@ share many of the same objects in common. Enabled by default.</value>
     <value>Bare</value>
   </data>
   <data name="StrClone" xml:space="preserve">
-    <value>Копировать</value>
+    <value>Копировать удаленный</value>
   </data>
   <data name="StrCloneRepository" xml:space="preserve">
-    <value>Копировать хранилище</value>
+    <value>Копировать репозиторий</value>
   </data>
   <data name="StrInit" xml:space="preserve">
-    <value>Новое</value>
+    <value>Создать новый</value>
   </data>
   <data name="StrInitRepository" xml:space="preserve">
-    <value>Создать новое хранилище</value>
+    <value>Создать новый репозиторий</value>
   </data>
   <data name="StrPath" xml:space="preserve">
     <value>Путь</value>
   </data>
   <data name="StrSelectRepositoryPath" xml:space="preserve">
-    <value>Select repository path</value>
+    <value>Укажите путь к репозиторию</value>
   </data>
   <data name="StrTemplate" xml:space="preserve">
     <value>Шаблон</value>
@@ -1211,7 +1211,7 @@ Proceed?</value>
     <value>Close</value>
   </data>
   <data name="StrConflicts" xml:space="preserve">
-    <value>Conflicts</value>
+    <value>Конфликты</value>
   </data>
   <data name="StrAmend" xml:space="preserve">
     <value>Исправить</value>
@@ -1490,10 +1490,10 @@ with the remote with the git-remote-&lt;vcs&gt; helper.</value>
     <value>Unable to set remote parameters</value>
   </data>
   <data name="StrlUnmergedFilesPresent" xml:space="preserve">
-    <value>unresolved conflicts</value>
+    <value>неразрешенные конфликты</value>
   </data>
   <data name="StrlUnstagedRemovedFiles" xml:space="preserve">
-    <value>unstaged removed files</value>
+    <value>новые удаленные файлы</value>
   </data>
   <data name="StrlUnstagedUntrackedFiles" xml:space="preserve">
     <value>неотслеживаемые новые файлы</value>
@@ -1514,13 +1514,13 @@ with the remote with the git-remote-&lt;vcs&gt; helper.</value>
     <value>Добавить заметку</value>
   </data>
   <data name="StrMergeTool" xml:space="preserve">
-    <value>Merge Tool</value>
+    <value>Средство слияния</value>
   </data>
   <data name="StrRun" xml:space="preserve">
-    <value>Run</value>
+    <value>Запустить</value>
   </data>
   <data name="StrSelect" xml:space="preserve">
-    <value>Select</value>
+    <value>Выбрать</value>
   </data>
   <data name="StrBehavior" xml:space="preserve">
     <value>Behavior</value>
@@ -1556,7 +1556,7 @@ with the remote with the git-remote-&lt;vcs&gt; helper.</value>
     <value>Имя пользователя не может быть пустым</value>
   </data>
   <data name="StrsForCurrentRepositoryOnly" xml:space="preserve">
-    <value>Только для текущего хранилища</value>
+    <value>Только для текущего репозитория</value>
   </data>
   <data name="StrsForCurrentWindowsUser" xml:space="preserve">
     <value>Для текущего пользователя Windows</value>
@@ -1703,7 +1703,7 @@ with the remote with the git-remote-&lt;vcs&gt; helper.</value>
     <value>путь не выбран</value>
   </data>
   <data name="StrsAppendRepositoryNameFromURL" xml:space="preserve">
-    <value>Добавить имя хранилища из URL к пути</value>
+    <value>Добавить имя репозитория из URL к пути</value>
   </data>
   <data name="StrsWillBeClonedInto" xml:space="preserve">
     <value>Будет скопировано в папку</value>
@@ -1715,10 +1715,10 @@ with the remote with the git-remote-&lt;vcs&gt; helper.</value>
     <value>Копирование {0}</value>
   </data>
   <data name="StrConflictingFiles" xml:space="preserve">
-    <value>Conflicting Files</value>
+    <value>Конфликтующие файлы</value>
   </data>
   <data name="StrRunMergeTool" xml:space="preserve">
-    <value>Run Merge Tool</value>
+    <value>Запустить средство слияния</value>
   </data>
   <data name="StrsNoContributorsToDisplay" xml:space="preserve">
     <value>No contributors to display</value>
@@ -2258,10 +2258,10 @@ Proceed?</value>
     <value>Open with gitter</value>
   </data>
   <data name="StrUseOurs" xml:space="preserve">
-    <value>Use Ours</value>
+    <value>Использовать свой (наш)</value>
   </data>
   <data name="StrUseTheirs" xml:space="preserve">
-    <value>Use Theirs</value>
+    <value>Использовать чужой (их)</value>
   </data>
   <data name="ErrFailedToResolve" xml:space="preserve">
     <value>Unable to apply conflict resolution</value>
@@ -2378,7 +2378,7 @@ Proceed?</value>
     <value>..\Resources\mark-as-resolved.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StrMarkAsResolved" xml:space="preserve">
-    <value>Mark as Resolved</value>
+    <value>Пометить разрешенным</value>
   </data>
   <data name="IcoStatusGreen1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\status-green-1.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -2612,5 +2612,8 @@ Reset existing branch instead of creating a new one?</value>
   </data>
   <data name="StrDeleteTag" xml:space="preserve">
     <value>Удалить метку</value>
+  </data>
+  <data name="SelectMergeTool" xml:space="preserve">
+    <value>Выбрать средство слияния</value>
   </data>
 </root>

@@ -41,13 +41,16 @@ namespace gitter.Git.Gui.Controls
 
 			_file = file;
 
+          //  Items.Add(GuiItemFactory.GetMergeToolItem<ToolStripMenuItem>(_file));
+
 			Items.Add(GuiItemFactory.GetMergeToolItem<ToolStripMenuItem>(_file));
+
 			if( _file.ConflictType != ConflictType.DeletedByUs &&
 				_file.ConflictType != ConflictType.DeletedByThem &&
 				_file.ConflictType != ConflictType.AddedByThem &&
 				_file.ConflictType != ConflictType.AddedByUs)
 			{
-				var mergeTools = new ToolStripMenuItem("Select Merge Tool");
+				var mergeTools = new ToolStripMenuItem(Resources.SelectMergeTool);
 				foreach(var tool in MergeTool.KnownTools)
 				{
 					if(tool.SupportsWin)

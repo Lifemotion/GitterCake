@@ -143,7 +143,7 @@
     <value>Параметры</value>
   </data>
   <data name="StrRepositories" xml:space="preserve">
-    <value>Хранилища</value>
+    <value>Репозитории</value>
   </data>
   <data name="StrDescription" xml:space="preserve">
     <value>Описание</value>
@@ -158,7 +158,7 @@
     <value>..\Resources\repository-remove.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StrAddRepository" xml:space="preserve">
-    <value>Добавить хранилище</value>
+    <value>Добавить репозиторий</value>
   </data>
   <data name="StrAdd" xml:space="preserve">
     <value>Добавить</value>
@@ -176,19 +176,19 @@
     <value>Версия</value>
   </data>
   <data name="ErrFailedToOpenRepository" xml:space="preserve">
-    <value>Не удалось открыть хранилище</value>
+    <value>Не удалось открыть репозиторий</value>
   </data>
   <data name="ErrPathIsNotValidRepository" xml:space="preserve">
-    <value>'{0}' не является корректным хранилищем</value>
+    <value>'{0}' не является корректным репозиторием</value>
   </data>
   <data name="ErrInvalidPath" xml:space="preserve">
     <value>Некорректный путь</value>
   </data>
   <data name="ErrSpecifiedPathIsNotValidRepository" xml:space="preserve">
-    <value>Указанный путь не является корректным хранилищем</value>
+    <value>Указанный путь не является корректным репозиторием</value>
   </data>
   <data name="StrRemoveRepository" xml:space="preserve">
-    <value>Удалить хранилище</value>
+    <value>Удалить репозиторий</value>
   </data>
   <data name="StrHelp" xml:space="preserve">
     <value>Справка</value>
@@ -197,7 +197,7 @@
     <value>недоступно</value>
   </data>
   <data name="StrRepository" xml:space="preserve">
-    <value>Хранилище</value>
+    <value>Репозиторий</value>
   </data>
   <data name="StrTools" xml:space="preserve">
     <value>Сервис</value>
@@ -284,28 +284,28 @@
     <value>..\Resources\start-page-logo-gradient-dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StrAddLocalRepository" xml:space="preserve">
-    <value>Добавить локальное хранилище...</value>
+    <value>Добавить локальный репозиторий...</value>
   </data>
   <data name="StrCloneRemoteRepository" xml:space="preserve">
-    <value>Загрузить удаленное хранилище...</value>
+    <value>Копировать удаленный репозиторий...</value>
   </data>
   <data name="StrClosePageAfterRepositoryLoad" xml:space="preserve">
     <value>Закрыть страницу после выбора </value>
   </data>
   <data name="StrInitLocalRepository" xml:space="preserve">
-    <value>Создать новое хранилище...</value>
+    <value>Создать новый репозиторий...</value>
   </data>
   <data name="StrLocalRepositories" xml:space="preserve">
-    <value>Локальные хранилища</value>
+    <value>Локальные репозитории</value>
   </data>
   <data name="StrNoRepositoriesFound" xml:space="preserve">
-    <value>Не найдены хранилища</value>
+    <value>Не найдены репозитории</value>
   </data>
   <data name="StrRecentRepositories" xml:space="preserve">
     <value>Последние</value>
   </data>
   <data name="StrScanLocalRepository" xml:space="preserve">
-    <value>Искать локальные хранилища...</value>
+    <value>Искать локальные репозитории...</value>
   </data>
   <data name="StrShowPageOnStartup" xml:space="preserve">
     <value>Показывать при запуске</value>

@@ -88,7 +88,7 @@ namespace gitter.Git.Gui.Dialogs
 
 		protected override string ActionVerb
 		{
-			get { return Resources.StrClone; }
+			get { return "OK"; }
 		}
 
 		private IGitRepositoryProvider GitRepositoryProvider

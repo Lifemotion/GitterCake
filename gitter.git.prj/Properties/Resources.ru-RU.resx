@@ -536,7 +536,7 @@
     <value>Unable to run merge tool</value>
   </data>
   <data name="StrResolveConflicts" xml:space="preserve">
-    <value>Resolve Conflicts</value>
+    <value>Разрешение конфликтов</value>
   </data>
   <data name="ErrInvalidRemoteName" xml:space="preserve">
     <value>Invalid remote name</value>
@@ -856,7 +856,7 @@ Commit or stash them and try again.</value>
     <value>Close</value>
   </data>
   <data name="StrConflicts" xml:space="preserve">
-    <value>Conflicts</value>
+    <value>Конфликты</value>
   </data>
   <data name="StrDiff" xml:space="preserve">
     <value>Diff</value>
@@ -1216,16 +1216,16 @@ Commit or stash them and try again.</value>
     <value>Will be cloned into</value>
   </data>
   <data name="StrCloningRepository" xml:space="preserve">
-    <value>Копирование хранилища</value>
+    <value>Копирование репозитория</value>
   </data>
   <data name="StrfCloning" xml:space="preserve">
     <value>Копирование {0}</value>
   </data>
   <data name="StrConflictingFiles" xml:space="preserve">
-    <value>Conflicting Files</value>
+    <value>Конфликтующие файлы</value>
   </data>
   <data name="StrRunMergeTool" xml:space="preserve">
-    <value>Run Merge Tool</value>
+    <value>Запустить средство слияния</value>
   </data>
   <data name="StrsNoContributorsToDisplay" xml:space="preserve">
     <value>No contributors to display</value>
@@ -1522,7 +1522,7 @@ Commit or stash them and try again.</value>
     <value>Merge tool is running</value>
   </data>
   <data name="StrWaitingMergeTool" xml:space="preserve">
-    <value>Ожидание заврешения работы утилиты слияния</value>
+    <value>Ожидание заврешения работы средства слияния</value>
   </data>
   <data name="StrCollapseAll" xml:space="preserve">
     <value>Collapse All</value>
@@ -1552,7 +1552,7 @@ Commit or stash them and try again.</value>
     <value>blame</value>
   </data>
   <data name="StrConflictResolution" xml:space="preserve">
-    <value>Conflict Resolution</value>
+    <value>Разрешение конфликтов</value>
   </data>
   <data name="StrsDeleteFile" xml:space="preserve">
     <value>Delete file</value>
@@ -1567,7 +1567,7 @@ Commit or stash them and try again.</value>
     <value>Use theirs version</value>
   </data>
   <data name="StrResolveConflict" xml:space="preserve">
-    <value>Resolve Conflict</value>
+    <value>Разрешить конфликт</value>
   </data>
   <data name="StrPatch" xml:space="preserve">
     <value>Patch</value>

@@ -169,12 +169,21 @@ namespace gitter.Git.Gui.Dialogs
 							}
 							catch(GitException exc)
 							{
-								GitterApplication.MessageBoxService.Show(
-									this,
-									exc.Message,
-									Resources.ErrFailedToRunMergeTool,
-									MessageBoxButton.Close,
-									MessageBoxIcon.Error);
+                                try
+                                {
+                                    file.RunMergeToolExternalAsync().Invoke<ProgressForm>(this);
+                                }
+                                catch (Exception)
+                                {
+                                    GitterApplication.MessageBoxService.Show(
+                                        this,
+                                        exc.Message,
+                                        Resources.ErrFailedToRunMergeTool,
+                                        MessageBoxButton.Close,
+                                        MessageBoxIcon.Error);
+                                }
+                                    
+
 							}
 							break;
 					}

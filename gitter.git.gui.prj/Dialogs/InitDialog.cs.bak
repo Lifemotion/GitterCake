@@ -107,7 +107,7 @@ namespace gitter.Git.Gui.Dialogs
 
 		protected override string ActionVerb
 		{
-			get { return "OK"; }
+			get { return Resources.StrInit; }
 		}
 
 		private IGitRepositoryProvider GitRepositoryProvider

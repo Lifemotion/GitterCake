@@ -25,6 +25,7 @@ namespace gitter.Git.AccessLayer
 	using System.Text;
 
 	using gitter.Git.AccessLayer.CLI;
+    using System.Diagnostics;
 
 	internal sealed partial class RepositoryCLI : IIndexAccessor
 	{
@@ -710,7 +711,22 @@ namespace gitter.Git.AccessLayer
 			}
 		}
 
-		/// <summary>Run merge tool to resolve conflicts.</summary>
+		public void RunMergeToolExternal(RunMergeToolParameters parameters)
+		{
+			Verify.Argument.IsNotNull(parameters, "parameters");
+            var defaultTool=System.IO.Path.Combine("WinMerge","WinMergeU.exe");
+            var prc = new Process();
+            var si = new ProcessStartInfo();
+            si.FileName = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, defaultTool);
+            si.WindowStyle = ProcessWindowStyle.Normal;
+            si.Arguments = '"'+parameters.Files[0]+'"';
+            prc.StartInfo = si;
+            prc.Start();
+            prc.WaitForExit();
+		}
+	
+
+		/// <summary>Run external merge tool to resolve conflicts.</summary>
 		/// <param name="parameters"><see cref="RunMergeToolParameters"/>.</param>
 		/// <exception cref="T:System.ArgumentNullException"><paramref name="parameters"/> == <c>null</c>.</exception>
 		public void RunMergeTool(RunMergeToolParameters parameters)
@@ -722,7 +738,7 @@ namespace gitter.Git.AccessLayer
 			{
 				args.Add(MergeToolCommand.Tool(parameters.Tool));
 			}
-			args.Add(MergeToolCommand.NoPrompt());
+           	args.Add(MergeToolCommand.NoPrompt());
 			if(parameters.Files != null && parameters.Files.Count != 0)
 			{
 				foreach(var file in parameters.Files)

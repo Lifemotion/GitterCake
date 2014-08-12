@@ -2616,4 +2616,7 @@ Reset existing branch instead of creating a new one?</value>
   <data name="StrDeleteTag" xml:space="preserve">
     <value>Delete Tag</value>
   </data>
+  <data name="SelectMergeTool" xml:space="preserve">
+    <value>Select Merge Tool</value>
+  </data>
 </root>

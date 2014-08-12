@@ -3012,13 +3012,20 @@ namespace gitter.Git.Gui
 						}
 						break;
 					default:
-						file.RunMergeToolAsync(tool).Invoke<ProgressForm>(parent);
+                        try
+                        {
+                            file.RunMergeToolAsync(tool).Invoke<ProgressForm>(parent);
+                        }
+                        catch (Exception)
+                        {
+                            file.RunMergeToolExternalAsync().Invoke<ProgressForm>(parent);
+                        }
 						break;
 				}
 			}
 			catch(GitException exc)
 			{
-				GitterApplication.MessageBoxService.Show(
+				    GitterApplication.MessageBoxService.Show(
 					parent,
 					exc.Message,
 					Resources.ErrFailedToRunMergeTool,

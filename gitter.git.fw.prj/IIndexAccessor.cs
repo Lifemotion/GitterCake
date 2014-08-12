@@ -88,5 +88,11 @@ namespace gitter.Git.AccessLayer
 		/// <param name="parameters"><see cref="RunMergeToolParameters"/>.</param>
 		/// <exception cref="T:System.ArgumentNullException"><paramref name="parameters"/> == <c>null</c>.</exception>
 		void RunMergeTool(RunMergeToolParameters parameters);
+
+
+		/// <summary>Run merge tool to resolve conflicts.</summary>
+		/// <param name="parameters"><see cref="RunMergeToolParameters"/>.</param>
+		/// <exception cref="T:System.ArgumentNullException"><paramref name="parameters"/> == <c>null</c>.</exception>
+		void RunMergeToolExternal(RunMergeToolParameters parameters);
 	}
 }
