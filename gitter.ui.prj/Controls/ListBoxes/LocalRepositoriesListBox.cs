@@ -38,8 +38,8 @@ namespace gitter
 			{
 				SizeMode = ColumnSizeMode.Fill
 			});
-       		HeaderStyle = HeaderStyle.Hidden;          
-			ItemHeight = 36;
+			HeaderStyle = HeaderStyle.Hidden;
+			ItemHeight = SystemInformation.IconSize.Height + 4;
 			AllowDrop = true;
 			_dragHelper = new DragHelper();
 		}
@@ -72,7 +72,7 @@ namespace gitter
 				using(var dragImage = RepositoryDragImage.Create(
 					((RepositoryListItem)item).DataContext.Path))
 				{
-					dragImage.Show();
+					dragImage.ShowDragVisual(this);
 					DoDragDrop(item, DragDropEffects.Move);
 				}
 				_dragHelper.Stop();

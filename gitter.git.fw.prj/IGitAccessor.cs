@@ -21,12 +21,17 @@
 namespace gitter.Git.AccessLayer
 {
 	using System;
+	using System.Threading;
+	using System.Threading.Tasks;
 
+	using gitter.Framework;
 	using gitter.Framework.Configuration;
 
 	/// <summary>Defines repository-independent git operations.</summary>
 	public interface IGitAccessor : IConfigAccessor
 	{
+		#region Properties
+
 		/// <summary>Returns provider of this accessor.</summary>
 		/// <value>Provider of this accessor</value>
 		IGitAccessorProvider Provider { get; }
@@ -35,16 +40,18 @@ namespace gitter.Git.AccessLayer
 		/// <value>git version.</value>
 		Version GitVersion { get; }
 
+		/// <summary>Create an empty git repository or reinitialize an existing one.</summary>
+		IGitAction<InitRepositoryParameters> InitRepository { get; }
+
+		/// <summary>Clone existing repository.</summary>
+		IGitAction<CloneRepositoryParameters> CloneRepository { get; }
+
+		#endregion
+
+		#region Methods
+
 		/// <summary>Forces re-check of git version.</summary>
-		void RefreshGitVersion();
-
-		/// <summary>Save parameters to the specified <paramref name="section"/>.</summary>
-		/// <param name="section">Section to store parameters.</param>
-		void SaveTo(Section section);
-
-		/// <summary>Load parameters from the specified <paramref name="section"/>.</summary>
-		/// <param name="section">Section to look for parameters.</param>
-		void LoadFrom(Section section);
+		void InvalidateGitVersion();
 
 		/// <summary>Create <see cref="IRepositoryAccessor"/> for specified <paramref name="repository"/>.</summary>
 		/// <param name="repository">git repository to get accessor for.</param>
@@ -57,14 +64,14 @@ namespace gitter.Git.AccessLayer
 		/// <returns><c>true</c> if specified path is a valid repository, <c>false</c> otherwise.</returns>
 		bool IsValidRepository(string path);
 
-		/// <summary>Create an empty git repository or reinitialize an existing one.</summary>
-		/// <param name="parameters"><see cref="InitRepositoryParameters"/>.</param>
-		/// <exception cref="ArgumentNullException"><paramref name="parameters"/> == <c>null</c>.</exception>
-		void InitRepository(InitRepositoryParameters parameters);
+		/// <summary>Save parameters to the specified <paramref name="section"/>.</summary>
+		/// <param name="section">Section to store parameters.</param>
+		void SaveTo(Section section);
 
-		/// <summary>Clone existing repository. </summary>
-		/// <param name="parameters"><see cref="CloneRepositoryParameters"/>.</param>
-		/// <exception cref="ArgumentNullException"><paramref name="parameters"/> == <c>null</c>.</exception>
-		void CloneRepository(CloneRepositoryParameters parameters);
+		/// <summary>Load parameters from the specified <paramref name="section"/>.</summary>
+		/// <param name="section">Section to look for parameters.</param>
+		void LoadFrom(Section section);
+
+		#endregion
 	}
 }

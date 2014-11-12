@@ -38,9 +38,9 @@ namespace gitter.Git.Gui
 	{
 		#region Constants
 
-		private const int DefaultElementHeight = 16;
-		private const int HeaderWidth = 70;
-		private const int MinWidth = HeaderWidth + 295;
+		private static readonly int DefaultElementHeight = SystemInformation.SmallIconSize.Height;
+		private static readonly int HeaderWidth          = (int)((SystemInformation.SmallIconSize.Width / 16.0) * 70);
+		private static readonly int MinWidth             = HeaderWidth + (int)((SystemInformation.SmallIconSize.Width / 16.0) * 295);
 
 		#endregion
 
@@ -313,19 +313,23 @@ namespace gitter.Git.Gui
 			public override ContextMenuStrip CreateContextMenu(Revision revision)
 			{
 				var menu = new ContextMenuStrip();
-				menu.Items.Add(GuiItemFactory.GetCopyHashToClipboardItem<ToolStripMenuItem>(Resources.StrCopyToClipboard, revision.Hash));
+				menu.Items.Add(GuiItemFactory.GetViewTreeItem<ToolStripMenuItem>(revision));
+				menu.Items.Add(GuiItemFactory.GetSavePatchItem<ToolStripMenuItem>(revision));
+				menu.Items.Add(GuiItemFactory.GetArchiveItem<ToolStripMenuItem>(revision));
+				menu.Items.Add(new ToolStripSeparator());
+				menu.Items.Add(GuiItemFactory.GetCopyHashToClipboardItem<ToolStripMenuItem>(Resources.StrCopyToClipboard, revision.HashString));
 				Utility.MarkDropDownForAutoDispose(menu);
 				return menu;
 			}
 
 			public override Size Measure(Graphics graphics, Revision revision, int width)
 			{
-				return Measure(graphics, TreeHashColumn.Font, revision.Hash, width);
+				return Measure(graphics, TreeHashColumn.Font, revision.HashString, width);
 			}
 
 			public override void Paint(Graphics graphics, Revision revision, Rectangle rect)
 			{
-				DefaultPaint(graphics, HashColumn.Font, Resources.StrHash.AddColon(), revision.Hash, rect);
+				DefaultPaint(graphics, HashColumn.Font, Resources.StrHash.AddColon(), revision.HashString, rect);
 			}
 		}
 
@@ -344,19 +348,19 @@ namespace gitter.Git.Gui
 			public override ContextMenuStrip CreateContextMenu(Revision revision)
 			{
 				var menu = new ContextMenuStrip();
-				menu.Items.Add(GuiItemFactory.GetCopyHashToClipboardItem<ToolStripMenuItem>(Resources.StrCopyToClipboard, revision.TreeHash));
+				menu.Items.Add(GuiItemFactory.GetCopyHashToClipboardItem<ToolStripMenuItem>(Resources.StrCopyToClipboard, revision.TreeHashString));
 				Utility.MarkDropDownForAutoDispose(menu);
 				return menu;
 			}
 
 			public override Size Measure(Graphics graphics, Revision revision, int width)
 			{
-				return Measure(graphics, TreeHashColumn.Font, revision.TreeHash, width);
+				return Measure(graphics, TreeHashColumn.Font, revision.TreeHashString, width);
 			}
 
 			public override void Paint(Graphics graphics, Revision revision, Rectangle rect)
 			{
-				DefaultPaint(graphics, TreeHashColumn.Font, Resources.StrTreeHash.AddColon(), revision.TreeHash, rect);
+				DefaultPaint(graphics, TreeHashColumn.Font, Resources.StrTreeHash.AddColon(), revision.TreeHashString, rect);
 			}
 		}
 
@@ -394,7 +398,7 @@ namespace gitter.Git.Gui
 					case 0:
 						return Size.Empty;
 					case 1:
-						return Measure(graphics, HashColumn.Font, revision.Parents[0].Hash, width);
+						return Measure(graphics, HashColumn.Font, revision.Parents[0].HashString, width);
 					default:
 						var sb = new StringBuilder(41 * revision.Parents.Count);
 						bool first = true;
@@ -413,7 +417,7 @@ namespace gitter.Git.Gui
 			{
 				if(revision.Parents.Count == 1)
 				{
-					DefaultPaint(graphics, HashColumn.Font, Resources.StrParent.AddColon(), revision.Parents[0].Hash, rect);
+					DefaultPaint(graphics, HashColumn.Font, Resources.StrParent.AddColon(), revision.Parents[0].HashString, rect);
 				}
 				else
 				{

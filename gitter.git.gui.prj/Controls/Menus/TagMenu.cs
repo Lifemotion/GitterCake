@@ -20,72 +20,50 @@
 
 namespace gitter.Git.Gui.Controls
 {
-    using gitter.Framework;
-    using System;
-    using System.ComponentModel;
-    using System.Windows.Forms;
-    using Resources = gitter.Git.Gui.Properties.Resources;
+	using System;
+	using System.ComponentModel;
+	using System.Windows.Forms;
 
-    [ToolboxItem(false)]
-    public sealed class TagMenu : ContextMenuStrip
-    {
-        private readonly Tag _tag;
+	using Resources = gitter.Git.Gui.Properties.Resources;
 
-        public TagMenu(Tag tag)
-        {
-            Verify.Argument.IsValidGitObject(tag, "tag");
+	[ToolboxItem(false)]
+	public sealed class TagMenu : ContextMenuStrip
+	{
+		private readonly Tag _tag;
 
-            _tag = tag;
+		public TagMenu(Tag tag)
+		{
+			Verify.Argument.IsValidGitObject(tag, "tag");
 
-            if (GitterApplication.ComplexityManager.Mode == Complexty.simple)
-            {
+			_tag = tag;
 
-                Items.Add(GuiItemFactory.GetCheckoutRevisionItem<ToolStripMenuItem>(_tag, "{0} '{1}'"));
-                Items.Add(new ToolStripSeparator());
-                Items.Add(GuiItemFactory.GetRemoveTagItem<ToolStripMenuItem>(_tag, "{0} '{1}'"));
+			Items.Add(GuiItemFactory.GetViewTreeItem<ToolStripMenuItem>(_tag));
+			Items.Add(GuiItemFactory.GetArchiveItem<ToolStripMenuItem>(_tag));
 
-                var item = new ToolStripMenuItem(Resources.StrAdditional);
-                item.DropDownItems.Add(GuiItemFactory.GetViewTreeItem<ToolStripMenuItem>(_tag));
-                item.DropDownItems.Add(GuiItemFactory.GetArchiveItem<ToolStripMenuItem>(_tag));
-                item.DropDownItems.Add(new ToolStripSeparator());
-                item.DropDownItems.Add(GuiItemFactory.GetCreateBranchItem<ToolStripMenuItem>(_tag));
-                item.DropDownItems.Add(GuiItemFactory.GetCreateTagItem<ToolStripMenuItem>(_tag));
-                item.DropDownItems.Add(new ToolStripSeparator());
-                item.DropDownItems.Add(GuiItemFactory.GetResetHeadHereItem<ToolStripMenuItem>(_tag));
+			Items.Add(new ToolStripSeparator()); // interactive section
 
-                Items.Add(item);
-            }
-            else
-            {
-                Items.Add(GuiItemFactory.GetViewTreeItem<ToolStripMenuItem>(_tag));
-                Items.Add(GuiItemFactory.GetArchiveItem<ToolStripMenuItem>(_tag));
+			Items.Add(GuiItemFactory.GetCheckoutRevisionItem<ToolStripMenuItem>(_tag, "{0} '{1}'"));
+			Items.Add(GuiItemFactory.GetResetHeadHereItem<ToolStripMenuItem>(_tag));
+			Items.Add(GuiItemFactory.GetRemoveTagItem<ToolStripMenuItem>(_tag, Resources.StrDelete));
 
-                Items.Add(new ToolStripSeparator()); // interactive section
+			Items.Add(new ToolStripSeparator()); // copy to clipboard section
 
-                Items.Add(GuiItemFactory.GetCheckoutRevisionItem<ToolStripMenuItem>(_tag, "{0} '{1}'"));
-                Items.Add(GuiItemFactory.GetResetHeadHereItem<ToolStripMenuItem>(_tag));
-                Items.Add(GuiItemFactory.GetRemoveTagItem<ToolStripMenuItem>(_tag, Resources.StrDelete));
+			var item = new ToolStripMenuItem(Resources.StrCopyToClipboard);
+			item.DropDownItems.Add(GuiItemFactory.GetCopyToClipboardItem<ToolStripMenuItem>(Resources.StrName, tag.Name));
+			item.DropDownItems.Add(GuiItemFactory.GetCopyToClipboardItem<ToolStripMenuItem>(Resources.StrFullName, tag.FullName));
+			item.DropDownItems.Add(GuiItemFactory.GetCopyHashToClipboardItem<ToolStripMenuItem>(Resources.StrPosition, tag.Revision.Hash.ToString()));
 
-                Items.Add(new ToolStripSeparator()); // copy to clipboard section
+			Items.Add(item);
 
-                var item = new ToolStripMenuItem(Resources.StrCopyToClipboard);
-                item.DropDownItems.Add(GuiItemFactory.GetCopyToClipboardItem<ToolStripMenuItem>(Resources.StrName, tag.Name));
-                item.DropDownItems.Add(GuiItemFactory.GetCopyToClipboardItem<ToolStripMenuItem>(Resources.StrFullName, tag.FullName));
-                item.DropDownItems.Add(GuiItemFactory.GetCopyHashToClipboardItem<ToolStripMenuItem>(Resources.StrPosition, tag.Revision.Hash));
+			Items.Add(new ToolStripSeparator());
 
-                Items.Add(item);
+			Items.Add(GuiItemFactory.GetCreateBranchItem<ToolStripMenuItem>(_tag));
+			Items.Add(GuiItemFactory.GetCreateTagItem<ToolStripMenuItem>(_tag));
+		}
 
-                Items.Add(new ToolStripSeparator());
-
-                Items.Add(GuiItemFactory.GetCreateBranchItem<ToolStripMenuItem>(_tag));
-                Items.Add(GuiItemFactory.GetCreateTagItem<ToolStripMenuItem>(_tag));
-            }
-
-        }
-
-        public new Tag Tag
-        {
-            get { return _tag; }
-        }
-    }
+		public new Tag Tag
+		{
+			get { return _tag; }
+		}
+	}
 }

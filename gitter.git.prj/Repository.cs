@@ -23,6 +23,8 @@ namespace gitter.Git
 	using System;
 	using System.IO;
 	using System.Collections.Generic;
+	using System.Threading;
+	using System.Threading.Tasks;
 
 	using gitter.Framework;
 
@@ -117,68 +119,81 @@ namespace gitter.Git
 
 		#region Static
 
-		private static void SetProgress(IAsyncProgressMonitor monitor, int val, string action)
+		private static void SetProgress(IProgress<OperationProgress> progress, int val, string action)
 		{
-			if(monitor != null)
+			if(progress != null)
 			{
-				if(monitor.IsCancelRequested)
+				var status = new OperationProgress
 				{
-					throw new OperationCanceledException();
-				}
-				monitor.SetProgress(val, action);
+					ActionName      = action,
+					MaxProgress     = 8,
+					CurrentProgress = val,
+				};
+				progress.Report(status);
 			}
 		}
 
-		private static void LoadCore(Repository repository, IAsyncProgressMonitor monitor)
+		private static void LoadCore(Repository repository, IProgress<OperationProgress> progress, CancellationToken cancellationToken)
 		{
-			if(monitor != null)
+			if(progress != null)
 			{
-				monitor.SetProgressRange(0, 8);
-				monitor.SetProgress(0, Resources.StrLoadingConfiguration.AddEllipsis());
+				SetProgress(progress, 0, Resources.StrLoadingConfiguration.AddEllipsis());
 			}
 
 			repository.Configuration.Refresh();
 
-			SetProgress(monitor, 1, Resources.StrLoadingReferences.AddEllipsis());
+			cancellationToken.ThrowIfCancellationRequested();
+			SetProgress(progress, 1, Resources.StrLoadingReferences.AddEllipsis());
 
-			var refs = repository.Accessor.QueryReferences(
+			var refs = repository.Accessor.QueryReferences.Invoke(
 				new QueryReferencesParameters(ReferenceType.Branch | ReferenceType.Tag | ReferenceType.Stash));
 			repository.Refs.Load(refs);
 
 			if(refs.Stash != null)
 			{
-				SetProgress(monitor, 2, Resources.StrLoadingStash.AddEllipsis());
+				cancellationToken.ThrowIfCancellationRequested();
+				SetProgress(progress, 2, Resources.StrLoadingStash.AddEllipsis());
 				repository.Stash.Refresh();
 			}
 
 			repository.Notes.Refresh();
 
-			SetProgress(monitor, 3, Resources.StrLoadingHEAD.AddEllipsis());
+			cancellationToken.ThrowIfCancellationRequested();
+			SetProgress(progress, 3, Resources.StrLoadingHEAD.AddEllipsis());
 			repository.Head = new Head(repository);
 
-			SetProgress(monitor, 4, Resources.StrLoadingRemotes.AddEllipsis());
+			cancellationToken.ThrowIfCancellationRequested();
+			SetProgress(progress, 4, Resources.StrLoadingRemotes.AddEllipsis());
 			repository.Remotes.Refresh();
 
 
-			SetProgress(monitor, 5, Resources.StrLoadingSubmodules.AddEllipsis());
+			cancellationToken.ThrowIfCancellationRequested();
+			SetProgress(progress, 5, Resources.StrLoadingSubmodules.AddEllipsis());
 			repository.Submodules.Refresh();
 
 			if(!repository.Head.IsEmpty)
 			{
-				SetProgress(monitor, 6, Resources.StrLoadingUsers.AddEllipsis());
+				cancellationToken.ThrowIfCancellationRequested();
+				SetProgress(progress, 6, Resources.StrLoadingUsers.AddEllipsis());
 				repository.Users.Refresh();
 			}
 
-			SetProgress(monitor, 7, Resources.StrLoadingStatus.AddEllipsis());
+			cancellationToken.ThrowIfCancellationRequested();
+			SetProgress(progress, 7, Resources.StrLoadingStatus.AddEllipsis());
 			repository.Status.Refresh();
 
-			repository.Monitor = new RepositoryMonitor(repository);
-
+			cancellationToken.ThrowIfCancellationRequested();
 			repository.UpdateState();
 
+			cancellationToken.ThrowIfCancellationRequested();
 			repository.UpdateUserIdentity(false);
 
-			SetProgress(monitor, 8, Resources.StrCompleted.AddPeriod());
+			cancellationToken.ThrowIfCancellationRequested();
+			repository.Monitor = new RepositoryMonitor(repository);
+			repository.Monitor.IsEnabled = true;
+
+			cancellationToken.ThrowIfCancellationRequested();
+			SetProgress(progress, 8, Resources.StrCompleted.AddPeriod());
 		}
 
 		public static Repository Load(IGitAccessor gitAccessor, string workingDirectory)
@@ -186,23 +201,22 @@ namespace gitter.Git
 			return new Repository(gitAccessor, workingDirectory, true);
 		}
 
-		public static IAsyncFunc<Repository> LoadAsync(IGitAccessor gitAccessor, string workingDirectory)
+		public static Task<Repository> LoadAsync(IGitAccessor gitAccessor, string workingDirectory, IProgress<OperationProgress> progress, CancellationToken cancellationToken)
 		{
 			Verify.Argument.IsNotNull(gitAccessor, "gitAccessor");
 			Verify.Argument.IsNotNull(workingDirectory, "workingDirectory");
 
-			return AsyncFunc.Create(
-				new
+			return Task.Factory.StartNew(
+				() =>
 				{
-					GitAccessor = gitAccessor,
-					WorkingDirectory = workingDirectory,
-				},
-				(data, monitor) =>
-				{
-					var repository = new Repository(data.GitAccessor, data.WorkingDirectory, false);
+					if(progress != null)
+					{
+						progress.Report(new OperationProgress(Resources.StrLoadingRepository.AddEllipsis()));
+					}
+					var repository = new Repository(gitAccessor, workingDirectory, false);
 					try
 					{
-						LoadCore(repository, monitor);
+						LoadCore(repository, progress, cancellationToken);
 					}
 					catch
 					{
@@ -211,8 +225,9 @@ namespace gitter.Git
 					}
 					return repository;
 				},
-				Resources.StrLoadingRepository.AddEllipsis(),
-				string.Empty, true);
+				cancellationToken,
+				TaskCreationOptions.None,
+				TaskScheduler.Default);
 		}
 
 		private static string GetWorkingDirectory(string workingDirectory)
@@ -269,8 +284,12 @@ namespace gitter.Git
 					}
 				}
 			}
-			catch
+			catch(Exception exc)
 			{
+				if(exc.IsCritical())
+				{
+					throw;
+				}
 			}
 			if(configurationManager == null)
 			{
@@ -292,28 +311,27 @@ namespace gitter.Git
 			Verify.Argument.IsNotNull(gitAccessor, "gitAccessor");
 			Verify.Argument.IsNotNull(workingDirectory, "workingDirectory");
 
-			_workingDirectory		= GetWorkingDirectory(workingDirectory);
-			_gitDirectory			= GetGitDirectory(_workingDirectory);
-			_configurationManager	= GetConfigurationManager(_gitDirectory);
+			_workingDirectory     = GetWorkingDirectory(workingDirectory);
+			_gitDirectory         = GetGitDirectory(_workingDirectory);
+			_configurationManager = GetConfigurationManager(_gitDirectory);
 
-			_accessor		= gitAccessor.CreateRepositoryAccessor(this);
-
-			_revisionCache	= new RevisionCache(this);
-			_configuration	= new ConfigParametersCollection(this);
-			_status			= new Status(this);
-			_stash			= new StashedStatesCollection(this);
-			_refs			= new RefsCollection(this);
-			_notes			= new NotesCollection(this);
-			_remotes		= new RemotesCollection(this);
-			_submodules		= new SubmodulesCollection(this);
-			_users			= new UsersCollection(this);
-			_hooks			= new HooksCollection(this);
+			_accessor      = gitAccessor.CreateRepositoryAccessor(this);
+			_revisionCache = new RevisionCache(this);
+			_configuration = new ConfigParametersCollection(this);
+			_status        = new Status(this);
+			_stash         = new StashedStatesCollection(this);
+			_refs          = new RefsCollection(this);
+			_notes         = new NotesCollection(this);
+			_remotes       = new RemotesCollection(this);
+			_submodules    = new SubmodulesCollection(this);
+			_users         = new UsersCollection(this);
+			_hooks         = new HooksCollection(this);
 
 			if(load)
 			{
 				try
 				{
-					LoadCore(this, null);
+					LoadCore(this, null, CancellationToken.None);
 				}
 				catch
 				{
@@ -342,9 +360,10 @@ namespace gitter.Git
 			{
 				return _head;
 			}
-			if(GitUtils.IsValidSHA1(revisionExpression))
+			Hash hash;
+			if(Hash.TryParse(revisionExpression, out hash))
 			{
-				var revision = _revisionCache.TryGetRevision(revisionExpression);
+				var revision = _revisionCache.TryGetRevision(hash);
 				if(revision != null) return revision;
 			}
 			var reference = _refs.TryGetReference(revisionExpression);
@@ -361,6 +380,13 @@ namespace gitter.Git
 		{
 			get { return _monitor; }
 			private set { _monitor = value; }
+		}
+
+		/// <summary>Returns repository monitor.</summary>
+		/// <value>Repository monitor.</value>
+		IRepositoryMonitor IGitRepository.Monitor
+		{
+			get { return Monitor; }
 		}
 
 		#endregion
@@ -524,8 +550,12 @@ namespace gitter.Git
 					return null;
 				}
 			}
-			catch
+			catch(Exception exc)
 			{
+				if(exc.IsCritical())
+				{
+					throw;
+				}
 				return null;
 			}
 		}
@@ -586,8 +616,8 @@ namespace gitter.Git
 		private void UpdateUserIdentity(bool raiseEvent)
 		{
 			User userIdentity;
-			var name	= _configuration.TryGetParameterValue(GitConstants.UserNameParameter);
-			var email	= _configuration.TryGetParameterValue(GitConstants.UserEmailParameter);
+			var name  = _configuration.TryGetParameterValue(GitConstants.UserNameParameter);
+			var email = _configuration.TryGetParameterValue(GitConstants.UserEmailParameter);
 			if(name == null || email == null)
 			{
 				userIdentity = null;
@@ -653,7 +683,7 @@ namespace gitter.Git
 			Verify.Argument.IsNotNull(gitAccessor, "gitAccessor");
 			Verify.Argument.IsNeitherNullNorWhitespace(path, "path");
 
-			gitAccessor.InitRepository(new InitRepositoryParameters(path, template, bare));
+			gitAccessor.InitRepository.Invoke(new InitRepositoryParameters(path, template, bare));
 		}
 
 		public static void Init(IGitAccessor gitAccessor, string path, string template)
@@ -661,7 +691,7 @@ namespace gitter.Git
 			Verify.Argument.IsNotNull(gitAccessor, "gitAccessor");
 			Verify.Argument.IsNeitherNullNorWhitespace(path, "path");
 
-			gitAccessor.InitRepository(new InitRepositoryParameters(path, template, false));
+			gitAccessor.InitRepository.Invoke(new InitRepositoryParameters(path, template, false));
 		}
 
 		public static void Init(IGitAccessor gitAccessor, string path, bool bare)
@@ -669,7 +699,7 @@ namespace gitter.Git
 			Verify.Argument.IsNotNull(gitAccessor, "gitAccessor");
 			Verify.Argument.IsNeitherNullNorWhitespace(path, "path");
 
-			gitAccessor.InitRepository(new InitRepositoryParameters(path, null, bare));
+			gitAccessor.InitRepository.Invoke(new InitRepositoryParameters(path, null, bare));
 		}
 
 		public static void Init(IGitAccessor gitAccessor, string path)
@@ -677,7 +707,7 @@ namespace gitter.Git
 			Verify.Argument.IsNotNull(gitAccessor, "gitAccessor");
 			Verify.Argument.IsNeitherNullNorWhitespace(path, "path");
 
-			gitAccessor.InitRepository(new InitRepositoryParameters(path, null, false));
+			gitAccessor.InitRepository.Invoke(new InitRepositoryParameters(path, null, false));
 		}
 
 		#endregion
@@ -691,7 +721,7 @@ namespace gitter.Git
 		{
 			Verify.Argument.IsNotNull(gitAccessor, "gitAccessor");
 
-			gitAccessor.CloneRepository(
+			gitAccessor.CloneRepository.Invoke(
 				new CloneRepositoryParameters()
 				{
 					Url = url,
@@ -708,14 +738,15 @@ namespace gitter.Git
 				});
 		}
 
-		public static IAsyncAction CloneAsync(
+		public static Task CloneAsync(
 			IGitAccessor gitAccessor,
 			string url, string path, string template, string remoteName,
-			bool shallow, int depth, bool bare, bool mirror, bool recursive, bool noCheckout)
+			bool shallow, int depth, bool bare, bool mirror, bool recursive, bool noCheckout,
+			IProgress<OperationProgress> progress, CancellationToken cancellationToken)
 		{
 			Verify.Argument.IsNotNull(gitAccessor, "gitAccessor");
 
-			return AsyncAction.Create(
+			return gitAccessor.CloneRepository.InvokeAsync(
 				new CloneRepositoryParameters()
 				{
 					Url = url,
@@ -730,14 +761,7 @@ namespace gitter.Git
 					Recursive = recursive,
 					NoCheckout = noCheckout,
 				},
-				(parameters, monitor) =>
-				{
-					parameters.Monitor = monitor;
-					gitAccessor.CloneRepository(parameters);
-				},
-				Resources.StrCloningRepository.AddEllipsis(),
-				Resources.StrfCloning.UseAsFormat(url).AddEllipsis(),
-				true);
+				progress, cancellationToken);
 		}
 
 		#endregion
@@ -748,6 +772,8 @@ namespace gitter.Git
 		/// <param name="control">Type of operation.</param>
 		public void Rebase(RebaseControl control)
 		{
+			Verify.State.IsFalse(IsDisposed, "Repository is disposed.");
+
 			using(Monitor.BlockNotifications(
 				RepositoryNotifications.BranchChanged,
 				RepositoryNotifications.Checkout,
@@ -756,7 +782,7 @@ namespace gitter.Git
 			{
 				try
 				{
-					_accessor.Rebase(control);
+					Accessor.Rebase.Invoke(new RebaseParameters(control));
 				}
 				finally
 				{
@@ -771,64 +797,87 @@ namespace gitter.Git
 
 		/// <summary>Control rebase process.</summary>
 		/// <param name="control">Type of operation.</param>
-		public IAsyncAction RebaseAsync(RebaseControl control)
+		public Task RebaseAsync(RebaseControl control, IProgress<OperationProgress> progress)
 		{
-			string details;
+			Verify.State.IsFalse(IsDisposed, "Repository is disposed.");
+
 			switch(control)
 			{
 				case RebaseControl.Abort:
-					details = Resources.StrsAbortingRebase.AddEllipsis();
+					if(progress != null)
+					{
+						progress.Report(new OperationProgress(Resources.StrsAbortingRebase.AddEllipsis()));
+					}
 					break;
 				case RebaseControl.Continue:
-					details = Resources.StrsContinuingRebase.AddEllipsis();
+					if(progress != null)
+					{
+						progress.Report(new OperationProgress(Resources.StrsContinuingRebase.AddEllipsis()));
+					}
 					break;
 				case RebaseControl.Skip:
-					details = Resources.StrsSkippingCommit.AddEllipsis();
+					if(progress != null)
+					{
+						progress.Report(new OperationProgress(Resources.StrsSkippingCommit.AddEllipsis()));
+					}
 					break;
 				default:
 					throw new ArgumentException(
 						"Unknown RebaseControl value: {0}".UseAsFormat(control),
 						"control");
 			}
-			return AsyncAction.Create(
-				new
+
+			var block = Monitor.BlockNotifications(
+				RepositoryNotifications.BranchChanged,
+				RepositoryNotifications.Checkout,
+				RepositoryNotifications.WorktreeUpdated,
+				RepositoryNotifications.IndexUpdated);
+			return Accessor.Rebase.InvokeAsync(new RebaseParameters(control), progress, CancellationToken.None)
+				.ContinueWith(
+				t =>
 				{
-					Repository = this,
-					Control = control,
+					block.Dispose();
+					_refs.RefreshBranches();
+					_head.Refresh();
+					_status.Refresh();
+					OnStateChanged();
+					OnUpdated();
+					TaskUtility.PropagateFaultedStates(t);
 				},
-				(data, monitor) =>
-				{
-					data.Repository.Rebase(data.Control);
-				},
-				Resources.StrRebase,
-				details);
+				CancellationToken.None,
+				TaskContinuationOptions.ExecuteSynchronously,
+				TaskScheduler.Default);
 		}
 
 		#endregion
 
 		#region gc
 
-		/// <summary>Perform garbage collection.</summary>
-		public void GarbageCollect()
+		private static GarbageCollectParameters GetGarbageCollectParameters()
 		{
-			Accessor.GarbageCollect(new GarbageCollectParameters());
+			return new GarbageCollectParameters();
 		}
 
 		/// <summary>Perform garbage collection.</summary>
-		public IAsyncAction GarbageCollectAsync()
+		public void GarbageCollect()
 		{
-			return AsyncAction.Create(
-				this,
-				(repository, monitor) =>
-				{
-					repository.Accessor.GarbageCollect(
-						new GarbageCollectParameters()
-						{
-							//Monitor = monitor,
-						});
-				},
-				Resources.StrHousekeeping,
-				Resources.StrOptimizingRepository.AddEllipsis());
+			Verify.State.IsFalse(IsDisposed, "Repository is disposed.");
+
+			var parameters = GetGarbageCollectParameters();
+			Accessor.GarbageCollect.Invoke(parameters);
+		}
+
+		/// <summary>Perform garbage collection.</summary>
+		public Task GarbageCollectAsync(IProgress<OperationProgress> progress)
+		{
+			Verify.State.IsFalse(IsDisposed, "Repository is disposed.");
+
+			if(progress != null)
+			{
+				progress.Report(new OperationProgress(Resources.StrOptimizingRepository.AddEllipsis()));
+			}
+			var parameters = GetGarbageCollectParameters();
+			return Accessor.GarbageCollect.InvokeAsync(parameters, progress, CancellationToken.None);
 		}
 
 		#endregion
@@ -852,7 +901,7 @@ namespace gitter.Git
 		{
 			if(Monitor != null)
 			{
-				Monitor.Shutdown();
+				Monitor.Dispose();
 			}
 			var disposable = _accessor as IDisposable;
 			if(disposable != null)

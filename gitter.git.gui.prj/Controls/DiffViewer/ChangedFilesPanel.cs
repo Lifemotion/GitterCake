@@ -1,7 +1,7 @@
 #region Copyright Notice
 /*
  * gitter - VCS repository management tool
- * Copyright (C) 2013  Popovskiy Maxim Vladimirovitch <amgine.gitter@gmail.com>
+ * Copyright (C) 2014  Popovskiy Maxim Vladimirovitch <amgine.gitter@gmail.com>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -81,8 +81,8 @@ namespace gitter.Git.Gui.Controls
 
 		#endregion
 
-		private const int LineHeight = 20;
-		private const int HeaderHeight = 20;
+		private static readonly int LineHeight   = SystemInformation.SmallIconSize.Height + 4;
+		private static readonly int HeaderHeight = SystemInformation.SmallIconSize.Height + 4;
 		private const int HeaderBottomMargin = 3;
 		private const int HeaderContentPadding = 3;
 		private const int HeaderSpacing = 7;
@@ -112,7 +112,7 @@ namespace gitter.Git.Gui.Controls
 				{
 					_text = file.TargetFile;
 				}
-				_icon = Utility.QueryIcon(_text);
+				_icon = GraphicsUtility.QueryIcon(_text);
 				switch(file.Status)
 				{
 					case FileStatus.Removed:
@@ -449,6 +449,14 @@ namespace gitter.Git.Gui.Controls
 			if(handler != null) handler(this, EventArgs.Empty);
 		}
 
+		public event EventHandler<DiffFileEventArgs> FileNavigationRequested;
+
+		private void OnFileNavigationRequested(DiffFile diffFile)
+		{
+			var handler = FileNavigationRequested;
+			if(handler != null) handler(this, new DiffFileEventArgs(diffFile));
+		}
+
 		#endregion
 
 		/// <summary>Create <see cref="ChangedFilesPanel"/>.</summary>
@@ -621,6 +629,7 @@ namespace gitter.Git.Gui.Controls
 						if(id != -1)
 						{
 							var file = _items[id].File;
+							bool found = false;
                             if (ChangedFileClick != null) { ChangedFileClick(file); }
 							foreach(var panel in FlowControl.Panels)
 							{
@@ -628,8 +637,13 @@ namespace gitter.Git.Gui.Controls
 								if(diffpanel != null && diffpanel.DiffFile == file)
 								{
 									diffpanel.ScrollIntoView();
+									found = true;
 									break;
 								}
+							}
+							if(!found)
+							{
+								OnFileNavigationRequested(file);
 							}
 						}
 						else

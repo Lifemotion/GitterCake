@@ -93,7 +93,7 @@ namespace gitter.Git
 		/// <returns>Object pointed by HEAD of the specified repository.</returns>
 		private static IRevisionPointer GetHeadPointer(Repository repository)
 		{
-			var head = repository.Accessor.QuerySymbolicReference(
+			var head = repository.Accessor.QuerySymbolicReference.Invoke(
 				new QuerySymbolicReferenceParameters(GitConstants.HEAD));
 
 			switch(head.TargetType)
@@ -105,7 +105,7 @@ namespace gitter.Git
 						branch = repository.Refs.Heads.TryGetItem(head.TargetObject);
 						if(branch == null)
 						{
-							var info = repository.Accessor.QueryBranch(
+							var info = repository.Accessor.QueryBranch.Invoke(
 								new QueryBranchParameters(head.TargetObject, false));
 							if(info != null)
 							{
@@ -124,7 +124,7 @@ namespace gitter.Git
 				case ReferenceType.Revision:
 					lock(repository.Revisions.SyncRoot)
 					{
-						return repository.Revisions.GetOrCreateRevision(head.TargetObject);
+						return repository.Revisions.GetOrCreateRevision(new Hash(head.TargetObject));
 					}
 				default:
 					return new NowherePointer(repository, head.TargetObject);
@@ -239,8 +239,8 @@ namespace gitter.Git
 				RepositoryNotifications.WorktreeUpdated,
 				RepositoryNotifications.SubmodulesChanged))
 			{
-				Repository.Accessor.Reset(
-					new ResetParameters(rev.Hash, mode));
+				Repository.Accessor.Reset.Invoke(
+					new ResetParameters(rev.Hash.ToString(), mode));
 			}
 
 			if(currentBranch != null)
@@ -288,7 +288,7 @@ namespace gitter.Git
 			Verify.State.IsFalse(IsEmpty,
 				Resources.ExcCantDoOnEmptyRepository.UseAsFormat("format merge message"));
 
-			return Repository.Accessor.FormatMergeMessage(
+			return Repository.Accessor.FormatMergeMessage.Invoke(
 				new FormatMergeMessageParameters(revision.Pointer, Pointer.Pointer));
 		}
 
@@ -305,7 +305,7 @@ namespace gitter.Git
 			{
 				names.Add(branch.Pointer);
 			}
-			return Repository.Accessor.FormatMergeMessage(
+			return Repository.Accessor.FormatMergeMessage.Invoke(
 				new FormatMergeMessageParameters(names, Pointer.Pointer));
 		}
 
@@ -325,7 +325,7 @@ namespace gitter.Git
 			{
 				try
 				{
-					Repository.Accessor.Merge(
+					Repository.Accessor.Merge.Invoke(
 						new MergeParameters(branch.FullName)
 						{
 							NoCommit = noCommit,
@@ -410,7 +410,7 @@ namespace gitter.Git
 			{
 				try
 				{
-					Repository.Accessor.Merge(
+					Repository.Accessor.Merge.Invoke(
 						new MergeParameters(branchNames)
 						{
 							NoCommit = noCommit,

@@ -1,7 +1,7 @@
 #region Copyright Notice
 /*
  * gitter - VCS repository management tool
- * Copyright (C) 2013  Popovskiy Maxim Vladimirovitch <amgine.gitter@gmail.com>
+ * Copyright (C) 2014  Popovskiy Maxim Vladimirovitch <amgine.gitter@gmail.com>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,56 +38,203 @@ namespace gitter.Git.Gui.Views
 	{
 		#region Data
 
-		private IDiffSource _source;
+		private IDiffSource _diffSource;
 		private DiffOptions _options;
-		private bool _loaded;
+		private AsyncDataBinding<Diff> _diffBinding;
+		private DiffViewMode _viewMode;
+		private DiffViewer _diffViewerFiles;
+		private SplitContainer _container;
 
 		#endregion
 
-		public DiffView(Guid guid, IDictionary<string, object> parameters, GuiProvider gui)
-			: base(guid, gui, parameters)
+		#region Events
+
+		private static readonly object ViewModeChangedEvent = new object();
+
+		public event EventHandler ViewModeChanged
+		{
+			add { Events.AddHandler(ViewModeChangedEvent, value); }
+			remove { Events.RemoveHandler(ViewModeChangedEvent, value); }
+		}
+
+		protected virtual void OnViewModeChanged(EventArgs e)
+		{
+			var handler = (EventHandler)Events[ViewModeChangedEvent];
+			if(handler != null) handler(this, e);
+		}
+
+		#endregion
+
+		#region .ctor
+
+		public DiffView(Guid guid, GuiProvider gui)
+			: base(guid, gui)
 		{
 			InitializeComponent();
 
-			_diffViewerHead.PreviewKeyDown += OnKeyDown;
-            _diffViewerHead.DiffFileContextMenuRequested += OnDiffFileContextMenuRequested;
-            _diffViewerHead.UntrackedFileContextMenuRequested += OnUntrackedFileContextMenuRequested;
-
-            _diffViewerBody.PreviewKeyDown += OnKeyDown;
-            _diffViewerBody.DiffFileContextMenuRequested += OnDiffFileContextMenuRequested;
-            _diffViewerBody.UntrackedFileContextMenuRequested += OnUntrackedFileContextMenuRequested;
-
-            _diffViewerHead.ChangedFileClick += OnHeadChangeFileClick;
-
-			ApplyParameters(parameters);
+			_diffViewer.PreviewKeyDown += OnKeyDown;
+			_diffViewer.DiffFileContextMenuRequested += OnDiffFileContextMenuRequested;
+			_diffViewer.UntrackedFileContextMenuRequested += OnUntrackedFileContextMenuRequested;
 
 			AddTopToolStrip(new DiffToolbar(this));
 		}
 
-        private void OnHeadChangeFileClick(DiffFile file)
-        {
-            _diffViewerBody.ShowChangedFile(file);
-        }
+		#endregion
+
+		#region Properties
 
 		public override bool IsDocument
 		{
 			get { return true; }
 		}
 
-		protected override void AttachToRepository(Repository repository)
+		public IDiffSource DiffSource
 		{
-            _diffViewerHead.Repository = repository;
-            _diffViewerBody.Repository = repository;
-			base.AttachToRepository(repository);
+			get { return _diffSource; }
+			private set
+			{
+				if(_diffSource != value)
+				{
+					if(_diffSource != null)
+					{
+						DiffBinding = null;
+						_diffSource.Dispose();
+						_diffSource.Updated -= OnDiffSourceUpdated;
+					}
+					_diffSource = value;
+					if(_diffSource != null)
+					{
+						switch(ViewMode)
+						{
+							case DiffViewMode.Single:
+								DiffBinding = new DiffBinding(value, _diffViewer, DiffOptions);
+								break;
+							case DiffViewMode.Split:
+								DiffBinding = new SplitDiffBinding(value, _diffViewer, _diffViewerFiles, DiffOptions);
+								break;
+						}
+						_diffSource.Updated += OnDiffSourceUpdated;
+					}
+				}
+			}
 		}
+
+		public DiffViewMode ViewMode
+		{
+			get { return _viewMode; }
+			set
+			{
+				if(_viewMode != value)
+				{
+					_viewMode = value;
+					switch(value)
+					{
+						case DiffViewMode.Single:
+							DiffViewerFiles = null;
+							_diffViewer.Parent = null;
+							_diffViewer.Bounds = _container.Bounds;
+							_diffViewer.Dock = DockStyle.Bottom;
+							_diffViewer.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
+							_diffViewer.Parent = this;
+							if(_container != null)
+							{
+								_container.Dispose();
+								_container = null;
+							}
+							if(DiffSource != null)
+							{
+								DiffBinding = new DiffBinding(DiffSource, _diffViewer, DiffOptions);
+							}
+							break;
+						case DiffViewMode.Split:
+							_container = new SplitContainer
+							{
+								Orientation = Orientation.Horizontal,
+								Bounds = _diffViewer.Bounds,
+								Dock = DockStyle.Bottom,
+								Anchor = AnchorStyles.Top | AnchorStyles.Bottom,
+								Parent = this,
+							};
+							if(_container.Height > _container.SplitterWidth)
+							{
+								try
+								{
+									_container.SplitterDistance = (int)(_container.Height * 0.25);
+								}
+								catch
+								{
+								}
+							}
+							_diffViewer.Parent = null;
+							_diffViewer.Dock = DockStyle.Fill;
+							_diffViewer.Parent = _container.Panel1;
+							DiffViewerFiles = new DiffViewer
+							{
+								BorderStyle = BorderStyle.None,
+								Dock = DockStyle.Fill,
+								Parent = _container.Panel2,
+							};
+							if(DiffSource != null)
+							{
+								DiffBinding = new SplitDiffBinding(DiffSource, _diffViewer, DiffViewerFiles, DiffOptions);
+							}
+							break;
+					}
+					OnViewModeChanged(EventArgs.Empty);
+				}
+			}
+		}
+
+		private DiffViewer DiffViewerFiles
+		{
+			get { return _diffViewerFiles; }
+			set
+			{
+				if(_diffViewerFiles != value)
+				{
+					if(_diffViewerFiles != null)
+					{
+						_diffViewerFiles.Parent = null;
+						_diffViewerFiles.DiffFileContextMenuRequested -= OnDiffFileContextMenuRequested;
+						_diffViewerFiles.UntrackedFileContextMenuRequested -= OnUntrackedFileContextMenuRequested;
+						_diffViewerFiles.Dispose();
+					}
+					_diffViewerFiles = value;
+					if(_diffViewerFiles != value)
+					{
+						_diffViewerFiles.DiffFileContextMenuRequested += OnDiffFileContextMenuRequested;
+						_diffViewerFiles.UntrackedFileContextMenuRequested += OnUntrackedFileContextMenuRequested;
+					}
+				}
+			}
+		}
+
+		private AsyncDataBinding<Diff> DiffBinding
+		{
+			get { return _diffBinding; }
+			set
+			{
+				if(_diffBinding != value)
+				{
+					if(_diffBinding != null)
+					{
+						_diffBinding.Dispose();
+		}
+					_diffBinding = value;
+					if(_diffBinding != null)
+					{
+						_diffBinding.ReloadData();
+					}
+				}
+			}
+		}
+
+		#endregion
 
 		protected override void DetachFromRepository(Repository repository)
 		{
+			DiffSource = null;
 			base.DetachFromRepository(repository);
-            _diffViewerHead.Repository = null;
-            _diffViewerHead.Clear();
-            _diffViewerBody.Repository = null;
-            _diffViewerBody.Clear();
 		}
 
 		protected override void SaveRepositoryConfig(Section section)
@@ -98,84 +245,85 @@ namespace gitter.Git.Gui.Views
 				node.SetValue<int>("Context", _options.Context);
 				node.SetValue<bool>("IgnoreWhitespace", _options.IgnoreWhitespace);
 				node.SetValue<bool>("UsePatienceAlgorithm", _options.UsePatienceAlgorithm);
+				node.SetValue<string>("ViewMode", ViewMode.ToString());
 			}
 			base.SaveRepositoryConfig(section);
 		}
 
 		protected override void LoadRepositoryConfig(Section section)
 		{
-			//if(Guid == Guids.ContextualDiffViewGuid)
-			//{
-			//    var node = section.TryGetSection("ContextualDiffOptions");
-			//    if(node != null)
-			//    {
-			//        _options.Context = node.GetValue<int>("Context", _options.Context);
-			//        _options.IgnoreWhitespace = node.GetValue<bool>("IgnoreWhitespace", _options.IgnoreWhitespace);
-			//        _options.UsePatienceAlgorithm = node.GetValue<bool>("UsePatienceAlgorithm", _options.UsePatienceAlgorithm);
-			//    }
-			//}
+			if(Guid == Guids.ContextualDiffViewGuid)
+		{
+				var node = section.TryGetSection("ContextualDiffOptions");
+				if(node != null)
+			{
+					_options.Context = node.GetValue<int>("Context", _options.Context);
+					_options.IgnoreWhitespace = node.GetValue<bool>("IgnoreWhitespace", _options.IgnoreWhitespace);
+					_options.UsePatienceAlgorithm = node.GetValue<bool>("UsePatienceAlgorithm", _options.UsePatienceAlgorithm);
+					switch(node.GetValue<string>("ViewMode", string.Empty))
+				{
+						case "Split":
+							ViewMode = DiffViewMode.Split;
+							break;
+						case "Single":
+						default:
+							ViewMode = DiffViewMode.Single;
+							break;
+					}
+					}
+				}
 			base.LoadRepositoryConfig(section);
 		}
 
-		public override void ApplyParameters(IDictionary<string, object> parameters)
+		protected override void AttachViewModel(object viewModel)
 		{
-			if(parameters != null)
-			{
-				var source = (IDiffSource)parameters["source"];
-				if(_source != source)
+			base.AttachViewModel(viewModel);
+
+			var vm = viewModel as DiffViewModel;
+			if(vm != null)
 				{
-					if(_source != null)
-					{
-						_source.Updated -= OnSourceUpdated;
-						_source.Dispose();
-					}
-					_source = source;
-					if(_source != null)
-					{
-						_source.Updated += OnSourceUpdated;
-					}
-				}
-				object options;
-				if(parameters.TryGetValue("options", out options))
-				{
-					_options = options as DiffOptions;
-				}
+				_options = vm.DiffOptions;
 				if(_options == null)
 				{
 					_options = new DiffOptions();
 				}
+				DiffSource = vm.DiffSource;
 				UpdateText();
-				Reload();
 			}
-			else
+			}
+
+		protected override void DetachViewModel(object viewModel)
+		{
+			var vm = viewModel as DiffViewModel;
+			if(vm != null)
 			{
-				UpdateText();
-                _diffViewerHead.Clear();
-                _diffViewerBody.Clear();
-				if(_source != null)
+				DiffBinding = null;
+				if(_diffSource != null)
 				{
-					_source.Updated -= OnSourceUpdated;
-					_source.Dispose();
+					_diffSource.Updated -= OnDiffSourceUpdated;
+					_diffSource.Dispose();
+					_diffSource = null;
 				}
+				UpdateText();
 			}
-			base.ApplyParameters(parameters);
+			base.DetachViewModel(viewModel);
 		}
 
-		private void OnSourceUpdated(object sender, EventArgs e)
+		private void OnDiffSourceUpdated(object sender, EventArgs e)
 		{
 			if(InvokeRequired)
 			{
-				BeginInvoke(new EventHandler(OnSourceUpdated), sender, e);
+				BeginInvoke(new MethodInvoker(RefreshContent));
 			}
 			else
 			{
-				Reload();
+				RefreshContent();
 			}
 		}
 
 		private void OnDiffFileContextMenuRequested(object sender, DiffFileContextMenuRequestedEventArgs e)
 		{
-			var menu = new DiffFileMenu(_source, e.File);
+			var menu = new DiffFileMenu(_diffSource, e.File);
 			if(menu.Items.Count == 0)
 			{
 				menu.Dispose();
@@ -194,26 +342,16 @@ namespace gitter.Git.Gui.Views
 			e.ContextMenu = menu;
 		}
 
-		public void Reload()
-		{
-			if(_loaded)
+		public override void RefreshContent()
 			{
-				if(_source != null)
+			if(DiffBinding != null)
 				{
-					_diffViewerHead.LoadAsync(_source, _options);
-                    _diffViewerBody.LoadAsync(_source, _options);
+				DiffBinding.ReloadData();
 				}
 				else
 				{
-                    _diffViewerHead.Clear();
-                    _diffViewerBody.Clear();
-				}
-			}
+				_diffViewer.Panels.Clear();
 		}
-
-		public override void RefreshContent()
-		{
-			Reload();
 		}
 
 		public DiffOptions DiffOptions
@@ -232,9 +370,9 @@ namespace gitter.Git.Gui.Views
 		{
 			if(Guid != Guids.ContextualDiffViewGuid)
 			{
-				if(_source != null)
+				if(DiffSource != null)
 				{
-					Text = _source.ToString();
+					Text = DiffSource.ToString();
 				}
 				else
 				{
@@ -244,20 +382,6 @@ namespace gitter.Git.Gui.Views
 			else
 			{
 				Text = Resources.StrContextualDiff;
-			}
-		}
-
-		public void SetSource(IDiffSource diffSource)
-		{
-			if(diffSource != null)
-			{
-                _diffViewerHead.LoadAsync(diffSource, _options);
-                _diffViewerBody.LoadAsync(diffSource, _options);
-			}
-			else
-			{
-				_diffViewerHead.Clear();
-                _diffViewerBody.Clear();
 			}
 		}
 
@@ -280,16 +404,6 @@ namespace gitter.Git.Gui.Views
 					RefreshContent();
 					e.IsInputKey = true;
 					break;
-			}
-		}
-
-		protected override void OnLoad(EventArgs e)
-		{
-			base.OnLoad(e);
-			if(!_loaded)
-			{
-				_loaded = true;
-				Reload();
 			}
 		}
 	}

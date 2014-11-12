@@ -30,12 +30,12 @@ namespace gitter.Git.AccessLayer.CLI
 		{
 		}
 
-		public GrepCommand(params CommandArgument[] args)
+		public GrepCommand(params ICommandArgument[] args)
 			: base("grep", args)
 		{
 		}
 
-		public GrepCommand(IList<CommandArgument> args)
+		public GrepCommand(IList<ICommandArgument> args)
 			: base("grep", args)
 		{
 		}

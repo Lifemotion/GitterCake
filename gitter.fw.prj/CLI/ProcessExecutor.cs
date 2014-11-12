@@ -22,94 +22,202 @@ namespace gitter.Framework.CLI
 {
 	using System;
 	using System.Diagnostics;
+	using System.Threading;
+	using System.Threading.Tasks;
 
-	/// <summary>Executes process with optional output redirecting.</summary>
+	public static class ProcessExecutor
+	{
+		public static class CancellationMethods
+		{
+			public static void KillProcess(Process process)
+			{
+				Verify.Argument.IsNotNull(process, "process");
+
+				try
+				{
+					process.Kill();
+				}
+				catch(Exception exc)
+				{
+					if(exc.IsCritical())
+					{
+						throw;
+					}
+				}
+			}
+
+			public static void AllowToExecute(Process process)
+			{
+				Verify.Argument.IsNotNull(process, "process");
+
+			}
+		}
+	}
+
+	/// <summary>Executes process with output redirecting.</summary>
+	/// <typeparam name="TInput">Process input type.</typeparam>
 	public abstract class ProcessExecutor<TInput>
 		where TInput : class
 	{
 		#region Data
 
-		private readonly string _path;
-		private IOutputReceiver _stdOutReceiver;
-		private IOutputReceiver _stdErrReceiver;
-		private Process _process;
+		private readonly string _exeFileName;
 
 		#endregion
 
 		#region .ctor
 
 		/// <summary>Initializes a new instance of the <see cref="ProcessExecutor&lt;TInput&gt;"/> class.</summary>
-		/// <param name="path">Path to exe file.</param>
+		/// <param name="exeFileName">Path to exe file.</param>
 		/// <param name="stdOutReceiver">STDOUT receiver (can be null).</param>
 		/// <param name="stdErrReceiver">STDERR receiver (can be null).</param>
-		public ProcessExecutor(string path, IOutputReceiver stdOutReceiver, IOutputReceiver stdErrReceiver)
+		public ProcessExecutor(string exeFileName)
 		{
-			Verify.Argument.IsNeitherNullNorWhitespace(path, "path");
+			Verify.Argument.IsNeitherNullNorWhitespace(exeFileName, "exeFileName");
 
-			_path = path;
-			_stdOutReceiver = stdOutReceiver;
-			_stdErrReceiver = stdErrReceiver;
+			_exeFileName = exeFileName;
 		}
 
 		#endregion
 
-		public string FileName
+		#region Properties
+
+		public string ExeFileName
 		{
-			get { return _path; }
+			get { return _exeFileName; }
 		}
+
+		#endregion
+
+		#region Methods
 
 		protected virtual ProcessStartInfo InitializeStartInfo(TInput input)
 		{
-			return new ProcessStartInfo()
-			{
-				FileName = _path,
-			};
+			return new ProcessStartInfo { FileName = ExeFileName };
 		}
 
-		public int Execute(TInput input)
+		protected virtual Process CreateProcess(TInput input)
 		{
-			BeginExecute(input);
-			return EndExecute();
+			return new Process { StartInfo = InitializeStartInfo(input) };
 		}
 
-		public void BeginExecute(TInput input)
+		public int Execute(TInput input, IOutputReceiver stdOutReceiver, IOutputReceiver stdErrReceiver)
 		{
 			Verify.Argument.IsNotNull(input, "input");
-			Verify.State.IsFalse(IsStarted);
 
-			_process = Process.Start(InitializeStartInfo(input));
-			if(_stdOutReceiver != null)
+			using(var process = CreateProcess(input))
 			{
-				_stdOutReceiver.Initialize(_process, _process.StandardOutput);
-			}
-			if(_stdErrReceiver != null)
-			{
-				_stdErrReceiver.Initialize(_process, _process.StandardError);
+				process.Start();
+				if(stdOutReceiver != null)
+				{
+					stdOutReceiver.Initialize(process, process.StandardOutput);
+				}
+				if(stdErrReceiver != null)
+				{
+					stdErrReceiver.Initialize(process, process.StandardError);
+				}
+				process.WaitForExit();
+				if(stdErrReceiver != null)
+				{
+					stdErrReceiver.WaitForEndOfStream();
+				}
+				if(stdOutReceiver != null)
+				{
+					stdOutReceiver.WaitForEndOfStream();
+				}
+				return process.ExitCode;
 			}
 		}
 
-		public int EndExecute()
+		public Task<int> ExecuteAsync(TInput input, IOutputReceiver stdOutReceiver, IOutputReceiver stdErrReceiver, Action<Process> cancellationMethod, CancellationToken cancellationToken)
 		{
-			Verify.State.IsTrue(IsStarted);
+			Verify.Argument.IsNotNull(input, "input");
 
-			_process.WaitForExit();
-			if(_stdErrReceiver != null)
+			var tcs = new TaskCompletionSource<int>();
+			if(cancellationToken.IsCancellationRequested)
 			{
-				_stdErrReceiver.Close();
+				tcs.SetCanceled();
+				return tcs.Task;
 			}
-			if(_stdOutReceiver != null)
+			var process = CreateProcess(input);
+			process.EnableRaisingEvents = true;
+			process.Exited += (s, e) =>
+				{
+					if(!tcs.Task.IsCanceled)
+					{
+						int exitCode;
+						try
+						{
+							exitCode = ((Process)s).ExitCode;
+						}
+						catch(Exception exc)
+						{
+							if(exc.IsCritical())
+							{
+								throw;
+							}
+							tcs.TrySetException(exc);
+							return;
+						}
+						tcs.TrySetResult(exitCode);
+					}
+				};
+			process.Start();
+			if(stdOutReceiver != null)
 			{
-				_stdOutReceiver.Close();
+				stdOutReceiver.Initialize(process, process.StandardOutput);
 			}
-			int code = _process.ExitCode;
-			_process.Dispose();
-			_process = null;
-			return code;
+			if(stdErrReceiver != null)
+			{
+				stdErrReceiver.Initialize(process, process.StandardError);
+			}
+			CancellationTokenRegistration cancellationRegistration;
+			if(cancellationToken.CanBeCanceled)
+			{
+				cancellationRegistration = cancellationToken.Register(() => tcs.TrySetCanceled());
+			}
+			else
+			{
+				cancellationRegistration = default(CancellationTokenRegistration);
+			}
+			return tcs.Task.ContinueWith(
+				task =>
+				{
+					if(task.IsCanceled)
+					{
+						if(stdErrReceiver != null)
+						{
+							stdErrReceiver.NotifyCanceled();
+						}
+						if(stdOutReceiver != null)
+						{
+							stdOutReceiver.NotifyCanceled();
+						}
+						if(cancellationMethod != null)
+						{
+							cancellationMethod(process);
+						}
+					}
+					else
+					{
+						if(stdErrReceiver != null)
+						{
+							stdErrReceiver.WaitForEndOfStream();
+						}
+						if(stdOutReceiver != null)
+						{
+							stdOutReceiver.WaitForEndOfStream();
+						}
+					}
+					cancellationRegistration.Dispose();
+					process.Dispose();
+					return TaskUtility.UnwrapResult(task);
+				},
+				CancellationToken.None,
+				TaskContinuationOptions.None,
+				TaskScheduler.Default);
 		}
 
-		public bool IsStarted
-		{
-			get { return _process != null; }
-		}
+		#endregion
 	}
 }

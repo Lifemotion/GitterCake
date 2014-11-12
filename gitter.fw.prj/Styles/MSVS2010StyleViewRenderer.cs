@@ -90,14 +90,14 @@ namespace gitter.Framework.Controls
 
 		private static class Constants
 		{
-			public const int TabHeight			= 20;
+			public static readonly int TabHeight        = SystemInformation.SmallIconSize.Height + 4;
+			public static readonly int HeaderHeight     = SystemInformation.SmallIconSize.Height + 3;
+			public static readonly int ViewButtonSize   = SystemInformation.SmallIconSize.Height - 1;
+			public static readonly int FloatTitleHeight = SystemInformation.SmallIconSize.Height;
 			public const int TabFooterHeight	= 4;
-			public const int HeaderHeight		= 19;
 			public const int FooterHeight		= 4;
-			public const int ViewButtonSize		= 15;
 			public const int SideTabSpacing		= 1;
 			public const int SideTabHeight		= 21;
-			public const int FloatTitleHeight	= 16;
 			public const int FloatBorderSize	= 4;
 			public const int FloatCornerRadius	= 3;
 		}
@@ -571,9 +571,9 @@ namespace gitter.Framework.Controls
 			rect.Width += 1;
 			rect.Y -= .5f;
 			rect.Height += 1;
-	
-			graphics.TextRenderingHint = Utility.TextRenderingHint;
-			graphics.TextContrast = Utility.TextContrast;
+
+			graphics.TextRenderingHint = GraphicsUtility.TextRenderingHint;
+			graphics.TextContrast       = GraphicsUtility.TextContrast;
 
 			Color textColor, backgroundStart, backgroundEnd;
 			if(header.ViewHost.IsActive)
@@ -1029,8 +1029,8 @@ namespace gitter.Framework.Controls
 			rect.Y -= .5f;
 			rect.Height += 1;
 
-			graphics.TextRenderingHint = Utility.TextRenderingHint;
-			graphics.TextContrast = Utility.TextContrast;
+			graphics.TextRenderingHint = GraphicsUtility.TextRenderingHint;
+			graphics.TextContrast      = GraphicsUtility.TextContrast;
 
 			Color textColor, backgroundStart, backgroundEnd;
 			textColor = ColorTable.ViewHostHeaderTextFocused;

@@ -1,7 +1,7 @@
 #region Copyright Notice
 /*
  * gitter - VCS repository management tool
- * Copyright (C) 2013  Popovskiy Maxim Vladimirovitch <amgine.gitter@gmail.com>
+ * Copyright (C) 2014  Popovskiy Maxim Vladimirovitch <amgine.gitter@gmail.com>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,8 +24,6 @@ namespace gitter.Git.Gui.Views
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Drawing;
-	using System.Text;
-	using System.Windows.Forms;
 
 	using gitter.Git.Gui.Controls;
 
@@ -34,14 +32,25 @@ namespace gitter.Git.Gui.Views
 	[ToolboxItem(false)]
 	internal partial class BlameView : GitViewBase
 	{
-		public BlameView(IDictionary<string, object> parameters, GuiProvider gui)
-			: base(Guids.BlameViewGuid, gui, parameters)
+		#region Data
+
+		private BlameFileBinding _blameFileBinding;
+
+		#endregion
+
+		#region .ctor
+
+		public BlameView(GuiProvider gui)
+			: base(Guids.BlameViewGuid, gui)
 		{
 			InitializeComponent();
 
 			Text = Resources.StrlBlame;
-			ApplyParameters(parameters);
 		}
+
+		#endregion
+
+		#region Properties
 
 		public override Image Image
 		{
@@ -53,21 +62,51 @@ namespace gitter.Git.Gui.Views
 			get { return true; }
 		}
 
-		private static string GetText(BlameFile file)
+		private BlameFileBinding BlameFileBinding
 		{
-			return Resources.StrlBlame + ": " + file.Name;
+			get { return _blameFileBinding; }
+			set
+			{
+				if(_blameFileBinding != value)
+				{
+					if(_blameFileBinding != null)
+					{
+						_blameFileBinding.Dispose();
+					}
+					_blameFileBinding = value;
+					if(_blameFileBinding != null)
+					{
+						_blameFileBinding.ReloadData();
+					}
+				}
+			}
 		}
 
-		public override void ApplyParameters(IDictionary<string, object> parameters)
+		#endregion
+
+		#region Methods
+
+		protected override void AttachViewModel(object viewModel)
 		{
-			base.ApplyParameters(parameters);
+			base.AttachViewModel(viewModel);
 
-			var blame = (IBlameSource)parameters["blame"];
-
-			Text = Resources.StrBlame + ": " + blame.ToString();
-
-			_blamePanel.Panels.Clear();
-			_blamePanel.Panels.Add(new BlameFilePanel(blame.Repository, blame.GetBlame()));
+			var vm = viewModel as BlameViewModel;
+			if(vm != null)
+			{
+				var blameSource = vm.BlameSource;
+				if(blameSource != null)
+				{
+					Text = Resources.StrBlame + ": " + blameSource.ToString();
+					BlameFileBinding = new BlameFileBinding(blameSource, _blamePanel, BlameOptions.Default);
+				}
+				else
+				{
+					Text = Resources.StrBlame;
+					BlameFileBinding = null;
+				}
+			}
 		}
+
+		#endregion
 	}
 }

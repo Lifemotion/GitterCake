@@ -57,16 +57,22 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\common\key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
-  <PropertyGroup />
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\gitter.teamcity.prj\gitter.teamcity.csproj">
-      <Project>{F939CB90-A1FD-4A3C-84FA-097BA644F254}</Project>
-      <Name>gitter.teamcity</Name>
-    </ProjectReference>
-    <Reference Include="NHunspell, Version=0.9.6.0, Culture=neutral, PublicKeyToken=1ac793ea843b4366, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="NHunspell, Version=0.9.6.0, Culture=neutral, PublicKeyToken=1ac793ea843b4366, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\gitter.fw.prj\Hunspell\NHunspell.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\gitter.fw.prj\gitter.fw.csproj">
       <Project>{A3B10F01-35EB-466D-89CE-D3BAA3047344}</Project>
       <Name>gitter.fw</Name>
@@ -91,7 +97,10 @@
       <Project>{122AA8B0-795B-4DD8-8650-11675D946F3E}</Project>
       <Name>gitter.redmine</Name>
     </ProjectReference>
-    <Reference Include="System.Xml" />
+    <ProjectReference Include="..\gitter.teamcity.prj\gitter.teamcity.csproj">
+      <Project>{F939CB90-A1FD-4A3C-84FA-097BA644F254}</Project>
+      <Name>gitter.teamcity</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\common\CommonAssemblyInfo.cs">
@@ -103,21 +112,36 @@
     <Compile Include="..\shared\Verify.cs">
       <Link>Shared\Verify.cs</Link>
     </Compile>
+    <Compile Include="Controls\Dialogs\PickerDialog.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ComboBoxes\RepositoryProviderPicker.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\Dialogs\CloneRepositoryDialog.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\Dialogs\InitRepositoryDialog.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Controls\Dialogs\AddServiceDialog.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\Dialogs\AddServiceDialog.Designer.cs">
-      <DependentUpon>AddServiceDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ComboBoxes\ServicePicker.cs">
+    <Compile Include="Controls\ComboBoxes\ServiceProviderPicker.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\ListBoxes\RecentRepositoryMenu.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\ListBoxes\RecentRepositoryListItem.cs" />
+    <Compile Include="Controls\ListBoxes\RepositoryProviderListItem.cs" />
+    <Compile Include="Controls\ListBoxes\RepositoryGroupBinding.cs" />
+    <Compile Include="Controls\ListBoxes\RepositoryGroupListItem.cs" />
     <Compile Include="Controls\ListBoxes\ServiceProviderListItem.cs" />
     <Compile Include="Controls\ListBoxes\RepositoryDragImage.cs" />
+    <Compile Include="Controls\StandardToolbar.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Properties\CachedResources.cs" />
     <Compile Include="Controls\Dialogs\AboutDialog.cs">
       <SubType>UserControl</SubType>
@@ -179,9 +203,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="Controls\Dialogs\AddServiceDialog.resx">
-      <DependentUpon>AddServiceDialog.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Controls\Dialogs\AboutDialog.resx">
       <DependentUpon>AboutDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -223,52 +244,30 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="app.manifest" />
     <None Include="Properties\postbuild.cmd" />
-    <None Include="app.ico" />
-    <None Include="Resources\repositories.png" />
-    <None Include="Resources\repository-go1.png" />
-    <None Include="Resources\repository-remove.png" />
-    <None Include="Resources\repository-add.png" />
-    <None Include="Resources\repository.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\application--arrow.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\repository-explorer.png" />
-  </ItemGroup>
-  <ItemGroup>
+    <Content Include="app.ico" />
+    <Content Include="Resources\repositories.png" />
+    <Content Include="Resources\repository-go1.png" />
+    <Content Include="Resources\repository-remove.png" />
+    <Content Include="Resources\repository-add.png" />
+    <Content Include="Resources\repository.png" />
+    <Content Include="Resources\application--arrow.png" />
+    <Content Include="Resources\repository-explorer.png" />
     <Content Include="Resources\database.png" />
-    <None Include="Resources\start-page-logo-gradient-dark.png" />
-    <None Include="Resources\start-page-logo-dark.png" />
-    <None Include="Resources\repo-scan.png" />
-    <None Include="Resources\repo-init.png" />
-    <None Include="Resources\repo-clone.png" />
-    <None Include="Resources\repo-add.png" />
-    <None Include="Resources\start-page-logo-gradient.png" />
-    <None Include="Resources\start-page-logo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
-      <Visible>False</Visible>
-      <ProductName>Клиентский профиль Microsoft .NET Framework 4 %28x86 и x64%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
-      <Visible>False</Visible>
-      <ProductName>Клиентский профиль .NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Windows.Installer.4.5">
-      <Visible>False</Visible>
-      <ProductName>Windows Installer 4.5</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
+    <Content Include="Resources\repository-clone.png" />
+    <Content Include="Resources\repository-init.png" />
+    <Content Include="Resources\database.png" />
+    <Content Include="Resources\start-page-logo-gradient-dark.png" />
+    <Content Include="Resources\start-page-logo-dark.png" />
+    <Content Include="Resources\repo-scan.png" />
+    <Content Include="Resources\repo-init.png" />
+    <Content Include="Resources\repo-clone.png" />
+    <Content Include="Resources\repo-add.png" />
+    <Content Include="Resources\start-page-logo-gradient.png" />
+    <Content Include="Resources\start-page-logo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

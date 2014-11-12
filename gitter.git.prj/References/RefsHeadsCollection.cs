@@ -1,7 +1,7 @@
 #region Copyright Notice
 /*
  * gitter - VCS repository management tool
- * Copyright (C) 2013  Popovskiy Maxim Vladimirovitch <amgine.gitter@gmail.com>
+ * Copyright (C) 2014  Popovskiy Maxim Vladimirovitch <amgine.gitter@gmail.com>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -81,7 +81,7 @@ namespace gitter.Git
 
 			using(Repository.Monitor.BlockNotifications(notifications))
 			{
-				Repository.Accessor.CreateBranch(new CreateBranchParameters(
+				Repository.Accessor.CreateBranch.Invoke(new CreateBranchParameters(
 					name, startingRevision.Pointer, checkout, orphan, createRefLog, tracking));
 			}
 
@@ -112,7 +112,7 @@ namespace gitter.Git
 		/// <exception cref="T:gitter.Git.GitException">Failed to dereference <paramref name="startingRevision"/> or create a branch.</exception>
 		public Branch CreateOrphan(string name, IRevisionPointer startingRevision, BranchTrackingMode tracking, bool createRefLog)
 		{
-			Verify.Argument.IsValidReferenceName(name, "name");
+			Verify.Argument.IsValidReferenceName(name, ReferenceType.Branch, "name");
 			Verify.Argument.IsValidRevisionPointer(startingRevision, Repository, "startingRevision");
 			Verify.Argument.IsFalse(ContainsObjectName(name), "name",
 				Resources.ExcObjectWithThisNameAlreadyExists.UseAsFormat("Branch"));
@@ -136,7 +136,7 @@ namespace gitter.Git
 		/// <exception cref="T:gitter.Git.GitException">Failed to dereference <paramref name="startingRevision"/> or create a branch.</exception>
 		public Branch Create(string name, IRevisionPointer startingRevision, BranchTrackingMode tracking, bool checkout, bool createRefLog)
 		{
-			Verify.Argument.IsValidReferenceName(name, "name");
+			Verify.Argument.IsValidReferenceName(name, ReferenceType.Branch, "name");
 			Verify.Argument.IsValidRevisionPointer(startingRevision, Repository, "startingRevision");
 			Verify.Argument.IsFalse(ContainsObjectName(name), "name",
 				Resources.ExcObjectWithThisNameAlreadyExists.UseAsFormat("Branch"));
@@ -229,7 +229,7 @@ namespace gitter.Git
 		internal void Rename(Branch branch, string name)
 		{
 			Verify.Argument.IsValidGitObject(branch, Repository, "branch");
-			Verify.Argument.IsValidReferenceName(name, "name");
+			Verify.Argument.IsValidReferenceName(name, ReferenceType.Branch, "name");
 			Verify.Argument.IsFalse(ContainsObjectName(name), "name",
 				Resources.ExcObjectWithThisNameAlreadyExists.UseAsFormat("Branch"));
 
@@ -237,7 +237,7 @@ namespace gitter.Git
 			using(Repository.Monitor.BlockNotifications(
 				RepositoryNotifications.BranchChanged))
 			{
-				Repository.Accessor.RenameBranch(
+				Repository.Accessor.RenameBranch.Invoke(
 					new RenameBranchParameters(branch.Name, name));
 			}
 		}
@@ -277,7 +277,7 @@ namespace gitter.Git
 			using(Repository.Monitor.BlockNotifications(
 				RepositoryNotifications.BranchChanged))
 			{
-				Repository.Accessor.DeleteBranch(
+				Repository.Accessor.DeleteBranch.Invoke(
 					new DeleteBranchParameters(branch.Name, false, force));
 			}
 			RemoveObject(branch);
@@ -309,7 +309,7 @@ namespace gitter.Git
 		/// <summary>Refresh local branches.</summary>
 		public void Refresh()
 		{
-			var refs = Repository.Accessor.QueryBranches(
+			var refs = Repository.Accessor.QueryBranches.Invoke(
 				new QueryBranchesParameters(QueryBranchRestriction.Local));
 			RefreshInternal(refs.Heads);
 		}
@@ -328,7 +328,7 @@ namespace gitter.Git
 		{
 			Verify.Argument.IsValidGitObject(branch, Repository, "branch");
 
-			var branchData = Repository.Accessor.QueryBranch(
+			var branchData = Repository.Accessor.QueryBranch.Invoke(
 				new QueryBranchParameters(branch.Name, branch.IsRemote));
 			if(branchData != null)
 			{
@@ -371,7 +371,7 @@ namespace gitter.Git
 		/// <returns>List of unmerged local branches.</returns>
 		public IList<Branch> GetUnmerged()
 		{
-			var refs = Repository.Accessor.QueryBranches(
+			var refs = Repository.Accessor.QueryBranches.Invoke(
 				new QueryBranchesParameters(QueryBranchRestriction.Local, BranchQueryMode.NoMerged));
 			return GetHeads(refs);
 		}
@@ -380,7 +380,7 @@ namespace gitter.Git
 		/// <returns>List of merged local branches.</returns>
 		public IList<Branch> GetMerged()
 		{
-			var refs = Repository.Accessor.QueryBranches(
+			var refs = Repository.Accessor.QueryBranches.Invoke(
 				new QueryBranchesParameters(QueryBranchRestriction.Local, BranchQueryMode.Merged));
 			return GetHeads(refs);
 		}
@@ -393,7 +393,7 @@ namespace gitter.Git
 		{
 			Verify.Argument.IsValidRevisionPointer(revision, Repository, "revision");
 
-			var refs = Repository.Accessor.QueryBranches(
+			var refs = Repository.Accessor.QueryBranches.Invoke(
 				new QueryBranchesParameters(QueryBranchRestriction.Local, BranchQueryMode.Contains, revision.Pointer));
 			return GetHeads(refs);
 		}

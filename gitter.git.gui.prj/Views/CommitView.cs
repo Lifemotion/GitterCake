@@ -1,7 +1,7 @@
 #region Copyright Notice
 /*
  * gitter - VCS repository management tool
- * Copyright (C) 2013  Popovskiy Maxim Vladimirovitch <amgine.gitter@gmail.com>
+ * Copyright (C) 2014  Popovskiy Maxim Vladimirovitch <amgine.gitter@gmail.com>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,14 +40,12 @@ namespace gitter.Git.Gui.Views
 	partial class CommitView : GitViewBase
 	{
 		private readonly CommitToolbar _toolbar;
-		private ICheckBoxWidget _chkAmend;
-		private IButtonWidget _btnCommit;
 		private TextBoxSpellChecker _speller;
 		private bool _treeMode;
 		private bool _suppressDiffUpdate;
 
-		public CommitView(IDictionary<string, object> parameters, GuiProvider gui)
-			: base(Guids.CommitViewGuid, gui, parameters)
+		public CommitView(GuiProvider gui)
+			: base(Guids.CommitViewGuid, gui)
 		{
 			InitializeComponent();
 
@@ -58,23 +56,6 @@ namespace gitter.Git.Gui.Views
 			_splitContainer.BackColor = GitterApplication.Style.Colors.WorkArea;
 			_splitContainer.Panel1.BackColor = GitterApplication.Style.Colors.Window;
 			_splitContainer.Panel2.BackColor = GitterApplication.Style.Colors.Window;
-
-            var dh = new DpiHelper(this);
-           
-			_chkAmend = GitterApplication.Style.CreateCheckBox();
-            _chkAmend.Control.Bounds = dh.ScaleRectangle( new Rectangle(477 ,67, 90, 20));
-			_chkAmend.Control.Anchor = AnchorStyles.Right | AnchorStyles.Bottom;
-			_chkAmend.Control.Parent = _splitContainer.Panel2;
-			_chkAmend.Control.Enabled = false;
-			_chkAmend.Control.TabIndex = 12;
-			_chkAmend.IsCheckedChanged += OnAmendCheckedChanged;
-
-			_btnCommit = GitterApplication.Style.CreateButton();
-            _btnCommit.Control.Bounds =  dh.ScaleRectangle( new Rectangle(477 , 93, 75, 23));
-			_btnCommit.Control.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-			_btnCommit.Control.Parent = _splitContainer.Panel2;
-			_btnCommit.Control.TabIndex = 11;
-			_btnCommit.Click += OnCommitClick;
 
 			_lblStaged.Text = Resources.StrsStagedChanges.AddColon();
 			_lstStaged.Text = Resources.StrsNoStagedChanges;

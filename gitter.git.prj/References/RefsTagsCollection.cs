@@ -1,7 +1,7 @@
 #region Copyright Notice
 /*
  * gitter - VCS repository management tool
- * Copyright (C) 2013  Popovskiy Maxim Vladimirovitch <amgine.gitter@gmail.com>
+ * Copyright (C) 2014  Popovskiy Maxim Vladimirovitch <amgine.gitter@gmail.com>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,7 +59,7 @@ namespace gitter.Git
 		/// <exception cref="T:gitter.Git.GitException">Failed to dereference <paramref name="revision"/> or failed to create a tag.</exception>
 		public Tag Create(string name, IRevisionPointer revision)
 		{
-			Verify.Argument.IsValidReferenceName(name, "name");
+			Verify.Argument.IsValidReferenceName(name, ReferenceType.Tag, "name");
 			Verify.Argument.IsValidRevisionPointer(revision, Repository, "revision");
 			Verify.Argument.IsFalse(ContainsObjectName(name), "name",
 				Resources.ExcObjectWithThisNameAlreadyExists.UseAsFormat("Tag"));
@@ -68,7 +68,7 @@ namespace gitter.Git
 			using(Repository.Monitor.BlockNotifications(
 				RepositoryNotifications.TagChanged))
 			{
-				Repository.Accessor.CreateTag(
+				Repository.Accessor.CreateTag.Invoke(
 					new CreateTagParameters(name, revision.Pointer));
 			}
 			var tag = new Tag(Repository, name, rev, TagType.Lightweight);
@@ -93,7 +93,7 @@ namespace gitter.Git
 		/// <exception cref="T:gitter.Git.GitException">Failed to dereference <paramref name="revision"/> or failed to create a tag.</exception>
 		public Tag Create(string name, IRevisionPointer revision, string message, bool sign)
 		{
-			Verify.Argument.IsValidReferenceName(name, "name");
+			Verify.Argument.IsValidReferenceName(name, ReferenceType.Tag, "name");
 			Verify.Argument.IsValidRevisionPointer(revision, Repository, "revision");
 			Verify.Argument.IsFalse(ContainsObjectName(name), "name",
 				Resources.ExcObjectWithThisNameAlreadyExists.UseAsFormat("Tag"));
@@ -103,7 +103,7 @@ namespace gitter.Git
 			using(Repository.Monitor.BlockNotifications(
 				RepositoryNotifications.TagChanged))
 			{
-				Repository.Accessor.CreateTag(
+				Repository.Accessor.CreateTag.Invoke(
 					new CreateTagParameters(name, revision.Pointer, message, sign));
 			}
 			var tag = new Tag(Repository, name, rev, TagType.Annotated);
@@ -128,7 +128,7 @@ namespace gitter.Git
 		/// <exception cref="T:gitter.Git.GitException">Failed to dereference <paramref name="revision"/> or failed to create a tag.</exception>
 		public Tag Create(string name, IRevisionPointer revision, string message, string keyId)
 		{
-			Verify.Argument.IsValidReferenceName(name, "name");
+			Verify.Argument.IsValidReferenceName(name, ReferenceType.Tag, "name");
 			Verify.Argument.IsValidRevisionPointer(revision, Repository, "revision");
 			Verify.Argument.IsFalse(ContainsObjectName(name), "name",
 				Resources.ExcObjectWithThisNameAlreadyExists.UseAsFormat("Tag"));
@@ -139,7 +139,7 @@ namespace gitter.Git
 			using(Repository.Monitor.BlockNotifications(
 				RepositoryNotifications.TagChanged))
 			{
-				Repository.Accessor.CreateTag(
+				Repository.Accessor.CreateTag.Invoke(
 					new CreateTagParameters(name, revision.Pointer, message, keyId));
 			}
 			var tag = new Tag(Repository, name, rev, TagType.Annotated);
@@ -169,7 +169,7 @@ namespace gitter.Git
 			using(Repository.Monitor.BlockNotifications(
 				RepositoryNotifications.TagChanged))
 			{
-				Repository.Accessor.DeleteTag(
+				Repository.Accessor.DeleteTag.Invoke(
 					new DeleteTagParameters(tag.Name));
 			}
 			RemoveObject(tag);
@@ -199,7 +199,7 @@ namespace gitter.Git
 		/// <summary>Sync information on tags: removes non-existent, adds new, verifies positions.</summary>
 		public void Refresh()
 		{
-			var tags = Repository.Accessor.QueryTags(
+			var tags = Repository.Accessor.QueryTags.Invoke(
 				new QueryTagsParameters());
 			RefreshInternal(tags);
 		}
@@ -217,7 +217,7 @@ namespace gitter.Git
 		{
 			Verify.Argument.IsValidGitObject(tag, Repository, "tag");
 
-			var tagData = Repository.Accessor.QueryTag(
+			var tagData = Repository.Accessor.QueryTag.Invoke(
 				new QueryTagParameters(tag.Name));
 			if(tagData != null)
 			{

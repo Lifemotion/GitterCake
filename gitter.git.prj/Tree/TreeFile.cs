@@ -22,6 +22,8 @@ namespace gitter.Git
 {
 	using System;
 	using System.IO;
+	using System.Threading;
+	using System.Threading.Tasks;
 
 	using gitter.Framework;
 
@@ -104,7 +106,7 @@ namespace gitter.Git
 
 		private void UseTheirs()
 		{
-			Repository.Accessor.CheckoutFiles(
+			Repository.Accessor.CheckoutFiles.Invoke(
 				new CheckoutFilesParameters(RelativePath)
 				{
 					Mode = CheckoutFileMode.Theirs
@@ -113,7 +115,7 @@ namespace gitter.Git
 
 		private void UseOurs()
 		{
-			Repository.Accessor.CheckoutFiles(
+			Repository.Accessor.CheckoutFiles.Invoke(
 				new CheckoutFilesParameters(RelativePath)
 				{
 					Mode = CheckoutFileMode.Ours
@@ -122,28 +124,7 @@ namespace gitter.Git
 
 		#region mergetool
 
-        private void RunMergeToolExternal(IAsyncProgressMonitor monitor)
-        {
-            try
-            {
-                using (Repository.Monitor.BlockNotifications(
-                    RepositoryNotifications.IndexUpdated,
-                    RepositoryNotifications.WorktreeUpdated))
-                {
-                    Repository.Accessor.RunMergeToolExternal(
-                        new RunMergeToolParameters(FullPath)
-                        {
-                            Monitor = monitor,
-                        });
-                }
-            }
-            finally
-            {
-                Repository.Status.Refresh();
-            }
-        }
-
-		private void RunMergeTool(MergeTool mergeTool, IAsyncProgressMonitor monitor)
+		private void RunMergeToolCore(MergeTool mergeTool)
 		{
 			try
 			{
@@ -151,10 +132,9 @@ namespace gitter.Git
 					RepositoryNotifications.IndexUpdated,
 					RepositoryNotifications.WorktreeUpdated))
 				{
-					Repository.Accessor.RunMergeTool(
+					Repository.Accessor.RunMergeTool.Invoke(
 						new RunMergeToolParameters(RelativePath)
 						{
-							Monitor = monitor,
 							Tool = mergeTool == null ? null : mergeTool.Name,
 						});
 				}
@@ -165,68 +145,60 @@ namespace gitter.Git
 			}
 		}
 
+		private Task RunMergeToolAsyncCore(MergeTool mergeTool, IProgress<OperationProgress> progress, CancellationToken cancellationToken)
+		{
+			if(progress != null)
+			{
+				progress.Report(new OperationProgress(Resources.StrWaitingMergeTool.AddEllipsis()));
+			}
+			var blockedNotifications = Repository.Monitor.BlockNotifications(
+				RepositoryNotifications.IndexUpdated,
+				RepositoryNotifications.WorktreeUpdated);
+			return Repository.Accessor
+				.RunMergeTool.InvokeAsync(
+					new RunMergeToolParameters(RelativePath)
+					{
+						Tool = mergeTool == null ? null : mergeTool.Name,
+					},
+					progress,
+					cancellationToken)
+				.ContinueWith(
+				t =>
+				{
+					blockedNotifications.Dispose();
+					Repository.Status.Refresh();
+				},
+				CancellationToken.None,
+				TaskContinuationOptions.None,
+				TaskScheduler.Default);
+		}
+
 		public void RunMergeTool()
 		{
-			Verify.State.IsFalse(ConflictType == Git.ConflictType.None);
+			Verify.State.IsFalse(ConflictType == ConflictType.None);
 
-			RunMergeTool(null, null);
+			RunMergeToolCore(null);
 		}
 
 		public void RunMergeTool(MergeTool mergeTool)
 		{
-			Verify.Argument.IsNotNull(mergeTool, "mergeTool");
-			Verify.State.IsFalse(ConflictType == Git.ConflictType.None);
+			Verify.State.IsFalse(ConflictType == ConflictType.None);
 
-			RunMergeTool(mergeTool, null);
+			RunMergeToolCore(mergeTool);
 		}
 
-		public IAsyncAction RunMergeToolAsync()
+		public Task RunMergeToolAsync(IProgress<OperationProgress> progress, CancellationToken cancellationToken)
 		{
-			Verify.State.IsFalse(ConflictType == Git.ConflictType.None);
+			Verify.State.IsFalse(ConflictType == ConflictType.None);
 
-			return AsyncAction.Create(this,
-				(file, mon) =>
-				{
-					file.RunMergeTool(null, mon);
-				},
-				Resources.StrRunningMergeTool,
-				Resources.StrWaitingMergeTool.AddEllipsis(),
-				true);
+			return RunMergeToolAsyncCore(null, progress, cancellationToken);
 		}
 
-        public IAsyncAction RunMergeToolExternalAsync()
-        {
-            Verify.State.IsFalse(ConflictType == Git.ConflictType.None);
-
-            return AsyncAction.Create(new
-            {
-                File = this,
-            },
-                (data, mon) =>
-                {
-                    data.File.RunMergeToolExternal(mon);
-                },
-                Resources.StrRunningMergeTool,
-                Resources.StrWaitingMergeTool.AddEllipsis(),
-                true);
-        }
-
-		public IAsyncAction RunMergeToolAsync(MergeTool mergeTool)
+		public Task RunMergeToolAsync(MergeTool mergeTool, IProgress<OperationProgress> progress, CancellationToken cancellationToken)
 		{
-			Verify.State.IsFalse(ConflictType == Git.ConflictType.None);
+			Verify.State.IsFalse(ConflictType == ConflictType.None);
 
-			return AsyncAction.Create(new
-				{
-					File = this,
-					Tool = mergeTool,
-				},
-				(data, mon) =>
-				{
-					data.File.RunMergeTool(data.Tool, mon);
-				},
-				Resources.StrRunningMergeTool,
-				Resources.StrWaitingMergeTool.AddEllipsis(),
-				true);
+			return RunMergeToolAsyncCore(mergeTool, progress, cancellationToken);
 		}
 
 		#endregion

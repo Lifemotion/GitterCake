@@ -1,7 +1,7 @@
 #region Copyright Notice
 /*
  * gitter - VCS repository management tool
- * Copyright (C) 2013  Popovskiy Maxim Vladimirovitch <amgine.gitter@gmail.com>
+ * Copyright (C) 2014  Popovskiy Maxim Vladimirovitch <amgine.gitter@gmail.com>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,11 +22,26 @@ namespace gitter.Git
 {
 	using System;
 
+	using gitter.Git.AccessLayer;
+
 	using Resources = gitter.Git.Properties.Resources;
 
 	/// <summary>git tag object.</summary>
 	public sealed class Tag : Reference
 	{
+		#region Static
+
+		/// <summary>Validates the tag name.</summary>
+		/// <param name="name">Tag name.</param>
+		/// <param name="errorMessage">Error message.</param>
+		/// <returns><c>true</c> if <paramref name="name"/> is a valid tag name; otherwise, <c>false</c>.</returns>
+		public static bool ValidateName(string name, out string errorMessage)
+		{
+			return Reference.ValidateName(name, ReferenceType.Tag, out errorMessage);
+		}
+
+		#endregion
+
 		#region Data
 
 		/// <summary>Tag type.</summary>
@@ -91,10 +106,15 @@ namespace gitter.Git
 					{
 						try
 						{
-							_message = Repository.Accessor.QueryTagMessage(FullName);
+							_message = Repository.Accessor.QueryTagMessage.Invoke(
+								new QueryTagMessageParameters { TagName = FullName });
 						}
-						catch
+						catch(Exception exc)
 						{
+							if(exc.IsCritical())
+							{
+								throw;
+							}
 							_message = string.Empty;
 						}
 					}

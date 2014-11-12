@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,6 +31,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -54,6 +56,7 @@
     <Compile Include="Blame\BlameHunk.cs" />
     <Compile Include="Blame\BlameLine.cs" />
     <Compile Include="Data\ObjectCountData.cs" />
+    <Compile Include="Diff\DiffFileEventArgs.cs" />
     <Compile Include="Enums\RevertControl.cs" />
     <Compile Include="Data\BlobData.cs" />
     <Compile Include="Data\BranchData.cs" />
@@ -112,19 +115,16 @@
     <Compile Include="GitEnvironment.cs" />
     <Compile Include="GitExceptions.cs" />
     <Compile Include="GitUtils.cs" />
-    <Compile Include="IBranchAccessor.cs" />
+    <Compile Include="Hash.cs" />
+    <Compile Include="HashStringCache.cs" />
     <Compile Include="IConfigAccessor.cs" />
     <Compile Include="IGitAccessor.cs" />
     <Compile Include="IGitAccessorProvider.cs" />
+    <Compile Include="IGitAction.cs" />
+    <Compile Include="IGitFunction.cs" />
     <Compile Include="IGitRepository.cs" />
-    <Compile Include="IIndexAccessor.cs" />
-    <Compile Include="INotesAccessor.cs" />
-    <Compile Include="IRemoteAccessor.cs" />
     <Compile Include="IRepositoryAccessor.cs" />
-    <Compile Include="IStashAccessor.cs" />
-    <Compile Include="ISubmoduleAccessor.cs" />
-    <Compile Include="ITagAccessor.cs" />
-    <Compile Include="ITreeAccessor.cs" />
+    <Compile Include="IRepositoryMonitor.cs" />
     <Compile Include="Parameters\ApplyPatchParameters.cs" />
     <Compile Include="Parameters\ApplyPatchTo.cs" />
     <Compile Include="Parameters\ArchiveParameters.cs" />
@@ -149,6 +149,7 @@
     <Compile Include="Parameters\Config\RenameConfigSectionParameters.cs" />
     <Compile Include="Parameters\Config\SetConfigValueParameters.cs" />
     <Compile Include="Parameters\Config\UnsetConfigValueParameters.cs" />
+    <Compile Include="Parameters\CountObjectsParameters.cs" />
     <Compile Include="Parameters\DereferenceParameters.cs" />
     <Compile Include="Parameters\DescribeParameters.cs" />
     <Compile Include="Parameters\FormatMergeMessageParameters.cs" />
@@ -167,6 +168,7 @@
     <Compile Include="Parameters\InitRepositoryParameters.cs" />
     <Compile Include="Parameters\MergeParameters.cs" />
     <Compile Include="Parameters\Notes\AppendNoteParameters.cs" />
+    <Compile Include="Parameters\Notes\PruneNotesParameters.cs" />
     <Compile Include="Parameters\Notes\QueryNotesParameters.cs" />
     <Compile Include="Parameters\QueryBlameParameters.cs" />
     <Compile Include="Parameters\QueryDiffParameters.cs" />
@@ -196,6 +198,7 @@
     <Compile Include="Parameters\RevertParameters.cs" />
     <Compile Include="Enums\RevisionMergesQueryMode.cs" />
     <Compile Include="Enums\RevisionQueryOrder.cs" />
+    <Compile Include="Parameters\SimilaritySpecification.cs" />
     <Compile Include="Parameters\Stash\QueryStashParameters.cs" />
     <Compile Include="Parameters\Stash\QueryStashTopParameters.cs" />
     <Compile Include="Parameters\Stash\StashApplyParameters.cs" />
@@ -208,6 +211,7 @@
     <Compile Include="Parameters\Submodule\SubmoduleUpdateParameters.cs" />
     <Compile Include="Parameters\Tag\CreateTagParameters.cs" />
     <Compile Include="Parameters\Tag\DeleteTagParameters.cs" />
+    <Compile Include="Parameters\Tag\QueryTagMessageParameters.cs" />
     <Compile Include="Parameters\Tag\QueryTagParameters.cs" />
     <Compile Include="Parameters\Tag\QueryTagsParameters.cs" />
     <Compile Include="Parameters\Tag\VerifyTagsParameters.cs" />

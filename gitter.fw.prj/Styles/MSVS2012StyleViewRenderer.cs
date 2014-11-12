@@ -1,7 +1,7 @@
 #region Copyright Notice
 /*
  * gitter - VCS repository management tool
- * Copyright (C) 2013  Popovskiy Maxim Vladimirovitch <amgine.gitter@gmail.com>
+ * Copyright (C) 2014  Popovskiy Maxim Vladimirovitch <amgine.gitter@gmail.com>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -292,15 +292,15 @@ namespace gitter.Framework.Controls
 
 		private static class Constants
 		{
-			public const int TabHeight			= 19;
+			public static readonly int TabHeight        = SystemInformation.SmallIconSize.Height + 3;
+			public static readonly int HeaderHeight     = SystemInformation.SmallIconSize.Height + 5;
+			public static readonly int ViewButtonSize   = SystemInformation.SmallIconSize.Height - 1;
+			public static readonly int FloatTitleHeight = SystemInformation.SmallIconSize.Height;
 			public const int TabFooterHeight	= 2;
-			public const int HeaderHeight		= 21;
 			public const int FooterHeight		= 0;
-			public const int ViewButtonSize		= 15;
 			public const int SideTabSpacing		= 12;
 			public const int SideTabHeight		= 25;
 			public const int SideTabOutline		= 6;
-			public const int FloatTitleHeight	= 16;
 			public const int FloatBorderSize	= 1;
 			public const int FloatCornerRadius	= 0;
 		}
@@ -905,8 +905,8 @@ namespace gitter.Framework.Controls
 				int textWidth;
 				using(var brush = new SolidBrush(textColor))
 				{
-					graphics.TextRenderingHint = Utility.TextRenderingHint;
-					graphics.TextContrast = Utility.TextContrast;
+					graphics.TextRenderingHint = GraphicsUtility.TextRenderingHint;
+					graphics.TextContrast      = GraphicsUtility.TextContrast;
 					textWidth = GitterApplication.TextRenderer.MeasureText(
 						graphics,
 						header.Text,
@@ -930,10 +930,23 @@ namespace gitter.Framework.Controls
 
 					using(var brush = new HatchBrush(HatchStyle.Percent20, accentColor, backgroundColor))
 					{
-						var ro = graphics.RenderingOrigin;
-						graphics.RenderingOrigin = new Point(client.X % 4, client.Y % 4);
+						var ro = default(Point);
+						try
+						{
+							ro = graphics.RenderingOrigin;
+							graphics.RenderingOrigin = new Point(client.X % 4, client.Y % 4);
+						}
+						catch(NotImplementedException)
+						{
+						}
 						graphics.FillRectangle(brush, client);
-						graphics.RenderingOrigin = ro;
+						try
+						{
+							graphics.RenderingOrigin = ro;
+						}
+						catch(NotImplementedException)
+						{
+						}
 					}
 				}
 			}
@@ -1313,8 +1326,8 @@ namespace gitter.Framework.Controls
 				int textWidth;
 				using(var brush = new SolidBrush(textColor))
 				{
-					graphics.TextRenderingHint = Utility.TextRenderingHint;
-					graphics.TextContrast = Utility.TextContrast;
+					graphics.TextRenderingHint = GraphicsUtility.TextRenderingHint;
+					graphics.TextContrast      = GraphicsUtility.TextContrast;
 					textWidth = GitterApplication.TextRenderer.MeasureText(
 						graphics,
 						header.Text,

@@ -21,11 +21,8 @@
 namespace gitter.Git
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
-	using System.Drawing;
 	using System.IO;
-	using System.Text;
 	using System.Windows.Forms;
 
 	using gitter.Framework;
@@ -76,17 +73,16 @@ namespace gitter.Git
 
 			if(_gitCLI.AutodetectGitExePath)
 			{
-				_versionPath = GitProcess.GitExePath;
 				_radAlwaysAutodetect.Checked = true;
 			}
 			else
 			{
-				_versionPath = _gitCLI.ManualGitExePath;
 				_radSpecifyManually.Checked = true;
 			}
+			_versionPath = _gitCLI.GitExecutablePath;
 			_txtmSysGitPath.Text = _versionPath;
 
-			_chkLogCLICalls.Checked = _gitCLI.LogCLICalls;
+			_chkLogCLICalls.Checked = _gitCLI.LogCalls;
 			_chkFallbackToAnsi.Checked = GitProcess.EnableAnsiCodepageFallback;
 
 			var version = TryGetVersion();
@@ -107,10 +103,16 @@ namespace gitter.Git
 			Version version = null;
 			try
 			{
-				_gitCLI.RefreshGitVersion();
+				_gitCLI.InvalidateGitVersion();
 				version = _gitCLI.GitVersion;
 			}
-			catch { }
+			catch(Exception exc)
+			{
+				if(exc.IsCritical())
+				{
+					throw;
+				}
+			}
 			return version;
 		}
 
@@ -138,8 +140,12 @@ namespace gitter.Git
 						{
 							BeginInvoke(new MethodInvoker(UpdateLatestVersion));
 						}
-						catch
+						catch(Exception exc)
 						{
+							if(exc.IsCritical())
+							{
+								throw;
+							}
 						}
 					}
 				});
@@ -223,7 +229,13 @@ namespace gitter.Git
 						{
 							version = GitProcess.CheckVersion(path);
 						}
-						catch { }
+						catch(Exception exc)
+						{
+							if(exc.IsCritical())
+							{
+								throw;
+							}
+						}
 						if(version != null)
 						{
 							_lblVersion.Text = version.ToString();
@@ -238,8 +250,12 @@ namespace gitter.Git
 						_lblVersion.Text = Resources.StrlUnavailable.SurroundWith("<", ">");
 					}
 				}
-				catch
+				catch(Exception exc)
 				{
+					if(exc.IsCritical())
+					{
+						throw;
+					}
 					_lblVersion.Text = Resources.StrlUnavailable.SurroundWith("<", ">");
 				}
 			}
@@ -252,16 +268,29 @@ namespace gitter.Git
 
 		private void _btnDownload_Click(object sender, EventArgs e)
 		{
-			var exc = _downloader.DownloadAndInstallAsync().Invoke<ProgressForm>(this);
-			if(exc != null)
+			try
 			{
+				ProgressForm.MonitorTaskAsModalWindow(this, "MSysGit Installation", _downloader.DownloadAndInstallAsync);
+			}
+			catch(Exception exc)
+			{
+				if(exc.IsCritical())
+				{
+					throw;
+				}
 				GitterApplication.MessageBoxService.Show(
 					this, exc.Message, "MSysGit Installation Failed", MessageBoxButton.Close, MessageBoxIcon.Error);
+				return;
 			}
 			var version = TryGetVersion();
 			if(version != null)
 			{
 				_lblVersion.Text = version.ToString();
+				_versionPath = _gitCLI.GitExecutablePath;
+				if(string.IsNullOrWhiteSpace(_txtmSysGitPath.Text))
+				{
+					_txtmSysGitPath.Text = _versionPath;
+				}
 			}
 			else
 			{
@@ -275,7 +304,7 @@ namespace gitter.Git
 		{
 			_gitCLI.ManualGitExePath = Path.GetFullPath(_txtmSysGitPath.Text.Trim());
 			_gitCLI.AutodetectGitExePath = _radAlwaysAutodetect.Checked;
-			_gitCLI.LogCLICalls = _chkLogCLICalls.Checked;
+			_gitCLI.LogCalls = _chkLogCLICalls.Checked;
 			_gitCLI.EnableAnsiCodepageFallback = _chkFallbackToAnsi.Checked;
 			return true;
 		}

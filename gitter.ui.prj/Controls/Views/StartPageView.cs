@@ -1,7 +1,7 @@
 #region Copyright Notice
 /*
  * gitter - VCS repository management tool
- * Copyright (C) 2013  Popovskiy Maxim Vladimirovitch <amgine.gitter@gmail.com>
+ * Copyright (C) 2014  Popovskiy Maxim Vladimirovitch <amgine.gitter@gmail.com>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,29 +21,35 @@
 namespace gitter
 {
 	using System;
-	using System.Linq;
-	using System.IO;
-	using System.Globalization;
 	using System.Collections.Generic;
 	using System.Drawing;
+	using System.Globalization;
+	using System.IO;
 	using System.Windows.Forms;
 
+	using gitter.Controls;
 	using gitter.Framework;
+	using gitter.Framework.Configuration;
 	using gitter.Framework.Controls;
 	using gitter.Framework.Services;
-	using gitter.Framework.Configuration;
 
 	using Resources = gitter.Properties.Resources;
 
 	internal partial class StartPageView : ViewBase
 	{
+		#region Data
+
 		private readonly StartPageViewFactory _factory;
-		private readonly NotifyCollectionBinding<string> _recentRepositoriesBinding;
+		private readonly NotifyCollectionBinding<RepositoryLink> _recentRepositoriesBinding;
 		private ICheckBoxWidget _chkShowPageAtStartup;
 		private ICheckBoxWidget _chkClosePageAfterRepositoryLoad;
 
-		public StartPageView(IWorkingEnvironment environment, IDictionary<string, object> parameters, StartPageViewFactory factory)
-			: base(Guids.StartPageView, environment, parameters)
+		#endregion
+
+		#region .ctor
+
+		public StartPageView(IWorkingEnvironment environment, StartPageViewFactory factory)
+			: base(Guids.StartPageView, environment)
 		{
 			Verify.Argument.IsNotNull(factory, "factory");
 			
@@ -66,16 +72,16 @@ namespace gitter
 			_lstRecentRepositories.KeyDown += OnRecentRepositoriesKeyDown;
 
 			_chkClosePageAfterRepositoryLoad = GitterApplication.Style.CreateCheckBox();
-            _chkClosePageAfterRepositoryLoad.Text = Resources.StrClosePageAfterRepositoryLoad;
-			_chkClosePageAfterRepositoryLoad.Control.Bounds = new Rectangle(9, 491, 330, 20);
+			_chkClosePageAfterRepositoryLoad.Text = Resources.StrsClosePageAfterRepositoryLoad;
+			_chkClosePageAfterRepositoryLoad.Control.Bounds = new Rectangle(9, 491, 199, 20);
 			_chkClosePageAfterRepositoryLoad.Control.Anchor = AnchorStyles.Left | AnchorStyles.Bottom;
 			_chkClosePageAfterRepositoryLoad.Control.Parent = this;
 			_chkClosePageAfterRepositoryLoad.IsChecked = _factory.CloseAfterRepositoryLoad;
 			_chkClosePageAfterRepositoryLoad.IsCheckedChanged += _chkClosePageAfterRepositoryLoad_CheckedChanged;
 
 			_chkShowPageAtStartup = GitterApplication.Style.CreateCheckBox();
-			_chkShowPageAtStartup.Text = Resources.StrShowPageOnStartup;
-			_chkShowPageAtStartup.Control.Bounds = new Rectangle(9, 511, 330, 20);
+			_chkShowPageAtStartup.Text = Resources.StrsShowPageOnStartup;
+			_chkShowPageAtStartup.Control.Bounds = new Rectangle(9, 511, 199, 20);
 			_chkShowPageAtStartup.Control.Anchor = AnchorStyles.Left | AnchorStyles.Bottom;
 			_chkShowPageAtStartup.Control.Parent = this;
 			_chkShowPageAtStartup.IsChecked = _factory.ShowOnStartup;
@@ -84,11 +90,29 @@ namespace gitter
 			_separator1.BackColor = GitterApplication.Style.Colors.Separator;
 			_separator2.BackColor = GitterApplication.Style.Colors.Separator;
 
-			_recentRepositoriesBinding = new NotifyCollectionBinding<string>(
+			_recentRepositoriesBinding = new NotifyCollectionBinding<RepositoryLink>(
 				_lstRecentRepositories.Items,
-				WorkingEnvironment.RecentRepositories,
+				WorkingEnvironment.RepositoryManagerService.RecentRepositories,
 				repo => new RecentRepositoryListItem(repo));
 		}
+
+		#endregion
+
+		#region Properties
+
+		public override bool IsDocument
+		{
+			get { return true; }
+		}
+
+		public override Image Image
+		{
+			get { return CachedResources.Bitmaps["ImgStartPage"]; }
+		}
+
+		#endregion
+
+		#region Methods
 
 		private static Bitmap GetLogo()
 		{
@@ -135,7 +159,7 @@ namespace gitter
 					while(_lstRecentRepositories.SelectedItems.Count != 0)
 					{
 						var item = (RecentRepositoryListItem)_lstRecentRepositories.SelectedItems[0];
-						WorkingEnvironment.RecentRepositories.Remove(item.DataContext);
+						WorkingEnvironment.RepositoryManagerService.RecentRepositories.Remove(item.DataContext);
 						if(item.ListBox != null)
 						{
 							item.Remove();
@@ -165,7 +189,7 @@ namespace gitter
 			else if(e.Data.GetDataPresent(typeof(RecentRepositoryListItem)))
 			{
 				var data = (RecentRepositoryListItem)e.Data.GetData(typeof(RecentRepositoryListItem));
-				if(!IsPresentInLocalRepositoryList(data.DataContext))
+				if(!IsPresentInLocalRepositoryList(data.DataContext.Path))
 				{
 					e.Effect = DragDropEffects.Copy;
 				}
@@ -217,16 +241,16 @@ namespace gitter
 				}
 				else if(e.Data.GetDataPresent(typeof(RepositoryListItem)))
 				{
-					var data = (RepositoryListItem)e.Data.GetData(typeof(RepositoryListItem));
+					var itemToMove = (RepositoryListItem)e.Data.GetData(typeof(RepositoryListItem));
 					var point = _lstLocalRepositories.PointToClient(new Point(e.X, e.Y));
 					CustomListBoxItemsCollection itemsCollection;
 					var index = _lstLocalRepositories.GetInsertIndexFormPoint(point.X, point.Y, false, out itemsCollection);
 					if(index == -1) return;
-					var currentIndex = _lstLocalRepositories.Items.IndexOf(data);
+					var currentIndex = _lstLocalRepositories.Items.IndexOf(itemToMove);
 					if(index == currentIndex) return;
 					if(currentIndex == -1)
 					{
-						itemsCollection.Insert(index, data);
+						itemsCollection.Insert(index, itemToMove);
 					}
 					else
 					{
@@ -234,33 +258,23 @@ namespace gitter
 						{
 							--index;
 						}
-						data.Remove();
-						itemsCollection.Insert(index, data);
+						itemToMove.Remove();
+						itemsCollection.Insert(index, itemToMove);
 					}
 				}
 				else if(e.Data.GetDataPresent(typeof(RecentRepositoryListItem)))
 				{
-					var data = (RecentRepositoryListItem)e.Data.GetData(typeof(RecentRepositoryListItem));
-					var path = data.DataContext;
+					var itemToMove = (RecentRepositoryListItem)e.Data.GetData(typeof(RecentRepositoryListItem));
+					var path = itemToMove.DataContext.Path;
 					if(IsPresentInLocalRepositoryList(path)) return;
 					var point = _lstLocalRepositories.PointToClient(new Point(e.X, e.Y));
 					CustomListBoxItemsCollection itemsCollection;
 					var index = _lstLocalRepositories.GetInsertIndexFormPoint(point.X, point.Y, false, out itemsCollection);
 					if(index == -1) return;
-					var item = new RepositoryListItem(new RepositoryLink(path, string.Empty));
-					itemsCollection.Insert(index, item);
-				}
-			}
+					var itemToInsert = new RepositoryListItem(new RepositoryLink(path, string.Empty));
+					itemsCollection.Insert(index, itemToInsert);
 		}
-
-		public override bool IsDocument
-		{
-			get { return true; }
 		}
-
-		public override Image Image
-		{
-			get { return CachedResources.Bitmaps["ImgStartPage"]; }
 		}
 
 		private void OnLocalRepositoriesListItemActivated(object sender, ItemEventArgs e)
@@ -283,7 +297,7 @@ namespace gitter
 			var item = e.Item as RecentRepositoryListItem;
 			if(item != null)
 			{
-				if(WorkingEnvironment.OpenRepository(item.DataContext))
+				if(WorkingEnvironment.OpenRepository(item.DataContext.Path))
 				{
 					if(_factory.CloseAfterRepositoryLoad)
 					{
@@ -364,23 +378,17 @@ namespace gitter
 
 		private void _btnInitLocalRepo_LinkClicked(object sender, EventArgs e)
 		{
-			var provider = WorkingEnvironment.RepositoryProviders
-											 .OfType<gitter.Git.IGitRepositoryProvider>()
-											 .FirstOrDefault();
-			if(provider != null)
+			using(var dlg = new InitRepositoryDialog(WorkingEnvironment))
 			{
-				provider.RunInitDialog();
+				dlg.Run(WorkingEnvironment.MainForm);
 			}
 		}
 
 		private void _btnCloneRemoteRepo_LinkClicked(object sender, EventArgs e)
 		{
-			var provider = WorkingEnvironment.RepositoryProviders
-											 .OfType<gitter.Git.IGitRepositoryProvider>()
-											 .FirstOrDefault();
-			if(provider != null)
+			using(var dlg = new CloneRepositoryDialog(WorkingEnvironment))
 			{
-				provider.RunCloneDialog();
+				dlg.Run(WorkingEnvironment.MainForm);
 			}
 		}
 
@@ -407,5 +415,7 @@ namespace gitter
 			//n.Parent = x;
 			//x.Show();
 		}
+
+		#endregion
 	}
 }

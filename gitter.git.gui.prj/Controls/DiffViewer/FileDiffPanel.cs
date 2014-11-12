@@ -1,7 +1,7 @@
 #region Copyright Notice
 /*
  * gitter - VCS repository management tool
- * Copyright (C) 2013  Popovskiy Maxim Vladimirovitch <amgine.gitter@gmail.com>
+ * Copyright (C) 2014  Popovskiy Maxim Vladimirovitch <amgine.gitter@gmail.com>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -626,8 +626,12 @@ namespace gitter.Git.Gui.Controls
 						longestLineWidth = GitterApplication.TextRenderer.MeasureText(
 							measureEventArgs.Graphics, longestLine.Text, font, int.MaxValue, ContentFormat).Width + CellSize.Width;
 					}
-					catch
+					catch(Exception exc)
 					{
+						if(exc.IsCritical())
+						{
+							throw;
+						}
 						longestLineWidth = (int)(maxLength * CellSize.Width);
 					}
 					w += longestLineWidth;
@@ -743,14 +747,10 @@ namespace gitter.Git.Gui.Controls
 
 		private Bitmap GetHeaderIcon()
 		{
-			if(_diffFile.Status == FileStatus.Removed)
-			{
-				return Utility.QueryIcon(_diffFile.SourceFile);
-			}
-			else
-			{
-				return Utility.QueryIcon(_diffFile.TargetFile);
-			}
+			return GraphicsUtility.QueryIcon(
+				_diffFile.Status == FileStatus.Removed
+					? _diffFile.SourceFile
+					: _diffFile.TargetFile);
 		}
 
 		private Bitmap GetHeaderIconOverlay()

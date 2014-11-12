@@ -27,7 +27,7 @@ namespace gitter.Framework.CLI
 	using System.Threading;
 
 	/// <summary>Reads text from stdio/stderr.</summary>
-	public sealed class AsyncTextReader : IOutputReceiver
+	public class AsyncTextReader : IOutputReceiver
 	{
 		#region Data
 
@@ -38,6 +38,7 @@ namespace gitter.Framework.CLI
 		private Decoder _decoder;
 		private StringBuilder _stringBuilder;
 		private ManualResetEvent _eof;
+		private volatile bool _isCanceled;
 
 		#endregion
 
@@ -79,24 +80,49 @@ namespace gitter.Framework.CLI
 			Verify.Argument.IsNotNull(reader, "reader");
 			Verify.State.IsFalse(IsInitialized);
 
-			var encoding	= reader.CurrentEncoding;
-			_stream			= reader.BaseStream;
-			_decoder		= encoding.GetDecoder();
-			_byteBuffer		= new byte[_bufferSize];
-			_charBuffer		= new char[encoding.GetMaxCharCount(_bufferSize) + 1];
-			_eof			= new ManualResetEvent(false);
+			var encoding = reader.CurrentEncoding;
+			_stream      = reader.BaseStream;
+			_decoder     = encoding.GetDecoder();
+			_byteBuffer  = new byte[_bufferSize];
+			_charBuffer  = new char[encoding.GetMaxCharCount(_bufferSize) + 1];
+			_eof         = new ManualResetEvent(false);
 
 			_stringBuilder.Clear();
 			BeginReadAsync();
 		}
 
-		/// <summary>Closes the reader.</summary>
-		public void Close()
+		/// <summary>Notifies receiver that output is no longer required.</summary>
+		/// <remarks>Reader should still receive bytes, but disable any stream processing.</remarks>
+		public void NotifyCanceled()
 		{
 			Verify.State.IsTrue(IsInitialized);
 
-			_eof.WaitOne();
-			_eof.Close();
+			_isCanceled = true;
+			var eof = _eof;
+			if(eof != null)
+			{
+				_eof = null;
+				eof.Dispose();
+			}
+		}
+
+		/// <summary>Closes the reader.</summary>
+		public void WaitForEndOfStream()
+		{
+			Verify.State.IsTrue(IsInitialized);
+
+			var eof = _eof;
+			if(eof != null)
+			{
+				try
+				{
+					eof.WaitOne();
+					eof.Dispose();
+				}
+				catch(ObjectDisposedException)
+				{
+				}
+			}
 
 			_stream = null;
 			_byteBuffer = null;
@@ -115,11 +141,47 @@ namespace gitter.Framework.CLI
 			get { return _stringBuilder.Length; }
 		}
 
+		/// <summary>Returns character at the specified position.</summary>
+		/// <param name="index">Characted index.</param>
+		/// <returns>Characted at the specified position.</returns>
+		public char this[int index]
+		{
+			get { return _stringBuilder[index]; }
+		}
+
 		/// <summary>Returns composed text.</summary>
 		/// <returns>Composed text.</returns>
 		public string GetText()
 		{
 			return _stringBuilder.ToString();
+		}
+
+		/// <summary>Returns composed text.</summary>
+		/// <param name="startIndex">Index of the first character.</param>
+		/// <param name="length">Length of the returned string.</param>
+		/// <returns>Composed text.</returns>
+		public string GetText(int startIndex, int length)
+		{
+			return _stringBuilder.ToString(startIndex, length);
+		}
+
+		/// <summary>
+		/// Copies the characters from a specified segment of this instance to a specified
+		/// segment of a destination System.Char array.
+		/// </summary>
+		/// <param name="sourceIndex">
+		/// The starting position in this instance where characters will be copied from.
+		/// The index is zero-based.
+		/// </param>
+		/// <param name="destination">The array where characters will be copied.</param>
+		/// <param name="destinationIndex">
+		/// The starting position in destination where characters will be copied.
+		/// The index is zero-based.
+		/// </param>
+		/// <param name="count">The number of characters to be copied.</param>
+		public void CopyTo(int sourceIndex, char[] destination, int destinationIndex, int count)
+		{
+			_stringBuilder.CopyTo(sourceIndex, destination, destinationIndex, count);
 		}
 
 		/// <summary>Returns array of collected characters.</summary>
@@ -145,7 +207,7 @@ namespace gitter.Framework.CLI
 
 		private void OnStreamRead(IAsyncResult ar)
 		{
-			int bytesCount = 0;
+			int bytesCount;
 			try
 			{
 				bytesCount = _stream.EndRead(ar);
@@ -160,24 +222,95 @@ namespace gitter.Framework.CLI
 			}
 			if(bytesCount != 0)
 			{
-				Decode(bytesCount);
+				if(!_isCanceled)
+				{
+					Decode(bytesCount);
+				}
 				BeginReadAsync();
 			}
 			else
 			{
-				_eof.Set();
+				if(_isCanceled)
+				{
+					return;
+				}
+				OnStringCompleted();
+				var eof = (EventWaitHandle)ar.AsyncState;
+				if(eof != null)
+				{
+					try
+					{
+						eof.Set();
+					}
+					catch(ObjectDisposedException)
+					{
+					}
+				}
 			}
 		}
 
 		private void BeginReadAsync()
 		{
-			_stream.BeginRead(_byteBuffer, 0, _byteBuffer.Length, OnStreamRead, null);
+			if(_isCanceled)
+			{
+				if(_stringBuilder.Length > 0)
+				{
+					_stringBuilder.Clear();
+				}
+				try
+				{
+					_stream.BeginRead(_byteBuffer, 0, _byteBuffer.Length, OnStreamRead, null);
+				}
+				catch(ObjectDisposedException)
+				{
+				}
+			}
+			else
+			{
+				bool isReading;
+				var eof = _eof;
+				try
+				{
+					_stream.BeginRead(_byteBuffer, 0, _byteBuffer.Length, OnStreamRead, eof);
+					isReading = true;
+				}
+				catch(IOException)
+				{
+					isReading = false;
+				}
+				catch(ObjectDisposedException)
+				{
+					isReading = false;
+				}
+				if(!isReading)
+				{
+					if(eof != null)
+					{
+						try
+						{
+							eof.Set();
+						}
+						catch(ObjectDisposedException)
+						{
+						}
+					}
+				}
+			}
 		}
 
 		private void Decode(int bytesCount)
 		{
 			int charsCount = _decoder.GetChars(_byteBuffer, 0, bytesCount, _charBuffer, 0);
-			_stringBuilder.Append(_charBuffer, 0, charsCount);
+			OnStringDecoded(_charBuffer, 0, charsCount);
+		}
+
+		protected virtual void OnStringDecoded(char[] buffer, int startIndex, int length)
+		{
+			_stringBuilder.Append(_charBuffer, startIndex, length);
+		}
+
+		protected virtual void OnStringCompleted()
+		{
 		}
 
 		#endregion

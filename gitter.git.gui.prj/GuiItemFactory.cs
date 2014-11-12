@@ -26,6 +26,8 @@ namespace gitter.Git.Gui
 	using System.Diagnostics;
 	using System.Collections.Generic;
 	using System.Text;
+	using System.Threading;
+	using System.Threading.Tasks;
 	using System.Windows.Forms;
 
 	using gitter.Framework;
@@ -335,11 +337,7 @@ namespace gitter.Git.Gui
 
 			GitterApplication.WorkingEnvironment.ViewDockService.ShowView(
 				Views.Guids.DiffViewGuid,
-				new Dictionary<string, object>()
-				{
-					{ "source", rev1.GetCompareDiffSource(rev2) }
-				},
-				true);
+				new Views.DiffViewModel(rev1.GetCompareDiffSource(rev2), null));
 		}
 
 		private static void OnViewReflogClick(object sender, EventArgs e)
@@ -348,129 +346,34 @@ namespace gitter.Git.Gui
 			var reference = (Reference)item.Tag;
 			GitterApplication.WorkingEnvironment.ViewDockService.ShowView(
 				Views.Guids.ReflogViewGuid,
-				new Dictionary<string, object>()
-				{
-					{ "reflog", reference.Reflog }
-				},
-				true);
-		}
-
-		private static void SavePatch(Control parent, string defaultFileName, Func<string> getPatch)
-		{
-			Verify.Argument.IsNotNull(getPatch, "getPatch");
-
-			const string patchExt = ".patch";
-
-			string fileName = null;
-			using(var dlg = new SaveFileDialog()
-				{
-					Filter = Resources.StrPatches + "|" + patchExt,
-					FileName = defaultFileName + patchExt,
-					DefaultExt = patchExt,
-					OverwritePrompt = true,
-					Title = Resources.StrSavePatch,
-				})
-			{
-				if(dlg.ShowDialog(parent) == DialogResult.OK)
-				{
-					fileName = dlg.FileName;
-				}
-			}
-			if(fileName != null)
-			{
-				string patch = null;
-				try
-				{
-					using(parent.ChangeCursor(Cursors.WaitCursor))
-					{
-						patch = getPatch();
-					}
-				}
-				catch(GitException exc)
-				{
-					GitterApplication.MessageBoxService.Show(
-						parent,
-						exc.Message,
-						Resources.ErrFailedToFormatPatch,
-						MessageBoxButton.Close,
-						MessageBoxIcon.Error);
-				}
-				if(patch != null)
-				{
-					try
-					{
-						File.WriteAllText(fileName, patch);
-					}
-					catch(IOException exc)
-					{
-						GitterApplication.MessageBoxService.Show(
-							parent,
-							exc.Message,
-							Resources.ErrFailedToSavePatch,
-							MessageBoxButton.Close,
-							MessageBoxIcon.Error);
-					}
-				}
-			}
+				new Views.ReflogViewModel(reference.Reflog));
 		}
 
 		private static void OnArchiveClick(object sender, EventArgs e)
 		{
-			var item = (ToolStripItem)sender;
+			var item     = (ToolStripItem)sender;
 			var revision = (IRevisionPointer)item.Tag;
-			var parent = Utility.GetParentControl(item);
+			var parent   = Utility.GetParentControl(item);
 
-			string fileName = null;
-			using(var dlg = new SaveFileDialog()
-				{
-					FileName = revision.Pointer,
-					Filter = "zip files|.zip|" +
-							 "tar.gz files|.tar.gz|" +
-							 "tar files|.tar|" +
-							 "tgz files|.tgz",
-					DefaultExt = ".zip",
-					OverwritePrompt = true,
-					Title = Resources.StrArchive,
-				})
-			{
-				if(dlg.ShowDialog(parent) == DialogResult.OK)
-				{
-					fileName = dlg.FileName;
+			GuiCommands.Archive(parent, revision, null, null);
 				}
-			}
-			if(!string.IsNullOrEmpty(fileName))
-			{
-				try
-				{
-					revision.ArchiveAsync(fileName).Invoke<ProgressForm>(parent);
-				}
-				catch(GitException exc)
-				{
-					GitterApplication.MessageBoxService.Show(
-						parent,
-						exc.Message,
-						Resources.ErrFailedToArchive,
-						MessageBoxButton.Close,
-						MessageBoxIcon.Error);
-				}
-			}
-		}
 
 		private static void OnSaveRevisionPatchClick(object sender, EventArgs e)
 		{
-			var item = (ToolStripItem)sender;
-			var revision = (IRevisionPointer)item.Tag;
+			var item       = (ToolStripItem)sender;
+			var revision   = (IRevisionPointer)item.Tag;
 			var repository = revision.Repository;
-			var parent = Utility.GetParentControl(item);
-			string fileName = revision.Dereference().Hash;
+			var parent     = Utility.GetParentControl(item);
+			var fileName   = revision.Dereference().Hash;
 
-			SavePatch(parent, fileName, revision.FormatPatch);
+			GuiCommands.FormatPatch(parent, revision);
 		}
 
 		private static void OnShowViewItemClick(object sender, EventArgs e)
 		{
-			var item = (ToolStripItem)sender;
+			var item     = (ToolStripItem)sender;
 			var viewGuid = (Guid)item.Tag;
+
 			GitterApplication.WorkingEnvironment
 							 .ViewDockService
 							 .ShowView(viewGuid, true);
@@ -539,10 +442,11 @@ namespace gitter.Git.Gui
 
 		private static void OnCheckoutRevisionClick(object sender, EventArgs e)
 		{
-			var item = (ToolStripItem)sender;
+			var item     = (ToolStripItem)sender;
 			var revision = (IRevisionPointer)item.Tag;
-			var parent = Utility.GetParentControl(item);
-			bool force = Control.ModifierKeys == Keys.Shift;
+			var parent   = Utility.GetParentControl(item);
+			var force    = Control.ModifierKeys == Keys.Shift;
+
 			if(GlobalBehavior.AskOnCommitCheckouts)
 			{
 				bool revIsLocalBranch = (revision is Branch) && !((Branch)revision).IsRemote;
@@ -779,29 +683,18 @@ namespace gitter.Git.Gui
 
 		private static void OnRebaseHeadHereClick(object sender, EventArgs e)
 		{
-			var item = (ToolStripItem)sender;
+			var item     = (ToolStripItem)sender;
 			var revision = (IRevisionPointer)item.Tag;
-			var parent = Utility.GetParentControl(item);
-			try
-			{
-				revision.RebaseHeadHereAsync().Invoke<ProgressForm>(parent);
+			var parent   = Utility.GetParentControl(item);
+
+			GuiCommands.RebaseHeadTo(parent, revision);
 			}
-			catch(GitException exc)
-			{
-				GitterApplication.MessageBoxService.Show(
-					parent,
-					exc.Message,
-					string.Format(Resources.ErrFailedToCherryPick, revision.Pointer),
-					MessageBoxButton.Close,
-					MessageBoxIcon.Error);
-			}
-		}
 
 		private static void OnCherryPickClick(object sender, EventArgs e)
 		{
-			var item = (ToolStripItem)sender;
+			var item     = (ToolStripItem)sender;
 			var revision = (IRevisionPointer)item.Tag;
-			var parent = Utility.GetParentControl(item);
+			var parent   = Utility.GetParentControl(item);
 
 			if(Control.ModifierKeys == Keys.Shift)
 			{
@@ -1099,9 +992,9 @@ namespace gitter.Git.Gui
 
 			var item = new T()
 			{
-				Image = CachedResources.Bitmaps["ImgStashSave"],
-				Text = Resources.StrStash.AddEllipsis(),
-				Tag = repository,
+				Image   = CachedResources.Bitmaps["ImgStashSave"],
+				Text    = Resources.StrStash.AddEllipsis(),
+				Tag     = repository,
 				Enabled = !repository.IsEmpty && repository.Status.UnmergedCount == 0,
 			};
 
@@ -1111,60 +1004,39 @@ namespace gitter.Git.Gui
 
 		private static void OnRefreshStashClick(object sender, EventArgs e)
 		{
-			var item = (ToolStripItem)sender;
+			var item       = (ToolStripItem)sender;
 			var repository = (Repository)item.Tag;
+
 			repository.Stash.Refresh();
 		}
 
 		private static void OnStashClearClick(object sender, EventArgs e)
 		{
-			var item = (ToolStripItem)sender;
+			var item       = (ToolStripItem)sender;
 			var repository = (Repository)item.Tag;
-			var parent = Utility.GetParentControl(item);
-			try
-			{
-				repository.Stash.ClearAsync().Invoke<ProgressForm>(parent);
-			}
-			catch(GitException exc)
-			{
-				GitterApplication.MessageBoxService.Show(
-					parent,
-					exc.Message,
-					Resources.ErrFailedToStashClear,
-					MessageBoxButton.Close,
-					MessageBoxIcon.Error);
-			}
+			var parent     = Utility.GetParentControl(item);
+
+			GuiCommands.ClearStash(parent, repository.Stash);
 		}
 
 		private static void OnStashSaveItemClick(object sender, EventArgs e)
 		{
-			var item = (ToolStripItem)sender;
+			var item       = (ToolStripItem)sender;
 			var repository = (Repository)item.Tag;
-			var parent = Utility.GetParentControl(item);
+			var parent     = Utility.GetParentControl(item);
+
 			using(var dlg = new StashSaveDialog(repository))
 			{
 				dlg.Run(parent);
 			}
-			//try
-			//{
-			//    repository.Stash.SaveAsync(false, string.Empty).Invoke<ProgressForm>(parent);
-			//}
-			//catch(GitException exc)
-			//{
-			//    GitterApplication.MessageBoxService.Show(
-			//        parent,
-			//        exc.Message,
-			//        Resources.ErrFailedToStash,
-			//        MessageBoxButton.Close,
-			//        MessageBoxIcon.Error);
-			//}
 		}
 
 		private static void OnStashSaveKeepIndexItemClick(object sender, EventArgs e)
 		{
-			var item = (ToolStripItem)sender;
+			var item       = (ToolStripItem)sender;
 			var repository = (Repository)item.Tag;
-			var parent = Utility.GetParentControl(item);
+			var parent     = Utility.GetParentControl(item);
+
 			using(var dlg = new StashSaveDialog(repository)
 				{
 					KeepIndex = true,
@@ -1172,151 +1044,71 @@ namespace gitter.Git.Gui
 			{
 				dlg.Run(parent);
 			}
-			//try
-			//{
-			//    repository.Stash.SaveAsync(true, string.Empty).Invoke<ProgressForm>(parent);
-			//}
-			//catch(GitException exc)
-			//{
-			//    GitterApplication.MessageBoxService.Show(
-			//        parent,
-			//        exc.Message,
-			//        Resources.ErrFailedToStash,
-			//        MessageBoxButton.Close,
-			//        MessageBoxIcon.Error);
-			//}
 		}
 
 		private static void OnStashPopClick(object sender, EventArgs e)
 		{
-			var item = (ToolStripItem)sender;
-			var repository = (Repository)item.Tag;
-			var parent = Utility.GetParentControl(item);
-			bool restoreIndex = Control.ModifierKeys == Keys.Shift;
-			try
-			{
-				repository.Stash.PopAsync(restoreIndex).Invoke<ProgressForm>(parent);
-			}
-			catch(GitException exc)
-			{
-				GitterApplication.MessageBoxService.Show(
-					parent,
-					exc.Message,
-					Resources.ErrFailedToStashPop,
-					MessageBoxButton.Close,
-					MessageBoxIcon.Error);
-			}
+			var item         = (ToolStripItem)sender;
+			var repository   = (Repository)item.Tag;
+			var parent       = Utility.GetParentControl(item);
+			var restoreIndex = Control.ModifierKeys == Keys.Shift;
+
+			GuiCommands.PopStashedState(parent, repository.Stash, restoreIndex);
 		}
 
 		private static void OnStashPopStateClick(object sender, EventArgs e)
 		{
-			var item = (ToolStripItem)sender;
+			var item         = (ToolStripItem)sender;
 			var stashedState = (StashedState)item.Tag;
-			var parent = Utility.GetParentControl(item);
-			bool restoreIndex = Control.ModifierKeys == Keys.Shift;
-			try
-			{
-				stashedState.PopAsync(restoreIndex).Invoke<ProgressForm>(parent);
-			}
-			catch(GitException exc)
-			{
-				GitterApplication.MessageBoxService.Show(
-					parent,
-					exc.Message,
-					string.Format(Resources.ErrFailedToStashPopState, ((IRevisionPointer)stashedState).Pointer),
-					MessageBoxButton.Close,
-					MessageBoxIcon.Error);
-			}
+			var parent       = Utility.GetParentControl(item);
+			var restoreIndex = Control.ModifierKeys == Keys.Shift;
+
+			GuiCommands.PopStashedState(parent, stashedState, restoreIndex);
 		}
 
 		private static void OnStashApplyClick(object sender, EventArgs e)
 		{
-			var item = (ToolStripItem)sender;
-			var repository = (Repository)item.Tag;
-			var parent = Utility.GetParentControl(item);
-			bool restoreIndex = Control.ModifierKeys == Keys.Shift;
-			try
-			{
-				repository.Stash.ApplyAsync(restoreIndex).Invoke<ProgressForm>(parent);
-			}
-			catch(GitException exc)
-			{
-				GitterApplication.MessageBoxService.Show(
-					parent,
-					exc.Message,
-					Resources.ErrFailedToStashApply,
-					MessageBoxButton.Close,
-					MessageBoxIcon.Error);
-			}
+			var item         = (ToolStripItem)sender;
+			var repository   = (Repository)item.Tag;
+			var parent       = Utility.GetParentControl(item);
+			var restoreIndex = Control.ModifierKeys == Keys.Shift;
+
+			GuiCommands.ApplyStashedState(parent, repository.Stash, restoreIndex);
 		}
 
 		private static void OnStashApplyStateClick(object sender, EventArgs e)
 		{
-			var item = (ToolStripItem)sender;
+			var item         = (ToolStripItem)sender;
 			var stashedState = (StashedState)item.Tag;
-			var parent = Utility.GetParentControl(item);
-			bool restoreIndex = Control.ModifierKeys == Keys.Shift;
-			try
-			{
-				stashedState.ApplyAsync(restoreIndex).Invoke<ProgressForm>(parent);
-			}
-			catch(GitException exc)
-			{
-				GitterApplication.MessageBoxService.Show(
-					parent,
-					exc.Message,
-					string.Format(Resources.ErrFailedToStashApplyState, ((IRevisionPointer)stashedState).Pointer),
-					MessageBoxButton.Close,
-					MessageBoxIcon.Error);
-			}
+			var parent       = Utility.GetParentControl(item);
+			var restoreIndex = Control.ModifierKeys == Keys.Shift;
+
+			GuiCommands.ApplyStashedState(parent, stashedState, restoreIndex);
 		}
 
 		private static void OnStashDropStateClick(object sender, EventArgs e)
 		{
-			var item = (ToolStripItem)sender;
+			var item         = (ToolStripItem)sender;
 			var stashedState = (StashedState)item.Tag;
-			var parent = Utility.GetParentControl(item);
-			try
-			{
-				stashedState.DropAsync().Invoke<ProgressForm>(parent);
+			var parent       = Utility.GetParentControl(item);
+
+			GuiCommands.DropStashedState(parent, stashedState);
 			}
-			catch(GitException exc)
-			{
-				GitterApplication.MessageBoxService.Show(
-					parent,
-					exc.Message,
-					string.Format(Resources.ErrFailedToStashDropState, ((IRevisionPointer)stashedState).Pointer),
-					MessageBoxButton.Close,
-					MessageBoxIcon.Error);
-			}
-		}
 
 		private static void OnStashDropClick(object sender, EventArgs e)
 		{
-			var item = (ToolStripItem)sender;
+			var item       = (ToolStripItem)sender;
 			var repository = (Repository)item.Tag;
-			var parent = Utility.GetParentControl(item);
-			try
-			{
-				repository.Stash.DropAsync().Invoke<ProgressForm>(parent);
+			var parent     = Utility.GetParentControl(item);
+
+			GuiCommands.DropStashedState(parent, repository.Stash);
 			}
-			catch(InvalidOperationException)
-			{
-			}
-			catch(GitException exc)
-			{
-				GitterApplication.MessageBoxService.Show(
-					parent,
-					exc.Message,
-					Resources.ErrFailedToStashDrop,
-					MessageBoxButton.Close,
-					MessageBoxIcon.Error);
-			}
-		}
+
 		private static void OnStashToBranchClick(object sender, EventArgs e)
 		{
-			var item = (ToolStripItem)sender;
+			var item         = (ToolStripItem)sender;
 			var stashedState = (StashedState)item.Tag;
+
 			using(var dlg = new StashToBranchDialog(stashedState))
 			{
 				dlg.Run(Utility.GetParentControl(item));
@@ -1348,12 +1140,9 @@ namespace gitter.Git.Gui
 			var revision = (IRevisionPointer)item.Tag;
 			var parent = Utility.GetParentControl(item);
 
-			using(var dlg = new AddNoteDialog(revision.Repository)
+			using(var dlg = new AddNoteDialog(revision.Repository))
 				{
-					Revision = revision.Pointer,
-					AllowChangeRevision = false,
-				})
-			{
+				dlg.Revision.Value = revision.Pointer;
 				dlg.Run(parent);
 			}
 		}
@@ -1472,31 +1261,16 @@ namespace gitter.Git.Gui
 			var branch = data.Item1;
 			var remote = data.Item2;
 
-			try
-			{
-				remote.PushAsync(new Branch[] { branch }, false, true, false)
-					  .Invoke<ProgressForm>(parent);
+			GuiCommands.Push(parent, remote, new Branch[] { branch }, false, true, false);
 			}
-			catch(GitException exc)
-			{
-				GitterApplication.MessageBoxService.Show(
-					parent,
-					exc.Message,
-					string.Format(Resources.ErrPushFailed, remote.Name),
-					MessageBoxButton.Close,
-					MessageBoxIcon.Error);
-			}
-		}
 
 		private static void OnCreateBranchClick(object sender, EventArgs e)
 		{
 			var item = (ToolStripItem)sender;
 			var repository = (Repository)item.Tag;
-			using(var dlg = new CreateBranchDialog(repository)
+			using(var dlg = new CreateBranchDialog(repository))
 			{
-				StartingRevision = GitConstants.HEAD,
-			})
-			{
+				dlg.StartingRevision.Value = GitConstants.HEAD;
 				dlg.Run(Utility.GetParentControl(item));
 			}
 		}
@@ -1525,14 +1299,12 @@ namespace gitter.Git.Gui
 				startingRevision = string.Empty;
 				defaultName = string.Empty;
 			}
-			using(var dlg = new CreateBranchDialog(revision.Repository)
+			using(var dlg = new CreateBranchDialog(revision.Repository))
 			{
-				StartingRevision = startingRevision,
-			})
-			{
+				dlg.StartingRevision.Value = startingRevision;
 				if(defaultName != string.Empty)
 				{
-					dlg.BranchName = defaultName;
+					dlg.BranchName.Value = defaultName;
 				}
 				dlg.Run(Utility.GetParentControl(item));
 			}
@@ -1655,11 +1427,9 @@ namespace gitter.Git.Gui
 			{
 				if(Control.ModifierKeys == Keys.Shift)
 				{
-					using(var dlg = new MergeDialog(revision.Repository)
+					using(var dlg = new MergeDialog(revision.Repository))
 						{
-							MergeFrom = revision,
-						})
-					{
+						dlg.Revisions.Value = new[] { revision };
 						dlg.Run(parent);
 					}
 				}
@@ -1748,11 +1518,9 @@ namespace gitter.Git.Gui
 		{
 			var item = (ToolStripItem)sender;
 			var repository = (Repository)item.Tag;
-			using(var dlg = new CreateTagDialog(repository)
+			using(var dlg = new CreateTagDialog(repository))
 			{
-				Revision = GitConstants.HEAD,
-			})
-			{
+				dlg.Revision.Value = GitConstants.HEAD;
 				dlg.Run(Utility.GetParentControl(item));
 			}
 		}
@@ -1761,11 +1529,9 @@ namespace gitter.Git.Gui
 		{
 			var item = (ToolStripItem)sender;
 			var revision = (IRevisionPointer)item.Tag;
-			using(var dlg = new CreateTagDialog(revision.Repository)
+			using(var dlg = new CreateTagDialog(revision.Repository))
 			{
-				Revision = (revision != null) ? revision.Pointer : GitConstants.HEAD,
-			})
-			{
+				dlg.Revision.Value = (revision != null) ? revision.Pointer : GitConstants.HEAD;
 				dlg.Run(Utility.GetParentControl(item));
 			}
 		}
@@ -1812,21 +1578,6 @@ namespace gitter.Git.Gui
 				Tag = remote,
 			};
 			item.Click += OnEditRemotePropertiesClick;
-			return item;
-		}
-
-		public static T GetBrowseRemoteItem<T>(Remote remote)
-			where T : ToolStripItem, new()
-		{
-			Verify.Argument.IsValidGitObject(remote, "remote");
-
-			var item = new T()
-			{
-				Image = CachedResources.Bitmaps["ImgSearch"],
-				Text = Resources.StrBrowse.AddEllipsis(),
-				Tag = remote,
-			};
-			item.Click += OnBrowseRemoteClick;
 			return item;
 		}
 
@@ -2055,35 +1806,22 @@ namespace gitter.Git.Gui
 			}
 		}
 
-		private static void OnBrowseRemoteClick(object sender, EventArgs e)
-		{
-			var item = (ToolStripItem)sender;
-			var remote = (Remote)item.Tag;
-			var parent = Utility.GetParentControl(item);
-			using(var d = new RemoteReferencesDialog(remote))
-			{
-				d.Run(parent);
-			}
-		}
-
 		private static void OnShowRemoteClick(object sender, EventArgs e)
 		{
 			var item = (ToolStripItem)sender;
 			var remote = (Remote)item.Tag;
-			var parameters = new Dictionary<string, object>()
-			{
-				{ "Remote", remote },
-			};
+			var viewModel = new Views.RemoteViewModel(remote);
 			GitterApplication.WorkingEnvironment
 							 .ViewDockService
-							 .ShowView(Views.Guids.RemoteViewGuid, parameters, true);
+							 .ShowView(Views.Guids.RemoteViewGuid, viewModel);
 		}
 
 		private static void OnRemoveRemoteReferenceClick(object sender, EventArgs e)
 		{
-			var item = (ToolStripItem)sender;
+			var item      = (ToolStripItem)sender;
 			var reference = (IRemoteReference)item.Tag;
-			var parent = Utility.GetParentControl(item);
+			var parent    = Utility.GetParentControl(item);
+
 			if(GitterApplication.MessageBoxService.Show(
 				parent,
 				Resources.AskRemoveRemoteReference,
@@ -2113,101 +1851,53 @@ namespace gitter.Git.Gui
 
 		private static void OnPruneRemoteClick(object sender, EventArgs e)
 		{
-			var item = (ToolStripItem)sender;
+			var item   = (ToolStripItem)sender;
 			var remote = (Remote)item.Tag;
 			var parent = Utility.GetParentControl(item);
-			try
-			{
-				remote.PruneAsync().Invoke<ProgressForm>(parent);
+
+			GuiCommands.Prune(parent, remote);
 			}
-			catch(GitException exc)
-			{
-				GitterApplication.MessageBoxService.Show(
-					parent,
-					exc.Message,
-					string.Format(Resources.ErrFailedToPrune, remote.Name),
-					MessageBoxButton.Close,
-					MessageBoxIcon.Error);
-			}
-		}
 
 		private static void OnFetchClick(object sender, EventArgs e)
 		{
 			var item = (ToolStripItem)sender;
 			var repository = (Repository)item.Tag;
 			var parent = Utility.GetParentControl(item);
-			try
-			{
-				repository.Remotes.FetchAsync().Invoke<ProgressForm>(parent);
-			}
-			catch(GitException exc)
-			{
-				GitterApplication.MessageBoxService.Show(
-					parent,
-					exc.Message,
-					Resources.ErrFailedToFetch,
-					MessageBoxButton.Close,
-					MessageBoxIcon.Error);
-			}
-		}
 
+			GuiCommands.Fetch(parent, repository);
+			}
 
 		private static void OnPullClick(object sender, EventArgs e)
 		{
-			var item = (ToolStripItem)sender;
+			var item       = (ToolStripItem)sender;
 			var repository = (Repository)item.Tag;
-			var parent = Utility.GetParentControl(item);
-			try
-			{
-				repository.Remotes.PullAsync().Invoke<ProgressForm>(parent);
-			}
-			catch(GitException exc)
-			{
-				GitterApplication.MessageBoxService.Show(
-					parent,
-					exc.Message,
-					Resources.ErrFailedToPull,
-					MessageBoxButton.Close,
-					MessageBoxIcon.Error);
-			}
+			var parent     = Utility.GetParentControl(item);
+
+			GuiCommands.Pull(parent, repository);
 		}
 		private static void OnFetchFromClick(object sender, EventArgs e)
 		{
-			var item = (ToolStripItem)sender;
-			var remote = (Remote)item.Tag;
-			var parent = Utility.GetParentControl(item);
-			try
+			var item       = (ToolStripItem)sender;
+			var remote     = (Remote)item.Tag;
+			var repository = remote.Repository;
+			var parent     = Utility.GetParentControl(item);
+
+			if(!remote.IsDeleted)
 			{
-				remote.FetchAsync().Invoke<ProgressForm>(parent);
-			}
-			catch(GitException exc)
-			{
-				GitterApplication.MessageBoxService.Show(
-					parent,
-					exc.Message,
-					string.Format(Resources.ErrFailedToFetchFrom, remote.Name),
-					MessageBoxButton.Close,
-					MessageBoxIcon.Error);
+				GuiCommands.Fetch(parent, repository);
 			}
 		}
 
 		private static void OnPullFromClick(object sender, EventArgs e)
 		{
-			var item = (ToolStripItem)sender;
-			var remote = (Remote)item.Tag;
-			var parent = Utility.GetParentControl(item);
-			try
+			var item       = (ToolStripItem)sender;
+			var remote     = (Remote)item.Tag;
+			var repository = remote.Repository;
+			var parent     = Utility.GetParentControl(item);
+
+			if(!remote.IsDeleted)
 			{
-				remote.PullAsync().Invoke<ProgressForm>(parent);
-			}
-			catch(GitException exc)
-			{
-				GitterApplication.MessageBoxService.Show(
-					parent,
-					exc.Message,
-					string.Format(Resources.ErrFailedToPullFrom, remote.Name),
-					MessageBoxButton.Close,
-					MessageBoxIcon.Error);
+				GuiCommands.Pull(parent, remote);
 			}
 		}
 
@@ -2343,7 +2033,7 @@ namespace gitter.Git.Gui
 
 		static void OnRefreshSubmodulesClick(object sender, EventArgs e)
 		{
-			var item = (ToolStripItem)sender;
+			var item       = (ToolStripItem)sender;
 			var repository = (Repository)item.Tag;
 
 			repository.Submodules.Refresh();
@@ -2363,44 +2053,20 @@ namespace gitter.Git.Gui
 
 		static void OnUpdateSubmoduleClick(object sender, EventArgs e)
 		{
-			var item = (ToolStripItem)sender;
+			var item      = (ToolStripItem)sender;
 			var submodule = (Submodule)item.Tag;
-			var parent = Utility.GetParentControl(item);
+			var parent    = Utility.GetParentControl(item);
 
-			try
-			{
-				submodule.UpdateAsync().Invoke<ProgressForm>(parent);
-			}
-			catch(GitException exc)
-			{
-				GitterApplication.MessageBoxService.Show(
-					parent,
-					exc.Message,
-					string.Format(Resources.ErrFailedToUpdateSubmodule, submodule.Name),
-					MessageBoxButton.Close,
-					MessageBoxIcon.Error);
-			}
+			GuiCommands.UpdateSubmodule(parent, submodule);
 		}
 
 		static void OnUpdateSubmodulesClick(object sender, EventArgs e)
 		{
-			var item = (ToolStripItem)sender;
+			var item       = (ToolStripItem)sender;
 			var submodules = (SubmodulesCollection)item.Tag;
-			var parent = Utility.GetParentControl(item);
+			var parent     = Utility.GetParentControl(item);
 
-			try
-			{
-				submodules.UpdateAsync().Invoke<ProgressForm>(parent);
-			}
-			catch(GitException exc)
-			{
-				GitterApplication.MessageBoxService.Show(
-					parent,
-					exc.Message,
-					Resources.ErrFailedToUpdateSubmodule,
-					MessageBoxButton.Close,
-					MessageBoxIcon.Error);
-			}
+			GuiCommands.UpdateSubmodules(parent, submodules);
 		}
 
 		#endregion
@@ -2766,10 +2432,7 @@ namespace gitter.Git.Gui
 
 			GitterApplication.WorkingEnvironment.ViewDockService.ShowView(
 				Views.Guids.BlameViewGuid,
-				new Dictionary<string, object>()
-				{
-					{ "blame", data }
-				});
+				new Views.BlameViewModel(data));
 		}
 
 		private static void OnPathHistoryClick(object sender, EventArgs e)
@@ -2779,10 +2442,7 @@ namespace gitter.Git.Gui
 
 			GitterApplication.WorkingEnvironment.ViewDockService.ShowView(
 				Views.Guids.PathHistoryViewGuid,
-				new Dictionary<string, object>()
-				{
-					{ "source", data }
-				});
+				new Views.HistoryViewModel(data));
 		}
 
 		private static void OnResolveConflictItemClick(object sender, EventArgs e)
@@ -3012,20 +2672,22 @@ namespace gitter.Git.Gui
 						}
 						break;
 					default:
-                        try
+						ProgressForm.MonitorTaskAsModalWindow(parent, Resources.StrRunningMergeTool,
+							(p, c) => file.RunMergeToolAsync(tool, p, c));
+                      /*  try
                         {
                             file.RunMergeToolAsync(tool).Invoke<ProgressForm>(parent);
                         }
                         catch (Exception)
                         {
                             file.RunMergeToolExternalAsync().Invoke<ProgressForm>(parent);
-                        }
+                        }*/
 						break;
 				}
 			}
 			catch(GitException exc)
 			{
-				    GitterApplication.MessageBoxService.Show(
+				GitterApplication.MessageBoxService.Show(
 					parent,
 					exc.Message,
 					Resources.ErrFailedToRunMergeTool,
@@ -3266,24 +2928,36 @@ namespace gitter.Git.Gui
 						var gitAccessor = ((IGitRepository)parameter.Repository).Accessor.GitAccessor;
 						try
 						{
-							gitAccessor.UnsetConfigValue(
+							gitAccessor.UnsetConfigValue.Invoke(
 								new UnsetConfigValueParameters()
 								{
 									ConfigFile = Git.ConfigFile.User,
 									ParameterName = parameter.Name,
 								});
 						}
-						catch { }
+						catch(Exception exception)
+						{
+							if(exception.IsCritical())
+							{
+								throw;
+							}
+						}
 						try
 						{
-							gitAccessor.UnsetConfigValue(
+							gitAccessor.UnsetConfigValue.Invoke(
 								new UnsetConfigValueParameters()
 								{
 									ConfigFile = Git.ConfigFile.System,
 									ParameterName = parameter.Name,
 								});
 						}
-						catch { }
+						catch(Exception exception)
+						{
+							if(exception.IsCritical())
+							{
+								throw;
+							}
+						}
 						parameter.Refresh();
 					}
 				}
@@ -3810,31 +3484,23 @@ namespace gitter.Git.Gui
 					}
 				}
 			}
-			catch
+			catch(Exception exc)
 			{
+				if(exc.IsCritical())
+			{
+					throw;
+				}
 			}
 			process.Dispose();
 		}
 
 		private static void OnCompressRepositoryClick(object sender, EventArgs e)
 		{
-			var item = (ToolStripItem)sender;
-			var parent = Utility.GetParentControl(item);
-			var repo = (Repository)item.Tag;
+			var item       = (ToolStripItem)sender;
+			var repository = (Repository)item.Tag;
+			var parent     = Utility.GetParentControl(item);
 
-			try
-			{
-				repo.GarbageCollectAsync().Invoke<ProgressForm>(parent);
-			}
-			catch(GitException exc)
-			{
-				GitterApplication.MessageBoxService.Show(
-					parent,
-					exc.Message,
-					Resources.ErrFailedToCompressRepository,
-					MessageBoxButton.Close,
-					MessageBoxIcon.Error);
-			}
+			GuiCommands.GarbageCollect(parent, repository);
 		}
 
 		private static void OnOpenCmdAtItemClick(object sender, EventArgs e)
@@ -3871,10 +3537,7 @@ namespace gitter.Git.Gui
 
 			GitterApplication.WorkingEnvironment.ViewDockService.ShowView(
 				Views.Guids.DiffViewGuid,
-				new Dictionary<string, object>()
-				{
-					{ "source", diffSource }
-				});
+				new Views.DiffViewModel(diffSource, null));
 		}
 
 		private static void OnViewTreeItemClick(object sender, EventArgs e)
@@ -3884,10 +3547,7 @@ namespace gitter.Git.Gui
 
 			GitterApplication.WorkingEnvironment.ViewDockService.ShowView(
 				Views.Guids.TreeViewGuid,
-				new Dictionary<string, object>()
-				{
-					{ "tree", new RevisionTreeSource(revPtr) }
-				});
+				new Views.TreeViewModel(new RevisionTreeSource(revPtr)));
 		}
 
 		private static void OnResolveConflictsClick(object sender, EventArgs e)

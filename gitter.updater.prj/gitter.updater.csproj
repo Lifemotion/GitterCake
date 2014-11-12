@@ -36,10 +36,8 @@
   <PropertyGroup>
     <ApplicationIcon>app.ico</ApplicationIcon>
   </PropertyGroup>
-  <PropertyGroup />
-  <PropertyGroup />
   <PropertyGroup>
-    <ApplicationManifest>gitter.updater.manifest</ApplicationManifest>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -123,7 +121,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="app.config" />
-    <None Include="gitter.updater.manifest" />
+    <None Include="app.manifest" />
     <None Include="Properties\postbuild.cmd" />
   </ItemGroup>
   <ItemGroup>

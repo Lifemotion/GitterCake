@@ -46,6 +46,8 @@ namespace gitter.Git.Gui.Views
 		private readonly ToolStripMenuItem _mnuIgnoreWhitespace;
 		private readonly ToolStripMenuItem _mnuUsePatienceAlgorithm;
 		private readonly ToolStripMenuItem _mnuBinaryDiff;
+		private readonly ToolStripButton _btnSingleMode;
+		private readonly ToolStripButton _btnSplitMode;
 
 		#endregion
 
@@ -100,8 +102,28 @@ namespace gitter.Git.Gui.Views
 					Checked = _diffView.DiffOptions.Binary,
 				});
 
+			Items.Add(_btnSplitMode = new ToolStripButton(Resources.StrDiffSplitView, CachedResources.Bitmaps["ImgDiffSplitView"], (s, e) => _diffView.ViewMode = DiffViewMode.Split)
+				{
+					DisplayStyle = ToolStripItemDisplayStyle.Image,
+					Alignment = ToolStripItemAlignment.Right,
+					Checked = _diffView.ViewMode == DiffViewMode.Split,
+				});
+			Items.Add(_btnSingleMode = new ToolStripButton(Resources.StrDiffSingleView, CachedResources.Bitmaps["ImgDiffSingleView"], (s, e) => _diffView.ViewMode = DiffViewMode.Single)
+				{
+					DisplayStyle = ToolStripItemDisplayStyle.Image,
+					Alignment = ToolStripItemAlignment.Right,
+					Checked = _diffView.ViewMode == DiffViewMode.Single,
+				});
+
 			_contextTextBox.TextChanged += OnContextTextChanged;
 			_contextTextBox.KeyPress += (sender, e) => e.Handled = !char.IsNumber(e.KeyChar);
+			_diffView.ViewModeChanged += OnDiffViewViewModeChanged;
+		}
+
+		private void OnDiffViewViewModeChanged(object sender, EventArgs e)
+		{
+			_btnSingleMode.Checked = _diffView.ViewMode == DiffViewMode.Single;
+			_btnSplitMode.Checked  = _diffView.ViewMode == DiffViewMode.Split;
 		}
 
 		private void OnContextTextChanged(object sender, EventArgs e)
@@ -117,21 +139,21 @@ namespace gitter.Git.Gui.Views
 		{
 			_diffView.DiffOptions.IgnoreWhitespace = !_diffView.DiffOptions.IgnoreWhitespace;
 			_mnuIgnoreWhitespace.Checked = _diffView.DiffOptions.IgnoreWhitespace;
-			_diffView.Reload();
+			_diffView.RefreshContent();
 		}
 
 		private void OnUsePatienceAlgorithmClick(object sender, EventArgs e)
 		{
 			_diffView.DiffOptions.UsePatienceAlgorithm = !_diffView.DiffOptions.UsePatienceAlgorithm;
 			_mnuUsePatienceAlgorithm.Checked = _diffView.DiffOptions.UsePatienceAlgorithm;
-			_diffView.Reload();
+			_diffView.RefreshContent();
 		}
 
 		private void OnBinaryClick(object sender, EventArgs e)
 		{
 			_diffView.DiffOptions.Binary = !_diffView.DiffOptions.Binary;
 			_mnuBinaryDiff.Checked = _diffView.DiffOptions.Binary;
-			_diffView.Reload();
+			_diffView.RefreshContent();
 		}
 
 		private void SetContext(int context)
@@ -147,7 +169,7 @@ namespace gitter.Git.Gui.Views
 			if(_diffView.DiffOptions.Context != context)
 			{
 				_diffView.DiffOptions.Context = context;
-				_diffView.Reload();
+				_diffView.RefreshContent();
 				_contextTextBox.Text = context.ToString(CultureInfo.InvariantCulture);
 			}
 		}

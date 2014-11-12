@@ -1,7 +1,7 @@
 #region Copyright Notice
 /*
  * gitter - VCS repository management tool
- * Copyright (C) 2013  Popovskiy Maxim Vladimirovitch <amgine.gitter@gmail.com>
+ * Copyright (C) 2014  Popovskiy Maxim Vladimirovitch <amgine.gitter@gmail.com>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,13 +21,22 @@
 namespace gitter.Git
 {
 	using System;
+	using System.Threading;
+	using System.Threading.Tasks;
+
+	using gitter.Framework;
 
 	/// <summary>Represents a branch on remote repository (not a remote tracking branch).</summary>
 	public sealed class RemoteRepositoryBranch: BaseRemoteReference
 	{
-		internal RemoteRepositoryBranch(RemoteReferencesCollection refs, string name, string hash)
+		internal RemoteRepositoryBranch(RemoteReferencesCollection refs, string name, Hash hash)
 			: base(refs, name, hash)
 		{
+		}
+
+		public override ReferenceType ReferenceType
+		{
+			get { return ReferenceType.LocalBranch; }
 		}
 
 		protected override void DeleteCore()
@@ -35,9 +44,9 @@ namespace gitter.Git
 			References.RemoveBranch(this);
 		}
 
-		public override ReferenceType ReferenceType
+		protected override Task DeleteCoreAsync(IProgress<OperationProgress> progress, CancellationToken cancellationToken)
 		{
-			get { return ReferenceType.LocalBranch; }
+			return References.RemoveBranchAsync(this, progress, cancellationToken);
 		}
 	}
 }

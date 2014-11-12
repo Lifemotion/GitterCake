@@ -108,8 +108,12 @@ namespace gitter.Git.Gui.Dialogs
 			{
 				_downloader = MSysGitDownloader.EndCreate(ar);
 			}
-			catch
+			catch(Exception exc)
 			{
+				if(exc.IsCritical())
+				{
+					throw;
+				}
 				_downloader = null;
 			}
 			if(!Disposing && !IsDisposed)
@@ -118,8 +122,12 @@ namespace gitter.Git.Gui.Dialogs
 				{
 					BeginInvoke(new MethodInvoker(UpdateLatestVersion));
 				}
-				catch
+				catch(Exception exc)
 				{
+					if(exc.IsCritical())
+					{
+						throw;
+					}
 				}
 			}
 		}
@@ -131,11 +139,15 @@ namespace gitter.Git.Gui.Dialogs
 				Version currentVersion = null;
 				try
 				{
-					GitRepositoryProvider.GitAccessor.RefreshGitVersion();
+					GitRepositoryProvider.GitAccessor.InvalidateGitVersion();
 					currentVersion = GitRepositoryProvider.GitAccessor.GitVersion;
 				}
-				catch
+				catch(Exception exc)
 				{
+					if(exc.IsCritical())
+					{
+						throw;
+					}
 				}
 				_lnkDownload.Visible =
 					(currentVersion == null) ||
@@ -202,11 +214,15 @@ namespace gitter.Git.Gui.Dialogs
 			Version gitVersion;
 			try
 			{
-				GitRepositoryProvider.GitAccessor.RefreshGitVersion();
+				GitRepositoryProvider.GitAccessor.InvalidateGitVersion();
 				gitVersion = GitRepositoryProvider.GitAccessor.GitVersion;
 			}
-			catch
+			catch(Exception exc)
 			{
+				if(exc.IsCritical())
+				{
+					throw;
+				}
 				gitVersion = null;
 			}
 			_installedVersion = gitVersion;
@@ -225,7 +241,7 @@ namespace gitter.Git.Gui.Dialogs
 
 		private void OnConfigureClick(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			using(var dlg = new GitOptionsPage(_environment))
+			using(var dlg = new GitOptionsPage(_gitRepositoryProvider))
 			{
 				if(dlg.Run(this) == DialogResult.OK)
 				{

@@ -1865,8 +1865,8 @@ a new history totally disconnected from all the other branches and commits.</val
   <data name="StrTrackingBranches" xml:space="preserve">
     <value>Tracking Branches</value>
   </data>
-  <data name="StrFetchingLog" xml:space="preserve">
-    <value>Fetching Log</value>
+  <data name="StrsFetchingLog" xml:space="preserve">
+    <value>Fetching log</value>
   </data>
   <data name="StrFind" xml:space="preserve">
     <value>Find</value>
@@ -2607,6 +2607,22 @@ Reset existing branch instead of creating a new one?</value>
   <data name="StrsFetchRemote" xml:space="preserve">
     <value>Fetch remote</value>
   </data>
+  <data name="StrsFailedToFetchTree" xml:space="preserve">
+    <value>Failed to fetch tree data.</value>
+  </data>
+  <data name="ImgDiffSingleView" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\diff-single-view.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ImgDiffSplitView" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\diff-split-view.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="StrDiffSingleView" xml:space="preserve">
+    <value>Single View</value>
+  </data>
+  <data name="StrDiffSplitView" xml:space="preserve">
+    <value>Split View</value>
+  </data>
+
   <data name="StrAdditional" xml:space="preserve">
     <value>Additional</value>
   </data>

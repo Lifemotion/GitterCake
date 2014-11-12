@@ -1,7 +1,7 @@
 #region Copyright Notice
 /*
  * gitter - VCS repository management tool
- * Copyright (C) 2013  Popovskiy Maxim Vladimirovitch <amgine.gitter@gmail.com>
+ * Copyright (C) 2014  Popovskiy Maxim Vladimirovitch <amgine.gitter@gmail.com>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,10 @@
 namespace gitter.Git
 {
 	using System;
+	using System.Threading;
+	using System.Threading.Tasks;
+
+	using gitter.Framework;
 
 	/// <summary>Represents a reference on remote repository.</summary>
 	public interface IRemoteReference
@@ -34,12 +38,14 @@ namespace gitter.Git
 		string Name { get; }
 
 		/// <summary>Commit hash.</summary>
-		string Hash { get; }
+		Hash Hash { get; }
 
 		ReferenceType ReferenceType { get; }
 
 		/// <summary>Remove reference from remote repository.</summary>
 		void Delete();
+
+		Task DeleteAsync(IProgress<OperationProgress> progress, CancellationToken cancellationToken);
 
 		bool IsDeleted { get; }
 	}

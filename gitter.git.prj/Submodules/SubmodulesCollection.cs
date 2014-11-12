@@ -23,6 +23,8 @@ namespace gitter.Git
 	using System;
 	using System.IO;
 	using System.Collections.Generic;
+	using System.Threading;
+	using System.Threading.Tasks;
 
 	using gitter.Framework;
 
@@ -47,35 +49,29 @@ namespace gitter.Git
 			return new SubmoduleEventArgs(item);
 		}
 
-		public void Update()
+		private SubmoduleUpdateParameters GetUpdateParameters()
 		{
-			Repository.Accessor.UpdateSubmodule(
-				new SubmoduleUpdateParameters()
-				{
-					Recursive = true,
-					Init = true,
-				});
+			return new SubmoduleUpdateParameters()
+			{
+				Recursive = true,
+				Init = true,
+			};
 		}
 
-		public IAsyncAction UpdateAsync()
+		public void Update()
 		{
-			return AsyncAction.Create(
-				new
-				{
-					Repository = Repository,
-					Parameters =
-						new SubmoduleUpdateParameters()
-						{
-							Recursive = true,
-							Init = true,
-						},
-				},
-				(data, monitor) =>
-				{
-					data.Repository.Accessor.UpdateSubmodule(data.Parameters);
-				},
-				Resources.StrUpdate,
-				Resources.StrFetchingDataFromRemoteRepository);
+			var parameters = GetUpdateParameters();
+			Repository.Accessor.UpdateSubmodule.Invoke(parameters);
+		}
+
+		public Task UpdateAsync(IProgress<OperationProgress> progress, CancellationToken cancellationToken)
+		{
+			if(progress != null)
+			{
+				progress.Report(new OperationProgress(Resources.StrsUpdatingSubmodules.AddEllipsis()));
+			}
+			var parameters = GetUpdateParameters();
+			return Repository.Accessor.UpdateSubmodule.InvokeAsync(parameters, progress, cancellationToken);
 		}
 
 		public bool ExistsPath(string path)
@@ -196,7 +192,7 @@ namespace gitter.Git
 				{
 					try
 					{
-						Repository.Accessor.AddSubmodule(
+						Repository.Accessor.AddSubmodule.Invoke(
 							new AddSubmoduleParameters()
 							{
 								Branch = branch,
@@ -227,8 +223,12 @@ namespace gitter.Git
 				{
 					cfgFile = new ConfigurationFile(Repository, GitConstants.SubmodulesConfigFile, true);
 				}
-				catch
+				catch(Exception exc)
 				{
+					if(exc.IsCritical())
+					{
+						throw;
+					}
 					skipUpdate = true;
 				}
 				if(cfgFile != null)

@@ -91,15 +91,22 @@ namespace gitter.Git.Gui.Controls
 				{
 					var p = repository.GetRevisionPointer(Text.Trim());
 					var revision = p.Dereference();
-					if(!revision.IsLoaded)
+					if(revision != null && !revision.IsLoaded)
 					{
 						revision.Load();
 					}
 					_revisionToolTip.Revision = revision;
-					_revisionToolTip.Show(this, new Point(0, Height + 1));
+					if(revision != null)
+					{
+						_revisionToolTip.Show(this, new Point(0, Height + 1));
+					}
 				}
-				catch
+				catch(Exception exc)
 				{
+					if(exc.IsCritical())
+					{
+						throw;
+					}
 					_revisionToolTip.Revision = null;
 				}
 			}

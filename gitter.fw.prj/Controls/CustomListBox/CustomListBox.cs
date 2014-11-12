@@ -40,7 +40,7 @@ namespace gitter.Framework.Controls
 	{
 		#region Constants
 
-		protected const int DEFAULT_ITEM_HEIGHT = 21;
+		protected static readonly int DEFAULT_ITEM_HEIGHT = SystemInformation.SmallIconSize.Height + 5;
 
 		#endregion
 
@@ -708,10 +708,10 @@ namespace gitter.Framework.Controls
 		public int ItemHeight
 		{
 			get { return _itemHeight; }
-			set
+			protected set
 			{
 				Verify.Argument.IsPositive(value, "value");
-              
+
 				if(_itemHeight != value)
 				{
 					_itemHeight = value;
@@ -970,7 +970,7 @@ namespace gitter.Framework.Controls
 		}
 
 		/// <summary>Progress monitor for actions which update list contents.</summary>
-		public IAsyncProgressMonitor ProgressMonitor
+		public IProgress<OperationProgress> ProgressMonitor
 		{
 			get { return _processOverlay; }
 		}
@@ -1198,7 +1198,7 @@ namespace gitter.Framework.Controls
 			int maxw = column.MinWidth;
 			foreach(var item in _itemPlainList)
 			{
-				var s = item.MeasureSubItem(new SubItemMeasureEventArgs(Utility.MeasurementGraphics, index, column));
+				var s = item.MeasureSubItem(new SubItemMeasureEventArgs(GraphicsUtility.MeasurementGraphics, index, column));
 				if(s.Width > maxw) maxw = s.Width;
 			}
 			return maxw;
@@ -2436,9 +2436,7 @@ namespace gitter.Framework.Controls
 			switch(_oldHitTestResult.Area)
 			{
 				case HitTestArea.Item:
-					if(_itemFocus.IsTracked)
-					{
-						if(_oldHitTestResult.ItemPart != ItemHitTestResults.PlusMinus)
+					if(_oldHitTestResult.ItemPart >= 0 && _itemFocus.IsTracked && _itemFocus.Index >= 0 && _itemFocus.Index < _itemPlainList.Count)
 						{
 							var item = _itemPlainList[_itemFocus.Index];
 							item.OnDoubleClick(_mouseDownX, _mouseDownY);
@@ -2447,12 +2445,11 @@ namespace gitter.Framework.Controls
 								item.Activate();
 							}
 						}
-					}
 					break;
 				case HitTestArea.Header:
 					bool isOverLeftResizeGrip = _oldHitTestResult.ItemPart == ColumnHitTestResults.LeftResizer;
 					bool isOverRightResizeGrip = _oldHitTestResult.ItemPart == ColumnHitTestResults.RightResizer;
-					if (isOverLeftResizeGrip || isOverRightResizeGrip)
+					if(isOverLeftResizeGrip || isOverRightResizeGrip)
 					{
 						var index = _oldHitTestResult.ItemIndex;
 						if(index != -1)
@@ -2523,7 +2520,7 @@ namespace gitter.Framework.Controls
 						if(c.ContentWidth <= 0)
 						{
 							int max = 0;
-							var args = new SubItemMeasureEventArgs(Utility.MeasurementGraphics, c.Index, c);
+							var args = new SubItemMeasureEventArgs(GraphicsUtility.MeasurementGraphics, c.Index, c);
 							foreach(var item in _itemPlainList)
 							{
 								var width = item.MeasureSubItem(args).Width;
@@ -2867,7 +2864,7 @@ namespace gitter.Framework.Controls
 
 			if(_itemPlainList.Count == 0)
 			{
-				if(_processOverlay.Visible)
+				if(_processOverlay.IsVisible)
 				{
 					graphics.SetClip(clip);
 					var overlayBounds = GetOverlayBounds();
@@ -2905,7 +2902,7 @@ namespace gitter.Framework.Controls
 					++index;
 				}
 
-				if(_processOverlay.Visible)
+				if(_processOverlay.IsVisible)
 				{
 					var overlayBounds = GetOverlayBounds();
 					var overlayClip = Rectangle.Intersect(clip, overlayBounds);
@@ -2946,8 +2943,8 @@ namespace gitter.Framework.Controls
 		protected override void OnPaintClientArea(PaintEventArgs paintEventArgs)
 		{
 			var graphics = paintEventArgs.Graphics;
-			graphics.TextRenderingHint = Utility.TextRenderingHint;
-			graphics.TextContrast = Utility.TextContrast;
+			graphics.TextRenderingHint = GraphicsUtility.TextRenderingHint;
+			graphics.TextContrast      = GraphicsUtility.TextContrast;
 
 			PaintHeaders(paintEventArgs);
 			PaintItems(paintEventArgs);

@@ -171,4 +171,7 @@
   <data name="StrInstall" xml:space="preserve">
     <value>Install</value>
   </data>
+  <data name="StrsConnectingToRemoteHost" xml:space="preserve">
+    <value>Connecting to remote host</value>
+  </data>
 </root>

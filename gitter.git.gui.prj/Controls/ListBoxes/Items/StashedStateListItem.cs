@@ -49,8 +49,12 @@ namespace gitter.Git.Gui.Controls
 			{
 				return CompareByIndex(i1, i2);
 			}
-			catch
+			catch(Exception exc)
 			{
+				if(exc.IsCritical())
+				{
+					throw;
+				}
 				return 0;
 			}
 		}
@@ -103,7 +107,7 @@ namespace gitter.Git.Gui.Controls
 			switch((ColumnId)measureEventArgs.SubItemId)
 			{
 				case ColumnId.Hash:
-					return HashColumn.OnMeasureSubItem(measureEventArgs, DataContext.Revision.Hash);
+					return HashColumn.OnMeasureSubItem(measureEventArgs, DataContext.Revision.HashString);
 				case ColumnId.Name:
 				case ColumnId.Subject:
 					return SubjectColumn.OnMeasureSubItem(measureEventArgs, DataContext.Revision.Subject);
@@ -131,7 +135,7 @@ namespace gitter.Git.Gui.Controls
 			switch((ColumnId)paintEventArgs.SubItemId)
 			{
 				case ColumnId.Hash:
-					HashColumn.OnPaintSubItem(paintEventArgs, DataContext.Revision.Hash);
+					HashColumn.OnPaintSubItem(paintEventArgs, DataContext.Revision.HashString);
 					break;
 				case ColumnId.Name:
 				case ColumnId.Subject:

@@ -25,6 +25,11 @@ namespace gitter.Git.AccessLayer
 
 	public sealed class RebaseParameters
 	{
+		public RebaseParameters(RebaseControl control)
+		{
+			Control = control;
+		}
+
 		public RebaseParameters(string onto, string branch, string target)
 		{
 			NewBase = onto;
@@ -42,6 +47,8 @@ namespace gitter.Git.AccessLayer
 		{
 			Upstream = target;
 		}
+
+		public RebaseControl? Control { get; set; }
 
 		public string NewBase { get; set; }
 

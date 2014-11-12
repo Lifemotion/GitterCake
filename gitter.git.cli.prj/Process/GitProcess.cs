@@ -21,10 +21,10 @@
 namespace gitter.Git.AccessLayer.CLI
 {
 	using System;
-	using System.Collections.Specialized;
-	using System.Text;
-	using System.IO;
 	using System.Diagnostics;
+	using System.IO;
+	using System.Reflection;
+	using System.Text;
 
 	using gitter.Framework.CLI;
 
@@ -47,8 +47,12 @@ namespace gitter.Git.AccessLayer.CLI
 							return path;
 						}
 					}
-					catch
+					catch(Exception exc)
 					{
+						if(exc.IsCritical())
+						{
+							throw;
+						}
 					}
 				}
 			}
@@ -114,56 +118,35 @@ namespace gitter.Git.AccessLayer.CLI
 
 		public static Version CheckVersion(string gitExe)
 		{
-			var output = Exec(new GitInput(new Command("--version")));
+			var stdErrReceiver = new AsyncTextReader();
+			var stdOutReceiver = new AsyncTextReader();
+			var executor = new GitProcessExecutor(gitExe);
+			var exitCode = executor.Execute(new GitInput(new Command("--version")), stdOutReceiver, stdErrReceiver);
+			var output = new GitOutput(stdOutReceiver.GetText(), stdErrReceiver.GetText(), exitCode);
 			output.ThrowOnBadReturnCode();
 			var parser = new GitParser(output.Output);
 			return parser.ReadVersion();
 		}
 
-		private static void EnsureEnvironmentVariableExists(ProcessStartInfo psi, string variable, string value, bool resetIfExists = false)
-		{
-			EnsureEnvironmentVariableExists(psi.EnvironmentVariables, variable, value, resetIfExists);
-		}
-
-		private static void EnsureEnvironmentVariableExists(StringDictionary dictionary, string variable, string value, bool resetIfExists = false)
-		{
-			if(!dictionary.ContainsKey(variable))
-			{
-				dictionary.Add(variable, value);
-			}
-			else if(resetIfExists)
-			{
-				dictionary[variable] = value;
-			}
-		}
-
 		public static void SetCriticalEnvironmentVariables(ProcessStartInfo psi)
 		{
-			EnsureEnvironmentVariableExists(psi, GitEnvironment.PlinkProtocol, "ssh");
-			EnsureEnvironmentVariableExists(psi, GitEnvironment.Home, UserProfile);
-			EnsureEnvironmentVariableExists(psi, GitEnvironment.GitAskPass, _askPassUtilityPath);
-			EnsureEnvironmentVariableExists(psi, GitEnvironment.SshAskPass, _askPassUtilityPath);
-			EnsureEnvironmentVariableExists(psi, GitEnvironment.Display, "localhost:0.0");
+			psi.EnsureEnvironmentVariableExists(GitEnvironment.PlinkProtocol, "ssh");
+			psi.EnsureEnvironmentVariableExists(GitEnvironment.Home, UserProfile);
+			psi.EnsureEnvironmentVariableExists(GitEnvironment.GitAskPass, _askPassUtilityPath);
+			psi.EnsureEnvironmentVariableExists(GitEnvironment.SshAskPass, _askPassUtilityPath);
+			psi.EnsureEnvironmentVariableExists(GitEnvironment.Display, "localhost:0.0");
 		}
 
-		private static Encoding _defaultEncoding;
+		private static Encoding _defaultEncoding = Encoding.UTF8;
 		private static bool _enableCodepageFallback;
 		private static string _gitInstallationPath;
-		private static string _askPassUtilityPath;
+		private static string _askPassUtilityPath = Path.Combine(
+				Path.GetDirectoryName(Assembly.GetEntryAssembly().Location),
+				"gitter.askpass.exe");
 		private static string _gitExePath;
 		private static string _shExePath;
 		private static string _gitkCmdPath;
-		private static readonly string UserProfile;
-
-		static GitProcess()
-		{
-			UserProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-			DefaultEncoding = Encoding.UTF8;
-
-			_askPassUtilityPath = Path.Combine(
-				Path.GetDirectoryName(Environment.GetCommandLineArgs()[0]),
-				"gitter.askpass.exe");
-		}
+		private static readonly string UserProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
 		public static Encoding DefaultEncoding
 		{
@@ -189,20 +172,6 @@ namespace gitter.Git.AccessLayer.CLI
 						DefaultEncoding = Encoding.UTF8;
 					}
 				}
-			}
-		}
-
-		public static void UpdateGitExePath(GitCLI gitCLI)
-		{
-			Verify.Argument.IsNotNull(gitCLI, "gitCLI");
-
-			if(gitCLI.AutodetectGitExePath)
-			{
-				GitExePath = DetectGitExePath();
-			}
-			else
-			{
-				GitExePath = gitCLI.ManualGitExePath;
 			}
 		}
 
@@ -275,8 +244,12 @@ namespace gitter.Git.AccessLayer.CLI
 				{
 					return File.Exists(_shExePath);
 				}
-				catch
+				catch(Exception exc)
 				{
+					if(exc.IsCritical())
+					{
+						throw;
+					}
 					return false;
 				}
 			}
@@ -308,8 +281,12 @@ namespace gitter.Git.AccessLayer.CLI
 				{
 					return File.Exists(_gitkCmdPath);
 				}
-				catch
+				catch(Exception exc)
 				{
+					if(exc.IsCritical())
+					{
+						throw;
+					}
 					return false;
 				}
 			}
@@ -332,61 +309,18 @@ namespace gitter.Git.AccessLayer.CLI
 			return Process.Start(psi);
 		}
 
-		public static GitOutput Exec(GitInput input)
+		public static GitOutput Execute(GitInput input)
 		{
 			Verify.Argument.IsNotNull(input, "input");
 
 			var stdOutReader = new AsyncTextReader();
 			var stdErrReader = new AsyncTextReader();
-			var executor = CreateExecutor(stdOutReader, stdErrReader);
-			var exitCode = executor.Execute(input);
+			var executor = new GitProcessExecutor(GitExePath);
+			var exitCode = executor.Execute(input, stdOutReader, stdErrReader);
 			return new GitOutput(
 				stdOutReader.GetText(),
 				stdErrReader.GetText(),
 				exitCode);
-		}
-
-		public static ProcessExecutor CreateExecutor(IOutputReceiver stdOutReceiver, IOutputReceiver stdErrReceiver)
-		{
-			return new ProcessExecutor(_gitExePath, stdOutReceiver, stdErrReceiver);
-		}
-
-		public static GitAsync ExecAsync(GitInput input)
-		{
-			Verify.Argument.IsNotNull(input, "input");
-
-			var psi = new ProcessStartInfo()
-			{
-				Arguments = input.GetArguments(),
-				WindowStyle = ProcessWindowStyle.Normal,
-				UseShellExecute = false,
-				StandardOutputEncoding = input.Encoding,
-				StandardErrorEncoding = input.Encoding,
-				RedirectStandardInput = true,
-				RedirectStandardOutput = true,
-				RedirectStandardError = true,
-				LoadUserProfile = true,
-				FileName = _gitExePath,
-				ErrorDialog = false,
-				CreateNoWindow = true,
-			};
-			if(!string.IsNullOrEmpty(input.WorkingDirectory))
-			{
-				psi.WorkingDirectory = input.WorkingDirectory;
-			}
-			SetCriticalEnvironmentVariables(psi);
-			if(input.Environment != null)
-			{
-				foreach(var opt in input.Environment)
-				{
-					psi.EnvironmentVariables[opt.Key] = opt.Value;
-				}
-			}
-			return new GitAsync(new Process()
-			{
-				StartInfo = psi,
-				EnableRaisingEvents = true,
-			});
 		}
 	}
 }

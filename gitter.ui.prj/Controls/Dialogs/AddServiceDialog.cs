@@ -1,7 +1,7 @@
 #region Copyright Notice
 /*
  * gitter - VCS repository management tool
- * Copyright (C) 2013  Popovskiy Maxim Vladimirovitch <amgine.gitter@gmail.com>
+ * Copyright (C) 2014  Popovskiy Maxim Vladimirovitch <amgine.gitter@gmail.com>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,102 +28,79 @@ namespace gitter.Controls
 
 	using Resources = gitter.Properties.Resources;
 
-	public partial class AddServiceDialog : DialogBase, IExecutableDialog
+	public partial class AddServiceDialog : PickerDialog<ServiceProviderPicker, IRepositoryServiceProvider>, IExecutableDialog
 	{
 		#region Data
 
 		private readonly IWorkingEnvironment _environment;
-		private Dictionary<IRepositoryServiceProvider, Control> _setupControlCache;
-		private Control _activeSetupControl;
 
 		#endregion
 
+		#region .ctor
+
 		public AddServiceDialog(IWorkingEnvironment environment)
+			: base(Resources.StrProvider.AddColon())
 		{
 			Verify.Argument.IsNotNull(environment, "environment");
 
 			_environment = environment;
-			_setupControlCache = new Dictionary<IRepositoryServiceProvider, Control>();
-
-			InitializeComponent();
 
 			Text = Resources.StrAddService;
-
-			var hs = new HashSet<IRepositoryServiceProvider>(environment.ActiveIssueTrackerProviders);
-			foreach(var prov in _environment.IssueTrackerProviders)
-			{
-				if(!hs.Contains(prov))
-				{
-					var item = new ServiceProviderListItem(prov);
-					_servicePicker.ServiceProviders.Items.Add(item);
-				}
-			}
-
-			_servicePicker.SelectedIndexChanged += OnSelectedProviderChanged;
-
-			if(_servicePicker.ServiceProviders.Items.Count != 0)
-			{
-				var item = _servicePicker.ServiceProviders.Items[0];
-				item.IsSelected = true;
-				item.Activate();
-			}
-			else
-			{
-				_servicePicker.Enabled = false;
-				_lblProvider.Enabled = false;
-			}
 		}
 
-		private void OnSelectedProviderChanged(object sender, EventArgs e)
-		{
-			var prov = _servicePicker.SelectedIssueTracker;
-			if(prov == null) return;
-			Control setupControl;
-			if(!_setupControlCache.TryGetValue(prov, out setupControl))
-			{
-				setupControl = prov.CreateSetupControl(_environment.ActiveRepository);
-				_setupControlCache.Add(prov, setupControl);
-			}
-			int d = 0;
-			if(_activeSetupControl != null)
-			{
-				d -= _activeSetupControl.Height;
-				_activeSetupControl.Parent = null;
-				_activeSetupControl = null;
-			}
-			_activeSetupControl = setupControl;
-			if(_activeSetupControl != null)
-			{
-				d += _activeSetupControl.Height;
-			}
-			Height += d;
-			if(_activeSetupControl != null)
-			{
-				_activeSetupControl.SetBounds(0, _servicePicker.Bottom + 3, Width, 0,
-					BoundsSpecified.X | BoundsSpecified.Y | BoundsSpecified.Width);
-				_activeSetupControl.Parent = this;
-			}
-		}
+		#endregion
+
+		#region Properties
 
 		protected override string ActionVerb
 		{
 			get { return Resources.StrAdd; }
 		}
 
-		public bool Execute()
+		#endregion
+
+		#region Methods
+
+		protected override void LoadItems(ServiceProviderPicker picker)
 		{
-			var prov = _servicePicker.SelectedIssueTracker;
-			if(prov == null) return false;
-			var ctl = _activeSetupControl as IExecutableDialog;
-			if(ctl != null)
+			var hs = new HashSet<IRepositoryServiceProvider>(_environment.ActiveIssueTrackerProviders);
+			foreach(var prov in _environment.IssueTrackerProviders)
 			{
-				if(!ctl.Execute()) return false;
+				if(!hs.Contains(prov))
+				{
+					var item = new ServiceProviderListItem(prov);
+					picker.DropDownItems.Add(item);
+				}
 			}
-			if(!_environment.TryLoadIssueTracker(prov))
+		}
+
+		protected override Control CreateControl(IRepositoryServiceProvider item)
+		{
+			if(item == null)
+			{
+				return null;
+			}
+			return item.CreateSetupDialog(_environment.ActiveRepository);
+		}
+
+		public override bool Execute()
+		{
+			var provider = SelectedValue;
+			if(provider == null)
+			{
+				return false;
+			}
+			if(!base.Execute())
+			{
+				return false;
+			}
+			if(!_environment.TryLoadIssueTracker(provider))
 			{
 				return false;
 			}
 			return true;
 		}
+
+		#endregion
 	}
 }

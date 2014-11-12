@@ -29,7 +29,7 @@ namespace gitter.Git.Gui
 
 	sealed class RevisionToolTip : CustomToolTip
 	{
-		private const int MaxWidth = 450;
+		private static readonly int MaxWidth = (int)((SystemInformation.SmallIconSize.Width / 16.0) * 450);
 
 		private RevisionHeaderContent _content;
 
@@ -55,7 +55,7 @@ namespace gitter.Git.Gui
 		{
 			get
 			{
-				var size = _content.OnMeasure(Utility.MeasurementGraphics, MaxWidth);
+				var size = _content.OnMeasure(GraphicsUtility.MeasurementGraphics, MaxWidth);
 				size.Height += 3;
 				return size;
 			}

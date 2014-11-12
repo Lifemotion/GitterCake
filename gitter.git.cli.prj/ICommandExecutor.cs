@@ -22,16 +22,28 @@ namespace gitter.Git.AccessLayer.CLI
 {
 	using System;
 	using System.Text;
+	using System.Threading;
+	using System.Threading.Tasks;
+
+	using gitter.Framework.CLI;
 
 	/// <summary>Git command line executor.</summary>
 	internal interface ICommandExecutor
 	{
-		GitOutput ExecCommand(Command command);
+		GitOutput ExecuteCommand(Command command, CommandExecutionFlags flags);
 
-		GitOutput ExecCommand(Command command, Encoding encoding);
+		GitOutput ExecuteCommand(Command command, Encoding encoding, CommandExecutionFlags flags);
 
-		GitAsync ExecAsync(Command command);
+		int ExecuteCommand(Command command, IOutputReceiver stdOutReceiver, IOutputReceiver stdErrReceiver, CommandExecutionFlags flags);
 
-		GitAsync ExecAsync(Command command, Encoding encoding);
+		int ExecuteCommand(Command command, Encoding encoding, IOutputReceiver stdOutReceiver, IOutputReceiver stdErrReceiver, CommandExecutionFlags flags);
+
+		Task<GitOutput> ExecuteCommandAsync(Command command, CommandExecutionFlags flags, CancellationToken cancellationToken);
+
+		Task<GitOutput> ExecuteCommandAsync(Command command, Encoding encoding, CommandExecutionFlags flags, CancellationToken cancellationToken);
+
+		Task<int> ExecuteCommandAsync(Command command, IOutputReceiver stdOutReceiver, IOutputReceiver stdErrReceiver, CommandExecutionFlags flags, CancellationToken cancellationToken);
+
+		Task<int> ExecuteCommandAsync(Command command, Encoding encoding, IOutputReceiver stdOutReceiver, IOutputReceiver stdErrReceiver, CommandExecutionFlags flags, CancellationToken cancellationToken);
 	}
 }

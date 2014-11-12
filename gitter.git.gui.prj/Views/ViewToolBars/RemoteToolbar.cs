@@ -21,14 +21,8 @@
 namespace gitter.Git.Gui.Views
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
-	using System.Linq;
-	using System.Text;
 	using System.Windows.Forms;
-
-	using gitter.Framework;
-	using gitter.Framework.Services;
 
 	using gitter.Git.Gui.Dialogs;
 
@@ -72,19 +66,7 @@ namespace gitter.Git.Gui.Views
 			var remote = _remoteView.Remote;
 			if(remote != null && !remote.IsDeleted)
 			{
-				try
-				{
-					remote.FetchAsync().Invoke<ProgressForm>(_remoteView);
-				}
-				catch(GitException exc)
-				{
-					GitterApplication.MessageBoxService.Show(
-						_remoteView,
-						exc.Message,
-						string.Format(Resources.ErrFailedToFetchFrom, remote.Name),
-						MessageBoxButton.Close,
-						MessageBoxIcon.Error);
-				}
+				GuiCommands.Fetch(_remoteView, remote);
 			}
 		}
 
@@ -93,19 +75,7 @@ namespace gitter.Git.Gui.Views
 			var remote = _remoteView.Remote;
 			if(remote != null && !remote.IsDeleted)
 			{
-				try
-				{
-					remote.PullAsync().Invoke<ProgressForm>(_remoteView);
-				}
-				catch(GitException exc)
-				{
-					GitterApplication.MessageBoxService.Show(
-						_remoteView,
-						exc.Message,
-						string.Format(Resources.ErrFailedToPullFrom, remote.Name),
-						MessageBoxButton.Close,
-						MessageBoxIcon.Error);
-				}
+				GuiCommands.Pull(_remoteView, remote);
 			}
 		}
 
@@ -114,11 +84,9 @@ namespace gitter.Git.Gui.Views
 			var remote = _remoteView.Remote;
 			if(remote != null && !remote.IsDeleted)
 			{
-				using(var dlg = new PushDialog(_remoteView.Repository)
-					{
-						Remote = remote,
-					})
+				using(var dlg = new PushDialog(_remoteView.Repository))
 				{
+					dlg.Remote.Value = remote;
 					dlg.Run(_remoteView);
 				}
 			}
@@ -129,19 +97,7 @@ namespace gitter.Git.Gui.Views
 			var remote = _remoteView.Remote;
 			if(remote != null && !remote.IsDeleted)
 			{
-				try
-				{
-					remote.PruneAsync().Invoke<ProgressForm>(_remoteView);
-				}
-				catch(GitException exc)
-				{
-					GitterApplication.MessageBoxService.Show(
-						_remoteView,
-						exc.Message,
-						string.Format(Resources.ErrFailedToPrune, remote.Name),
-						MessageBoxButton.Close,
-						MessageBoxIcon.Error);
-				}
+				GuiCommands.Prune(_remoteView, remote);
 			}
 		}
 	}

@@ -1,7 +1,7 @@
 #region Copyright Notice
 /*
  * gitter - VCS repository management tool
- * Copyright (C) 2013  Popovskiy Maxim Vladimirovitch <amgine.gitter@gmail.com>
+ * Copyright (C) 2014  Popovskiy Maxim Vladimirovitch <amgine.gitter@gmail.com>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,26 +21,45 @@
 namespace gitter.Git.AccessLayer.CLI
 {
 	using System;
-	using System.IO;
 	using System.Collections.Generic;
+	using System.IO;
+	using System.Text;
 
-	using gitter.Framework.Services;
 	using gitter.Framework.Configuration;
 
 	/// <summary>Performs repository-independent git operations.</summary>
-	internal sealed partial class GitCLI : IGitAccessor
+	internal sealed partial class GitCLI : IGitAccessor, ICliOptionsProvider
 	{
+		#region Static
+
 		private static readonly Version _minVersion = new Version(1, 7, 0, 2);
+
+		#endregion
 
 		#region Data
 
 		private readonly IGitAccessorProvider _provider;
 		private readonly ICommandExecutor _executor;
+		private readonly CommandBuilder _commandBuilder;
+		private readonly OutputParser _outputParser;
 		private Version _gitVersion;
 		private bool _autodetectGitExePath;
+		private string _manualGitExePath;
 		private string _gitExePath;
 
+		private readonly IGitAction<InitRepositoryParameters> _init;
+		private readonly IGitAction<CloneRepositoryParameters> _clone;
+		private readonly IGitFunction<QueryConfigParameters, IList<ConfigParameterData>> _queryConfig;
+		private readonly IGitFunction<QueryConfigParameterParameters, ConfigParameterData> _queryConfigParameter;
+		private readonly IGitAction<AddConfigValueParameters> _addConfigValue;
+		private readonly IGitAction<SetConfigValueParameters> _setConfigValue;
+		private readonly IGitAction<UnsetConfigValueParameters> _unsetConfigValue;
+		private readonly IGitAction<RenameConfigSectionParameters> _renameConfigSection;
+		private readonly IGitAction<DeleteConfigSectionParameters> _deleteConfigSection;
+
 		#endregion
+
+		#region .ctor
 
 		/// <summary>Initializes a new instance of the <see cref="GitCLI"/> class.</summary>
 		/// <param name="provider">Provider of this accessor.</param>
@@ -48,13 +67,29 @@ namespace gitter.Git.AccessLayer.CLI
 		{
 			Verify.Argument.IsNotNull(provider, "provider");
 
-			_provider = provider;
-			_executor = new GitCommandExecutor(this);
+			_provider             = provider;
+			_executor             = new GitCommandExecutor(this);
+			_commandBuilder       = new CommandBuilder(this);
+			_outputParser         = new OutputParser(this);
 			_autodetectGitExePath = true;
-			_gitExePath = string.Empty;
+			_manualGitExePath     = string.Empty;
 
-			GitProcess.UpdateGitExePath(this);
+			GitProcess.GitExePath = GitExecutablePath;
+
+			GitCliMethod.Create(out _init,                 this,            CommandBuilder.GetInitCommand);
+			GitCliMethod.Create(out _clone,                CommandExecutor, CommandBuilder.GetCloneCommand);
+			GitCliMethod.Create(out _queryConfig,          CommandExecutor, CommandBuilder.GetQueryConfigCommand,          OutputParser.ParseQueryConfigResults);
+			GitCliMethod.Create(out _queryConfigParameter, CommandExecutor, CommandBuilder.GetQueryConfigParameterCommand, OutputParser.ParseQueryConfigParameterResult);
+			GitCliMethod.Create(out _addConfigValue,       CommandExecutor, CommandBuilder.GetAddConfigValueCommand,       OutputParser.HandleConfigResults);
+			GitCliMethod.Create(out _setConfigValue,       CommandExecutor, CommandBuilder.GetSetConfigValueCommand,       OutputParser.HandleConfigResults);
+			GitCliMethod.Create(out _unsetConfigValue,     CommandExecutor, CommandBuilder.GetUnsetConfigValueCommand,     OutputParser.HandleConfigResults);
+			GitCliMethod.Create(out _renameConfigSection,  CommandExecutor, CommandBuilder.GetRenameConfigSectionCommand,  OutputParser.HandleConfigResults);
+			GitCliMethod.Create(out _deleteConfigSection,  CommandExecutor, CommandBuilder.GetDeleteConfigSectionCommand,  OutputParser.HandleConfigResults);
 		}
+
+		#endregion
+
+		#region Properties
 
 		/// <summary>Returns provider of this accessor.</summary>
 		/// <value>Provider of this accessor</value>
@@ -63,10 +98,50 @@ namespace gitter.Git.AccessLayer.CLI
 			get { return _provider; }
 		}
 
-		public bool LogCLICalls
+		internal OutputParser OutputParser
+		{
+			get { return _outputParser; }
+		}
+
+		internal CommandBuilder CommandBuilder
+		{
+			get { return _commandBuilder; }
+		}
+
+		private ICommandExecutor CommandExecutor
+		{
+			get { return _executor; }
+		}
+
+		public string GitExecutablePath
+		{
+			get
+			{
+				if(_gitExePath == null)
+				{
+					if(AutodetectGitExePath)
+					{
+						_gitExePath = GitProcess.DetectGitExePath();
+					}
+					else
+					{
+						_gitExePath = ManualGitExePath;
+					}
+					GitProcess.GitExePath = _gitExePath;
+				}
+				return _gitExePath;
+			}
+		}
+
+		public bool LogCalls
 		{
 			get;
 			set;
+		}
+
+		public Encoding DefaultEncoding
+		{
+			get { return GitProcess.DefaultEncoding; }
 		}
 
 		public Version MinimumRequiredGitVersion
@@ -88,22 +163,24 @@ namespace gitter.Git.AccessLayer.CLI
 				if(_autodetectGitExePath != value)
 				{
 					_autodetectGitExePath = value;
-					GitProcess.UpdateGitExePath(this);
+					_gitExePath = null;
+					GitProcess.GitExePath = null;
 				}
 			}
 		}
 
 		public string ManualGitExePath
 		{
-			get { return _gitExePath; }
+			get { return _manualGitExePath; }
 			set
 			{
-				if(_gitExePath != value)
+				if(_manualGitExePath != value)
 				{
-					_gitExePath = value;
+					_manualGitExePath = value;
 					if(!AutodetectGitExePath)
 					{
-						GitProcess.UpdateGitExePath(this);
+						_gitExePath = value;
+						GitProcess.GitExePath = _gitExePath;
 					}
 				}
 			}
@@ -115,16 +192,67 @@ namespace gitter.Git.AccessLayer.CLI
 		{
 			get
 			{
-				if(_gitVersion == null)
+				var gitVersion = _gitVersion;
+				if(gitVersion == null)
 				{
-					_gitVersion = QueryVersion();
+					gitVersion = QueryVersion();
+					_gitVersion = gitVersion;
 				}
-				return _gitVersion;
+				return gitVersion;
 			}
 		}
 
+		/// <summary>Create an empty git repository or reinitialize an existing one.</summary>
+		public IGitAction<InitRepositoryParameters> InitRepository
+		{
+			get { return _init; }
+		}
+
+		/// <summary>Clone existing repository.</summary>
+		public IGitAction<CloneRepositoryParameters> CloneRepository
+		{
+			get { return _clone; }
+		}
+
+		public IGitFunction<QueryConfigParameters, IList<ConfigParameterData>> QueryConfig
+		{
+			get { return _queryConfig; }
+		}
+
+		public IGitFunction<QueryConfigParameterParameters, ConfigParameterData> QueryConfigParameter
+		{
+			get { return _queryConfigParameter; }
+		}
+
+		public IGitAction<AddConfigValueParameters> AddConfigValue
+		{
+			get { return _addConfigValue; }
+		}
+
+		public IGitAction<SetConfigValueParameters> SetConfigValue
+		{
+			get { return _setConfigValue; }
+		}
+
+		public IGitAction<UnsetConfigValueParameters> UnsetConfigValue
+		{
+			get { return _unsetConfigValue; }
+		}
+
+		public IGitAction<RenameConfigSectionParameters> RenameConfigSection
+		{
+			get { return _renameConfigSection; }
+		}
+
+		public IGitAction<DeleteConfigSectionParameters> DeleteConfigSection
+		{
+			get { return _deleteConfigSection; }
+		}
+
+		#endregion
+
 		/// <summary>Forces re-check of git version.</summary>
-		public void RefreshGitVersion()
+		public void InvalidateGitVersion()
 		{
 			_gitVersion = null;
 		}
@@ -133,7 +261,9 @@ namespace gitter.Git.AccessLayer.CLI
 		/// <returns>git version.</returns>
 		private Version QueryVersion()
 		{
-			var gitOutput = _executor.ExecCommand(new Command("--version"));
+			var gitOutput = CommandExecutor.ExecuteCommand(
+				new Command("--version"),
+				CommandExecutionFlags.None);
 			gitOutput.ThrowOnBadReturnCode();
 			var parser = new GitParser(gitOutput.Output);
 			return parser.ReadVersion();
@@ -152,123 +282,12 @@ namespace gitter.Git.AccessLayer.CLI
 			if(Directory.Exists(gitPath) || File.Exists(gitPath))
 			{
 				var executor = new RepositoryCommandExecutor(this, path);
-				var gitOutput = executor.ExecCommand(new RevParseCommand(RevParseCommand.GitDir()));
+				var gitOutput = executor.ExecuteCommand(
+					new RevParseCommand(RevParseCommand.GitDir()),
+					CommandExecutionFlags.None);
 				return gitOutput.ExitCode == 0;
 			}
 			return false;
-		}
-
-		/// <summary>Create an empty git repository or reinitialize an existing one.</summary>
-		/// <param name="parameters"><see cref="InitRepositoryParameters"/>.</param>
-		/// <exception cref="ArgumentNullException"><paramref name="parameters"/> == <c>null</c>.</exception>
-		public void InitRepository(InitRepositoryParameters parameters)
-		{
-			Verify.Argument.IsNotNull(parameters, "parameters");
-
-			var args = new List<CommandArgument>(3);
-			if(parameters.Bare)
-			{
-				args.Add(InitCommand.Bare());
-			}
-			if(!string.IsNullOrEmpty(parameters.Template))
-			{
-				args.Add(InitCommand.Template(parameters.Template));
-			}
-			var cmd = new InitCommand(args);
-			var executor = new RepositoryCommandExecutor(this, parameters.Path);
-			var output = executor.ExecCommand(cmd);
-			output.ThrowOnBadReturnCode();
-		}
-
-		/// <summary>Clone existing repository.</summary>
-		/// <param name="parameters"><see cref="CloneRepositoryParameters"/>.</param>
-		/// <exception cref="ArgumentNullException"><paramref name="parameters"/> == <c>null</c>.</exception>
-		public void CloneRepository(CloneRepositoryParameters parameters)
-		{
-			/*
-			 * git clone [--template=<template_directory>] [-l] [-s] [--no-hardlinks]
-			 * [-q] [-n] [--bare] [--mirror] [-o <name>] [-b <name>] [-u <upload-pack>]
-			 * [--reference <repository>] [--depth <depth>] [--recursive] [--] <repository> [<directory>]
-			*/
-			Verify.Argument.IsNotNull(parameters, "parameters");
-
-			var args = new List<CommandArgument>();
-
-			if(!string.IsNullOrEmpty(parameters.Template))
-			{
-				args.Add(CloneCommand.Template(parameters.Template));
-			}
-			if(parameters.NoCheckout)
-			{
-				args.Add(CloneCommand.NoCheckout());
-			}
-			if(parameters.Bare)
-			{
-				args.Add(CloneCommand.Bare());
-			}
-			if(parameters.Mirror)
-			{
-				args.Add(CloneCommand.Mirror());
-			}
-			if(!string.IsNullOrEmpty(parameters.RemoteName))
-			{
-				args.Add(CloneCommand.Origin(parameters.RemoteName));
-			}
-			if(parameters.Shallow)
-			{
-				args.Add(CloneCommand.Depth(parameters.Depth));
-			}
-			if(parameters.Recursive)
-			{
-				args.Add(CloneCommand.Recursive());
-			}
-			if(parameters.Monitor != null && GitFeatures.ProgressFlag.IsAvailableFor(this))
-			{
-				args.Add(CloneCommand.Progress());
-			}
-
-			args.Add(CloneCommand.NoMoreOptions());
-			args.Add(new PathCommandArgument(parameters.Url));
-			args.Add(new PathCommandArgument(parameters.Path));
-
-			var cmd = new CloneCommand(args);
-
-			if(!Directory.Exists(parameters.Path))
-			{
-				Directory.CreateDirectory(parameters.Path);
-			}
-			if(parameters.Monitor == null || !GitFeatures.ProgressFlag.IsAvailableFor(this))
-			{
-				var output = _executor.ExecCommand(cmd);
-				output.ThrowOnBadReturnCode();
-			}
-			else
-			{
-				using(var async = _executor.ExecAsync(cmd))
-				{
-					var mon = parameters.Monitor;
-					mon.Canceled += (sender, e) => async.Kill();
-					async.ErrorReceived += (sender, e) =>
-					{
-						if(e.Data != null && e.Data.Length != 0)
-						{
-							var parser = new GitParser(e.Data);
-							var progress = parser.ParseProgress();
-							progress.Notify(mon);
-						}
-						else
-						{
-							mon.SetProgressIndeterminate();
-						}
-					};
-					async.Start();
-					async.WaitForExit();
-					if(async.ExitCode != 0)
-					{
-						throw new GitException(async.StdErr);
-					}
-				}
-			}
 		}
 
 		/// <summary>Save parameters to the specified <paramref name="section"/>.</summary>
@@ -279,7 +298,7 @@ namespace gitter.Git.AccessLayer.CLI
 
 			section.SetValue("Path", ManualGitExePath);
 			section.SetValue("Autodetect", AutodetectGitExePath);
-			section.SetValue("LogCLICalls", LogCLICalls);
+			section.SetValue("LogCLICalls", LogCalls);
 			section.SetValue("EnableAnsiCodepageFallback", EnableAnsiCodepageFallback);
 		}
 
@@ -289,12 +308,12 @@ namespace gitter.Git.AccessLayer.CLI
 		{
 			Verify.Argument.IsNotNull(section, "section");
 
-			ManualGitExePath			= section.GetValue("Path", string.Empty);
-			AutodetectGitExePath		= section.GetValue("Autodetect", true);
-			LogCLICalls					= section.GetValue("LogCLICalls", false);
-			EnableAnsiCodepageFallback	= section.GetValue("EnableAnsiCodepageFallback", false);
+			ManualGitExePath           = section.GetValue("Path", string.Empty);
+			AutodetectGitExePath       = section.GetValue("Autodetect", true);
+			LogCalls                   = section.GetValue("LogCLICalls", false);
+			EnableAnsiCodepageFallback = section.GetValue("EnableAnsiCodepageFallback", false);
 
-			GitProcess.UpdateGitExePath(this);
+			GitProcess.GitExePath = GitExecutablePath;
 		}
 	}
 }

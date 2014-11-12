@@ -46,6 +46,7 @@ namespace gitter.Framework
 		private Section _globalSection;
 		private Section _viewsSection;
 		private Section _providersSection;
+		private Section _repositoryManagerSection;
 
 		private bool _isDisposed;
 
@@ -67,16 +68,21 @@ namespace gitter.Framework
 				}
 				catch(Exception exc)
 				{
+					if(exc.IsCritical())
+					{
+						throw;
+					}
 					LoggingService.Global.Error(exc);
 				}
 			}
 
-			_configuration		= LoadConfig(ConfigFileName, "Configuration");
-			_rootSection		= _configuration.RootSection;
-			_guiSection			= _rootSection.GetCreateSection("Gui");
-			_globalSection		= _rootSection.GetCreateSection("Global");
-			_viewsSection		= _rootSection.GetCreateSection("Tools");
-			_providersSection	= _rootSection.GetCreateSection("Providers");
+			_configuration            = LoadConfig(ConfigFileName, "Configuration");
+			_rootSection              = _configuration.RootSection;
+			_guiSection               = _rootSection.GetCreateSection("Gui");
+			_globalSection            = _rootSection.GetCreateSection("Global");
+			_viewsSection             = _rootSection.GetCreateSection("Tools");
+			_providersSection         = _rootSection.GetCreateSection("Providers");
+			_repositoryManagerSection = _rootSection.GetCreateSection("RepositoryManager");
 		}
 
 		~ConfigurationService()
@@ -124,6 +130,11 @@ namespace gitter.Framework
 		public Section ViewsSection
 		{
 			get { return _viewsSection; }
+		}
+
+		public Section RepositoryManagerSection
+		{
+			get { return _repositoryManagerSection; }
 		}
 
 		public Section GetSectionForProvider(IRepositoryProvider provider)
@@ -180,6 +191,10 @@ namespace gitter.Framework
 								}
 								catch(Exception exc)
 								{
+									if(exc.IsCritical())
+									{
+										throw;
+									}
 									LoggingService.Global.Error(exc);
 								}
 							}
@@ -188,10 +203,17 @@ namespace gitter.Framework
 				}
 				catch(Exception exc)
 				{
+					if(exc.IsCritical())
+					{
+						throw;
+					}
 					LoggingService.Global.Error(exc);
 				}
 			}
-			if(config == null) config = new ConfigurationManager(configName);
+			if(config == null)
+			{
+				config = new ConfigurationManager(configName);
+			}
 			return config;
 		}
 
@@ -207,6 +229,10 @@ namespace gitter.Framework
 			}
 			catch(Exception exc)
 			{
+				if(exc.IsCritical())
+				{
+					throw;
+				}
 				LoggingService.Global.Error(exc);
 			}
 		}

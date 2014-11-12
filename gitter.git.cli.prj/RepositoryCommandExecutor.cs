@@ -26,52 +26,65 @@ namespace gitter.Git.AccessLayer.CLI
 	using gitter.Framework.Services;
 
 	/// <summary>Executes commands for specific repository.</summary>
-	sealed class RepositoryCommandExecutor : ICommandExecutor
+	sealed class RepositoryCommandExecutor : CommandExecutorBase
 	{
+		#region Static
+
 		private static readonly LoggingService Log = new LoggingService("CLI");
 
-		private readonly GitCLI _gitCLI;
+		#endregion
+
+		#region Data
+
 		private readonly string _workingDirectory;
 
+		#endregion
+
+		#region .ctor
+
 		/// <summary>Initializes a new instance of the <see cref="RepositoryCommandExecutor"/> class.</summary>
+		/// <param name="cliOptionsProvider">CLI options provider.</param>
 		/// <param name="workingDirectory">Repository working directory.</param>
-		public RepositoryCommandExecutor(GitCLI gitCLI, string workingDirectory)
+		public RepositoryCommandExecutor(ICliOptionsProvider cliOptionsProvider, string workingDirectory)
+			: base(cliOptionsProvider)
 		{
-			Verify.Argument.IsNotNull(gitCLI, "gitCLI");
-			Verify.Argument.IsNotNull(workingDirectory, "workingDirectory");
+			Verify.Argument.IsNeitherNullNorWhitespace(workingDirectory, "workingDirectory");
 
-			_gitCLI = gitCLI;
-			_workingDirectory = workingDirectory;
+			_workingDirectory   = workingDirectory;
 		}
 
-		#region ICommandExecutor
+		#endregion
 
-		public GitOutput ExecCommand(Command command)
+		#region Properties
+
+		public string WorkingDirectory
 		{
-			if(_gitCLI.LogCLICalls) Log.Info("git {0}", command);
-			return GitProcess.Exec(
-				new GitInput(_workingDirectory, command, GitProcess.DefaultEncoding));
+			get { return _workingDirectory; }
 		}
 
-		public GitOutput ExecCommand(Command command, Encoding encoding)
+		#endregion
+
+		#region Overrides
+
+		protected override void OnCommandExecuting(Command command)
 		{
-			if(_gitCLI.LogCLICalls) Log.Info("git {0}", command);
-			return GitProcess.Exec(
-				new GitInput(_workingDirectory, command, encoding));
+			Assert.IsNotNull(command);
+
+			if(CliOptionsProvider.LogCalls)
+			{
+				Log.Info("git {0}", command);
+			}
 		}
 
-		public GitAsync ExecAsync(Command command)
+		protected override GitInput PrepareInput(Command command, Encoding encoding)
 		{
-			if(_gitCLI.LogCLICalls) Log.Info("git {0}", command);
-			return GitProcess.ExecAsync(
-				new GitInput(_workingDirectory, command, GitProcess.DefaultEncoding));
-		}
+			Assert.IsNotNull(command);
 
-		public GitAsync ExecAsync(Command command, Encoding encoding)
-		{
-			if(_gitCLI.LogCLICalls) Log.Info("git {0}", command);
-			return GitProcess.ExecAsync(
-				new GitInput(_workingDirectory, command, encoding));
+			if(encoding == null)
+			{
+				encoding = CliOptionsProvider.DefaultEncoding;
+			}
+			return new GitInput(WorkingDirectory, command, encoding);
 		}
 
 		#endregion

@@ -38,6 +38,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -47,13 +48,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\common\key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NHunspell">
+    <Reference Include="NHunspell, Version=1.1.1.0, Culture=neutral, PublicKeyToken=1ac793ea843b4366, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>Hunspell\NHunspell.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -73,22 +76,24 @@
     <Compile Include="..\shared\Verify.cs">
       <Link>Shared\Verify.cs</Link>
     </Compile>
-    <Compile Include="AsyncExecution\AsyncAction.cs" />
-    <Compile Include="AsyncExecution\AsyncActionContext.cs" />
-    <Compile Include="AsyncExecution\AsyncContext.cs" />
-    <Compile Include="AsyncExecution\AsyncFunc.cs" />
-    <Compile Include="AsyncExecution\AsyncFuncContext.cs" />
-    <Compile Include="AsyncExecution\IAsyncAction.cs" />
-    <Compile Include="AsyncExecution\IAsyncFunc.cs" />
-    <Compile Include="AsyncExecution\NullMonitor.cs" />
+    <Compile Include="AsyncDataBinding.cs" />
     <Compile Include="CachedResources.cs" />
     <Compile Include="Cache\CachedBrush.cs" />
     <Compile Include="ClipboardEx.cs" />
     <Compile Include="CLI\AsyncBytesReader.cs" />
     <Compile Include="CLI\AsyncTextReader.cs" />
+    <Compile Include="CLI\AsyncTextParser.cs" />
+    <Compile Include="CLI\StringTextSegment.cs" />
+    <Compile Include="CLI\CharArrayTextSegment.cs" />
     <Compile Include="CLI\IOutputReceiver.cs" />
+    <Compile Include="CLI\IParser.cs" />
+    <Compile Include="CLI\ITextSegment.cs" />
+    <Compile Include="CLI\NullReader.cs" />
+    <Compile Include="CLI\TextLineReceivedEventArgs.cs" />
+    <Compile Include="CLI\NotifyingAsyncTextReader.cs" />
     <Compile Include="CLI\ProcessExecutor.cs" />
-    <Compile Include="ComplexityMode.cs" />
+    <Compile Include="CLI\ProcessStartInfoExtensions.cs" />
+	 <Compile Include="ComplexityMode.cs" />
     <Compile Include="Controls\Button\CustomButtonAdapter.cs" />
     <Compile Include="Controls\Button\CustomButton.cs">
       <SubType>Component</SubType>
@@ -113,20 +118,54 @@
     <Compile Include="Controls\CustomListBox\DateColumnExtender.Designer.cs">
       <DependentUpon>DateColumnExtender.cs</DependentUpon>
     </Compile>
-    <Compile Include="DpiHelper.cs" />
+    <Compile Include="Controls\Dialogs\IRepositoryCloneDialog.cs" />
+    <Compile Include="Controls\Dialogs\IRepositoryInitDialog.cs" />
+    <Compile Include="Controls\Popup\CustomObjectPicker.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\Popup\IPicker.cs" />
+    <Compile Include="Controls\Views\WebBrowserView\WebBrowserViewModel.cs" />
+    <Compile Include="ExceptionExtensions.cs" />
+    <Compile Include="GraphicsUtility.cs" />
+	<Compile Include="DpiHelper.cs" />
     <Compile Include="GuiCommand.cs" />
+    <Compile Include="Hooks\LowLevelMouseHook.cs" />
+    <Compile Include="IProgress.cs" />
+    <Compile Include="Mvc\IUserInputErrorNotifier.cs" />
+    <Compile Include="Mvc\IUserInputSource.cs" />
+    <Compile Include="Mvc\IView.cs" />
+    <Compile Include="Mvc\IViewController.cs" />
+    <Compile Include="Mvc\MouseCursor.cs" />
+    <Compile Include="Mvc\ViewControllerBase.cs" />
+    <Compile Include="Mvc\WinForms\NumericUpDownInputSource.cs" />
+    <Compile Include="Mvc\WinForms\PickerInputSource.cs" />
+    <Compile Include="Mvc\WinForms\RadioButtonInputSource.cs" />
+    <Compile Include="Mvc\WinForms\CheckBoxInputSource.cs" />
+    <Compile Include="Mvc\WinForms\ControlInputSource.cs" />
+    <Compile Include="Mvc\WinForms\MouseCursorConverter.cs" />
+    <Compile Include="Mvc\WinForms\IWin32ControlInputSource.cs" />
+    <Compile Include="Mvc\UserInputError.cs" />
+    <Compile Include="Mvc\WinForms\RadioButtonGroupInputSource.cs" />
+    <Compile Include="Mvc\WinForms\TextBoxInputSource.cs" />
+    <Compile Include="Mvc\ViewExtensions.cs" />
+    <Compile Include="Mvc\WinForms\UserInputErrorNotifier.cs" />
     <Compile Include="Native\AnimationFlags.cs" />
     <Compile Include="Native\BITMAPINFOHEADER.cs" />
     <Compile Include="Native\COMBOBOXINFO.cs" />
     <Compile Include="Native\DCX.cs" />
+    <Compile Include="Native\DRAWTEXTPARAMS.cs" />
+    <Compile Include="Native\DT.cs" />
     <Compile Include="Native\DwmApi.cs" />
     <Compile Include="Native\DWMNCRP.cs" />
     <Compile Include="Native\DWMWA.cs" />
     <Compile Include="Native\Gdi32.cs" />
+    <Compile Include="Native\HookProc.cs" />
     <Compile Include="Native\Kernel32.cs" />
     <Compile Include="Native\MINMAXINFO.cs" />
+    <Compile Include="Native\MSLLHOOKSTRUCT.cs" />
     <Compile Include="Native\NativeUtility.cs" />
     <Compile Include="Native\NCCALCSIZE_PARAMS.cs" />
+    <Compile Include="Native\POINT.cs" />
     <Compile Include="Native\RECT.cs" />
     <Compile Include="Native\RedrawWindowFlags.cs" />
     <Compile Include="Native\Shell32.cs" />
@@ -134,10 +173,16 @@
     <Compile Include="Native\SHFILEINFO.cs" />
     <Compile Include="Native\User.cs" />
     <Compile Include="Native\User32.cs" />
+    <Compile Include="Native\WH.cs" />
     <Compile Include="Native\WINDOWPOS.cs" />
     <Compile Include="Native\WNDPROC.cs" />
     <Compile Include="Native\WVR.cs" />
-    <Compile Include="Options\EssentialOptionsPage.cs">
+    <Compile Include="Native\MOUSEHOOKSTRUCT.cs" />
+    <Compile Include="NullProgress.cs" />
+    <Compile Include="OperationProgress.cs" />
+    <Compile Include="Services\RepositoryManager\RepositoryGroupCollection.cs" />
+    <Compile Include="Services\RepositoryManager\RepositoryGroupEventArgs.cs" />
+	    <Compile Include="Options\EssentialOptionsPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Options\EssentialOptionsPage.Designer.cs">
@@ -374,7 +419,7 @@
     <Compile Include="Services\GdiTextRenderer.cs" />
     <Compile Include="Services\Gravatar\Gravatar.cs" />
     <Compile Include="IAvatar.cs" />
-    <Compile Include="IIssueTrackerProvider.cs" />
+    <Compile Include="IRepositoryServiceProvider.cs" />
     <Compile Include="Styles\MSVS2010StyleToolStripRenderer.cs" />
     <Compile Include="Options\SelectableFontManager.cs" />
     <Compile Include="Options\SpellingPage.cs">
@@ -556,7 +601,6 @@
     <Compile Include="Services\MessageBox\MessageBoxForm.Designer.cs">
       <DependentUpon>MessageBoxForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="AsyncExecution\IAsyncProgressMonitor.cs" />
     <Compile Include="IRepositoryGuiProvider.cs" />
     <Compile Include="Services\MessageBox\IMessageBoxService.cs" />
     <Compile Include="INamedObject.cs" />
@@ -598,10 +642,12 @@
     <Compile Include="Services\MessageBox\SystemMessageBoxService.cs" />
     <Compile Include="Styles\StyleType.cs" />
     <Compile Include="Styles\SystemStyleColors.cs" />
+    <Compile Include="TaskUtility.cs" />
     <Compile Include="Utility.cs" />
     <Compile Include="Win7Support\VistaPickFolderDialog.cs" />
     <Compile Include="Win7Support\ITaskbarList3.cs" />
     <Compile Include="Native\WM.cs" />
+    <Compile Include="Hooks\WindowsHook.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\CustomListBox\ColumnsDialog.resx">

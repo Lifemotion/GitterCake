@@ -170,8 +170,12 @@ namespace gitter.Framework
 						return false;
 					}
 				}
-				catch
+				catch(Exception exc)
 				{
+					if(exc.IsCritical())
+					{
+						throw;
+					}
 					return false;
 				}
 			}

@@ -33,24 +33,24 @@ namespace gitter.Git.AccessLayer.CLI
 		private readonly Command _command;
 		private readonly Encoding _encoding;
 		private IDictionary<string, string> _environment;
-		private IList<CommandArgument> _options;
+		private IList<ICommandArgument> _options;
 
 		#endregion
 
 		#region .ctor
 
-		public GitInput(IList<CommandArgument> options)
-			: this(null, null, GitProcess.DefaultEncoding, options)
+		public GitInput(IList<ICommandArgument> options)
+			: this(string.Empty, null, GitProcess.DefaultEncoding, options)
 		{
 		}
 
 		public GitInput(Command command)
-			: this(null, command, GitProcess.DefaultEncoding, null)
+			: this(string.Empty, command, GitProcess.DefaultEncoding, null)
 		{
 		}
 
 		public GitInput(Command command, Encoding encoding)
-			: this(null, command, encoding, null)
+			: this(string.Empty, command, encoding, null)
 		{
 		}
 
@@ -64,24 +64,27 @@ namespace gitter.Git.AccessLayer.CLI
 		{
 		}
 
-		public GitInput(string workingDirectory, IList<CommandArgument> options)
+		public GitInput(string workingDirectory, IList<ICommandArgument> options)
 			: this(workingDirectory, null, GitProcess.DefaultEncoding, options)
 		{
 		}
 
-		public GitInput(string workingDirectory, Command command, IList<CommandArgument> options)
+		public GitInput(string workingDirectory, Command command, IList<ICommandArgument> options)
 			: this(workingDirectory, command, GitProcess.DefaultEncoding, options)
 		{
 		}
 
-		public GitInput(string workingDirectory, Command command, Encoding encoding, IList<CommandArgument> options)
+		public GitInput(string workingDirectory, Command command, Encoding encoding, IList<ICommandArgument> options)
 		{
-			Verify.Argument.IsNotNull(encoding, "encoding");
+			if(encoding == null)
+			{
+				encoding = GitProcess.DefaultEncoding;
+			}
 
-			_workingDirectory = workingDirectory;
-			_command = command;
-			_options = options;
-			_encoding = encoding;
+			_workingDirectory = workingDirectory ?? string.Empty;
+			_command          = command;
+			_options          = options;
+			_encoding         = encoding;
 		}
 
 		#endregion
@@ -98,7 +101,7 @@ namespace gitter.Git.AccessLayer.CLI
 			get { return _encoding; }
 		}
 
-		public IList<CommandArgument> Options
+		public IList<ICommandArgument> Options
 		{
 			get { return _options; }
 			set { _options = value; }
@@ -124,14 +127,28 @@ namespace gitter.Git.AccessLayer.CLI
 			var sb = new StringBuilder();
 			if(_options != null && _options.Count != 0)
 			{
+				const char OptionSeparator = ' ';
+				bool first = true;
 				foreach(var opt in _options)
 				{
-					opt.GetArgument(sb);
+					if(opt == null)
+					{
+						continue;
+					}
+					if(!first)
+					{
+						sb.Append(OptionSeparator);
+					}
+					else
+					{
+						first = false;
+					}
+					opt.ToString(sb);
 				}
 			}
 			if(_command != null)
 			{
-				_command.GetCommand(sb);
+				_command.ToString(sb);
 			}
 			return sb.ToString();
 		}

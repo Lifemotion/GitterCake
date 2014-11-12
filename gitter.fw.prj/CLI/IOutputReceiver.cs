@@ -36,7 +36,11 @@ namespace gitter.Framework.CLI
 		/// <param name="reader">StreamReader to read from.</param>
 		void Initialize(Process process, StreamReader reader);
 
-		/// <summary>Closes the receiver.</summary>
-		void Close();
+		/// <summary>Notifies receiver that output is no longer required.</summary>
+		/// <remarks>Reader should still receive bytes, but disable any stream processing.</remarks>
+		void NotifyCanceled();
+
+		/// <summary>Waits for outpuit stream end.</summary>
+		void WaitForEndOfStream();
 	}
 }

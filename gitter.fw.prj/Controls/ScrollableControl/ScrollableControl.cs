@@ -231,7 +231,7 @@ namespace gitter.Framework.Controls
 		/// <summary>Horizontal scrollbar.</summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		protected IScrollBarWidget HScrollBar
+		public IScrollBarWidget HScrollBar
 		{
 			get { return _hScrollBar; }
 		}
@@ -239,7 +239,7 @@ namespace gitter.Framework.Controls
 		/// <summary>Vertical scrollbar.</summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		protected IScrollBarWidget VScrollBar
+		public IScrollBarWidget VScrollBar
 		{
 			get { return _vScrollBar; }
 		}
@@ -387,6 +387,16 @@ namespace gitter.Framework.Controls
 			{
 				_hScrollBar.Value = 0;
 			}
+		}
+
+		public void ScrollUp()
+		{
+			ScrollItems(1);
+		}
+
+		public void ScrollDown()
+		{
+			ScrollItems(-1);
 		}
 
 		/// <summary>Disable control redraw events.</summary>
@@ -1180,25 +1190,29 @@ namespace gitter.Framework.Controls
 		{
 			if(ClientRectangle.Contains(e.Location))
 			{
-				int lines = SystemInformation.MouseWheelScrollLines;
-				int scrollpos = VScrollPos;
-				if(lines < 0)
-				{
-					int h = VScrollAffectsClientArea ? ClientArea.Height : ContentArea.Height;
-					h = Math.Max(GetVScrollSmallChange(), h);
-					scrollpos -= h * Math.Sign(e.Delta);
-				}
-				else
-				{
-					scrollpos -= GetVScrollSmallChange() * Math.Sign(e.Delta) * lines;
-				}
-				scrollpos = ClampScrollPosition(scrollpos, MaxVScrollPos);
-				scrollpos = TransformVScrollPos(scrollpos);
-				_vScrollBar.Value = scrollpos;
-
+				ScrollItems(e.Delta);
 				UpdateHover(e.X, e.Y);
 			}
 			base.OnMouseWheel(e);
+		}
+
+		private void ScrollItems(int delta)
+		{
+			int lines = SystemInformation.MouseWheelScrollLines;
+			int scrollpos = VScrollPos;
+			if(lines < 0)
+			{
+				int h = VScrollAffectsClientArea ? ClientArea.Height : ContentArea.Height;
+				h = Math.Max(GetVScrollSmallChange(), h);
+				scrollpos -= h * Math.Sign(delta);
+			}
+			else
+			{
+				scrollpos -= GetVScrollSmallChange() * Math.Sign(delta) * lines;
+			}
+			scrollpos = ClampScrollPosition(scrollpos, MaxVScrollPos);
+			scrollpos = TransformVScrollPos(scrollpos);
+			_vScrollBar.Value = scrollpos;
 		}
 
 		protected override void OnResize(EventArgs e)

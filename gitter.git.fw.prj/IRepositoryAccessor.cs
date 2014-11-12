@@ -20,172 +20,241 @@
 
 namespace gitter.Git.AccessLayer
 {
-	using System;
 	using System.Collections.Generic;
 
 	/// <summary>Interface of repository accessor object.</summary>
-	public interface IRepositoryAccessor :
-		IIndexAccessor,
-		IBranchAccessor,
-		ITagAccessor,
-		IStashAccessor,
-		INotesAccessor,
-		IRemoteAccessor,
-		ISubmoduleAccessor,
-		ITreeAccessor,
-		IConfigAccessor
+	public interface IRepositoryAccessor : IConfigAccessor
 	{
 		/// <summary>Returns git accessor.</summary>
 		/// <value>git accessor.</value>
 		IGitAccessor GitAccessor { get; }
 
+		/// <summary>Add file to index.</summary>
+		IGitAction<AddFilesParameters> AddFiles { get; }
+
+		/// <summary>Add remote repository.</summary>
+		IGitAction<AddRemoteParameters> AddRemote { get; }
+
+		/// <summary>Add new submodule.</summary>
+		IGitAction<AddSubmoduleParameters> AddSubmodule { get; }
+
+		/// <summary>Append new note to object.</summary>
+		IGitAction<AppendNoteParameters> AppendNote { get; }
+
+		/// <summary>Apply patches to working directory and/or index.</summary>
+		IGitAction<ApplyPatchParameters> ApplyPatch { get; }
+
 		/// <summary>Create an archive of files from a named tree.</summary>
-		/// <param name="parameters"><see cref="ArchiveParameters"/>.</param>
-		/// <exception cref="ArgumentNullException"><paramref name="parameters"/> == <c>null</c>.</exception>
-		void Archive(ArchiveParameters parameters);
+		IGitAction<ArchiveParameters> Archive { get; }
 
-		/// <summary>Get symbolic reference target.</summary>
-		/// <param name="parameters"><see cref="QuerySymbolicReferenceParameters"/>.</param>
-		/// <returns>Symbolic reference data.</returns>
-		/// <exception cref="T:System.ArgumentNullException"><paramref name="parameters"/> == <c>null</c>.</exception>
-		SymbolicReferenceData QuerySymbolicReference(QuerySymbolicReferenceParameters parameters);
-
-		/// <summary>Get referenced revision.</summary>
-		/// <param name="parameters"><see cref="DereferenceParameters"/>.</param>
-		/// <returns>Corresponding <see cref="RevisionData"/>.</returns>
-		/// <exception cref="T:System.ArgumentNullException"><paramref name="parameters"/> == <c>null</c>.</exception>
-		RevisionData Dereference(DereferenceParameters parameters);
-
-		///	<summary>Describes revision with tag.</summary>
-		/// <param name="parameters"><see cref="DescribeParameters"/>.</param>
-		/// <returns>Tag name.</returns>
-		/// <exception cref="T:System.ArgumentNullException"><paramref name="parameters"/> == <c>null</c>.</exception>
-		string Describe(DescribeParameters parameters);
-
-		/// <summary>Get contents of requested objects.</summary>
-		/// <param name="parameters"><see cref="QueryObjectsParameters"/>.</param>
-		/// <returns>Objects contents.</returns>
-		/// <exception cref="T:System.ArgumentNullException"><paramref name="parameters"/> == <c>null</c>.</exception>
-		string QueryObjects(QueryObjectsParameters parameters);
-
-		/// <summary>Get list of references.</summary>
-		/// <param name="parameters"><see cref="QueryReferencesParameters"/>.</param>
-		/// <returns>Lists of references.</returns>
-		/// <exception cref="T:System.ArgumentNullException"><paramref name="parameters"/> == <c>null</c>.</exception>
-		ReferencesData QueryReferences(QueryReferencesParameters parameters);
-
-		/// <summary>Get revision list.</summary>
-		/// <param name="parameters"><see cref="QueryRevisionsParameters"/>.</param>
-		/// <returns>List of revisions.</returns>
-		/// <exception cref="T:System.ArgumentNullException"><paramref name="parameters"/> == <c>null</c>.</exception>
-		IList<RevisionData> QueryRevisions(QueryRevisionsParameters parameters);
-
-		/// <summary>Get revision graph.</summary>
-		/// <param name="parameters"><see cref="QueryRevisionsParameters"/>.</param>
-		/// <returns>Revision graph.</returns>
-		IList<RevisionGraphData> QueryRevisionGraph(QueryRevisionsParameters parameters);
-
-		/// <summary>Get reflog.</summary>
-		/// <param name="parameters"><see cref="QueryReflogParameters"/>.</param>
-		/// <returns>List of reflog records.</returns>
-		/// <exception cref="T:System.ArgumentNullException"><paramref name="parameters"/> == <c>null</c>.</exception>
-		IList<ReflogRecordData> QueryReflog(QueryReflogParameters parameters);
-		
-		/// <summary>Get revision information.</summary>
-		/// <param name="parameters"><see cref="QueryRevisionParameters"/>.</param>
-		/// <returns>Revision data.</returns>
-		RevisionData QueryRevision(QueryRevisionParameters parameters);
-
-		/// <summary>Get user list.</summary>
-		/// <param name="parameters"><see cref="QueryUsersParameters"/>.</param>
-		/// <returns>List of committers and authors.</returns>
-		/// <exception cref="T:System.ArgumentNullException"><paramref name="parameters"/> == <c>null</c>.</exception>
-		IList<UserData> QueryUsers(QueryUsersParameters parameters);
+		/// <summary>Remove untracked files from the working tree.</summary>
+		IGitAction<CleanFilesParameters> CleanFiles { get; }
 
 		/// <summary>Checkout branch/revision.</summary>
-		/// <param name="parameters"><see cref="CheckoutParameters"/>.</param>
-		/// <exception cref="T:System.ArgumentNullException"><paramref name="parameters"/> == <c>null</c>.</exception>
-		void Checkout(CheckoutParameters parameters);
+		IGitAction<CheckoutParameters> Checkout { get; }
 
-		/// <summary>Reset HEAD and/or index.</summary>
-		/// <param name="parameters"><see cref="ResetParameters"/>.</param>
-		/// <exception cref="T:System.ArgumentNullException"><paramref name="parameters"/> == <c>null</c>.</exception>
-		void Reset(ResetParameters parameters);
+		/// <summary>Checkout files from tree object to working directory.</summary>
+		IGitAction<CheckoutFilesParameters> CheckoutFiles { get; }
 
 		/// <summary>Performs a cherry-pick operation.</summary>
-		/// <param name="parameters"><see cref="CherryPickParameters"/>.</param>
-		/// <exception cref="T:System.ArgumentNullException"><paramref name="parameters"/> == <c>null</c>.</exception>
-		/// <exception cref="T:gitter.Git.HaveConflictsException">Conflicted files are present, cherry-pick is not possible.</exception>
-		/// <exception cref="T:gitter.Git.CommitIsMergeException">Specified revision is a merge, cherry-pick cannot be performed on merges.</exception>
-		/// <exception cref="T:gitter.Git.HaveLocalChangesException">Dirty working directory, unable to cherry-pick.</exception>
-		/// <exception cref="T:gitter.Git.CherryPickIsEmptyException">Resulting cherry-pick is empty.</exception>
-		/// <exception cref="T:gitter.Git.AutomaticCherryPickFailedException">Cherry-pick was not finished because of conflicts.</exception>
-		void CherryPick(CherryPickParameters parameters);
+		IGitAction<CherryPickParameters> CherryPick { get; }
 
-		/// <summary>Performs a cherry-pick operation.</summary>
-		/// <param name="control">Sequencer command to execute.</param>
-		void CherryPick(CherryPickControl control);
+		/// <summary>Commit changes.</summary>
+		IGitAction<CommitParameters> Commit { get; }
 
-		/// <summary>Performs a revert operation.</summary>
-		/// <param name="parameters"><see cref="RevertParameters"/>.</param>
-		/// <exception cref="T:System.ArgumentNullException"><paramref name="parameters"/> == <c>null</c>.</exception>
-		/// <exception cref="T:gitter.Git.HaveConflictsException">Conflicted files are present, revert is not possible.</exception>
-		/// <exception cref="T:gitter.Git.CommitIsMergeException">Specified revision is a merge, revert cannot be performed on merges.</exception>
-		/// <exception cref="T:gitter.Git.HaveLocalChangesException">Dirty working directory, unable to revert.</exception>
-		void Revert(RevertParameters parameters);
+		/// <summary>Calculate object count.</summary>
+		IGitFunction<CountObjectsParameters, ObjectCountData> CountObjects { get; }
 
-		/// <summary>Executes revert sequencer subcommand.</summary>
-		/// <param name="control">Operation to execute.</param>
-		void Revert(RevertControl control);
+		/// <summary>Create local branch.</summary>
+		IGitAction<CreateBranchParameters> CreateBranch { get; }
 
-		/// <summary>Forward-port local commits to the updated upstream head.</summary>
-		/// <param name="parameters"><see cref="RebaseParameters"/>.</param>
-		/// <exception cref="ArgumentNullException"><paramref name="parameters"/> == <c>null</c>.</exception>
-		void Rebase(RebaseParameters parameters);
+		/// <summary>Create new tag object.</summary>
+		IGitAction<CreateTagParameters> CreateTag { get; }
 
-		/// <summary>Control rebase process.</summary>
-		/// <param name="control">Rebase control option.</param>
-		void Rebase(RebaseControl control);
+		/// <summary>Remove local branch.</summary>
+		IGitAction<DeleteBranchParameters> DeleteBranch { get; }
 
-		/// <summary>Prepare merge message.</summary>
-		/// <param name="parameters"><see cref="FormatMergeMessageParameters"/>.</param>
-		/// <returns>Merge message.</returns>
-		/// <exception cref="T:System.ArgumentNullException"><paramref name="parameters"/> == <c>null</c>.</exception>
-		string FormatMergeMessage(FormatMergeMessageParameters parameters);
+		/// <summary>Delete tag.</summary>
+		IGitAction<DeleteTagParameters> DeleteTag { get; }
 
-		/// <summary>Merge development histories together.</summary>
-		/// <param name="parameters"><see cref="MergeParameters"/>.</param>
-		/// <exception cref="T:System.ArgumentNullException"><paramref name="parameters"/> == <c>null</c>.</exception>
-		/// <exception cref="T:gitter.Git.AutomaticMergeFailedException">Merge resulted in conflicts.</exception>
-		void Merge(MergeParameters parameters);
+		/// <summary>Dereference valid ref.</summary>
+		IGitFunction<DereferenceParameters, RevisionData> Dereference { get; }
 
-		/// <summary>Get patch representing changes made by specified commit.</summary>
-		/// <param name="parameters"><see cref="QueryRevisionDiffParameters"/>.</param>
-		/// <returns>Patch, representing changes made by specified commit.</returns>
-		/// <exception cref="T:System.ArgumentNullException"><paramref name="parameters"/> == <c>null</c>.</exception>
-		string QueryRevisionPatch(QueryRevisionDiffParameters parameters);
+		/// <summary>Describe revision.</summary>
+		IGitFunction<DescribeParameters, string> Describe { get; }
 
-		/// <summary>Get <see cref="Diff"/>, representing changes made by specified commit.</summary>
-		/// <param name="parameters"><see cref="QueryRevisionDiffParameters"/>.</param>
-		/// <returns><see cref="Diff"/>, representing changes made by specified commit.</returns>
-		/// <exception cref="T:System.ArgumentNullException"><paramref name="parameters"/> == <c>null</c>.</exception>
-		Diff QueryRevisionDiff(QueryRevisionDiffParameters parameters);
+		/// <summary>Download objects and refs from another repository.</summary>
+		IGitAction<FetchParameters> Fetch { get; }
 
-		/// <summary>Get <see cref="Diff"/>, representing difference between specified objects.</summary>
-		/// <param name="parameters"><see cref="QueryDiffParameters"/>.</param>
-		/// <returns><see cref="Diff"/>, representing difference between requested objects.</returns>
-		/// <exception cref="T:System.ArgumentNullException"><paramref name="parameters"/> == <c>null</c>.</exception>
-		Diff QueryDiff(QueryDiffParameters parameters);
-
-		/// <summary>Get <see cref="BlameFile"/>, annotating each line of file with commit information.</summary>
-		/// <param name="parameters"><see cref="QueryBlameParameters"/>.</param>
-		/// <returns><see cref="BlameFile"/>, annotating each line of file with commit information.</returns>
-		/// <exception cref="T:System.ArgumentNullException"><paramref name="parameters"/> == <c>null</c>.</exception>
-		BlameFile QueryBlame(QueryBlameParameters parameters);
+		/// <summary>Formats merge message using commit messages.</summary>
+		IGitFunction<FormatMergeMessageParameters, string> FormatMergeMessage { get; }
 
 		/// <summary>Cleanup unnecessary files and optimize the local repository.</summary>
-		/// <param name="parameters"><see cref="GarbageCollectParameters"/>.</param>
-		/// <exception cref="T:System.ArgumentNullException"><paramref name="parameters"/> == <c>null</c>.</exception>
-		void GarbageCollect(GarbageCollectParameters parameters);
+		IGitAction<GarbageCollectParameters> GarbageCollect { get; }
+
+		/// <summary>Merge development histories together.</summary>
+		IGitAction<MergeParameters> Merge { get; }
+
+		/// <summary>Remove stale remote tracking branches.</summary>
+		IGitAction<PruneRemoteParameters> PruneRemote { get; }
+
+		/// <summary>Download objects and refs from another repository and merge with local branches configured for this.</summary>
+		IGitAction<PullParameters> Pull { get; }
+
+		/// <summary>Update remote refs along with associated objects.</summary>
+		IGitFunction<PushParameters, IList<ReferencePushResult>> Push { get; }
+
+		/// <summary>Annotate each line of file with commit information.</summary>
+		IGitFunction<QueryBlameParameters, BlameFile> QueryBlame { get; }
+
+		/// <summary>Queries the BLOB bytes.</summary>
+		IGitFunction<QueryBlobBytesParameters, byte[]> QueryBlobBytes { get; }
+
+		/// <summary>Check if branch exists and get its position.</summary>
+		IGitFunction<QueryBranchParameters, BranchData> QueryBranch { get; }
+
+		/// <summary>Query branch list.</summary>
+		IGitFunction<QueryBranchesParameters, BranchesData> QueryBranches { get; }
+
+		/// <summary>Get list of stale remote tracking branches that are subject to pruninig.</summary>
+		IGitFunction<PruneRemoteParameters, IList<string>> QueryBranchesToPrune { get; }
+
+		/// <summary>Get <see cref="Diff"/>, representing difference between specified objects.</summary>
+		IGitFunction<QueryDiffParameters, Diff> QueryDiff { get; }
+
+		/// <summary>Get the list of files that can be added.</summary>
+		IGitFunction<AddFilesParameters, IList<TreeFileData>> QueryFilesToAdd { get; }
+
+		/// <summary>Get list of files which will be removed by a remove files call.</summary>
+		IGitFunction<RemoveFilesParameters, IList<string>> QueryFilesToRemove { get; }
+
+		/// <summary>Get list of files and directories which will be removed by a clean call.</summary>
+		IGitFunction<CleanFilesParameters, IList<string>> QueryFilesToClean { get; }
+
+		/// <summary>Get list of all note objects.</summary>
+		IGitFunction<QueryNotesParameters, IList<NoteData>> QueryNotes { get; }
+
+		/// <summary>Get contents of requested objects.</summary>
+		IGitFunction<QueryObjectsParameters, string> QueryObjects { get; }
+
+		/// <summary>Get revision information.</summary>
+		IGitFunction<QueryRevisionParameters, RevisionData> QueryRevision { get; }
+
+		/// <summary>Get revision list.</summary>
+		IGitFunction<QueryRevisionsParameters, IList<RevisionData>> QueryRevisions { get; }
+
+		/// <summary>Get <see cref="Diff"/>, representing changes made by specified commit.</summary>
+		IGitFunction<QueryRevisionDiffParameters, Diff> QueryRevisionDiff { get; }
+
+		/// <summary>Get revision graph.</summary>
+		IGitFunction<QueryRevisionsParameters, IList<RevisionGraphData>> QueryRevisionGraph { get; }
+
+		/// <summary>Get patch representing changes made by specified commit.</summary>
+		IGitFunction<QueryRevisionDiffParameters, byte[]> QueryRevisionPatch { get; }
+
+		/// <summary>Get list of references.</summary>
+		IGitFunction<QueryReferencesParameters, ReferencesData> QueryReferences { get; }
+
+		/// <summary>Get reference reflog.</summary>
+		IGitFunction<QueryReflogParameters, IList<ReflogRecordData>> QueryReflog { get; }
+
+		/// <summary>Get information about remote.</summary>
+		IGitFunction<QueryRemoteParameters, RemoteData> QueryRemote { get; }
+
+		/// <summary>Get list of references on remote repository.</summary>
+		IGitFunction<QueryRemoteReferencesParameters, IList<RemoteReferenceData>> QueryRemoteReferences { get; }
+
+		/// <summary>Query list of remotes.</summary>
+		IGitFunction<QueryRemotesParameters, IList<RemoteData>> QueryRemotes { get; }
+
+		/// <summary>Query all stashed states.</summary>
+		IGitFunction<QueryStashParameters, IList<StashedStateData>> QueryStash { get; }
+
+		/// <summary>Get patch representing stashed changes.</summary>
+		IGitFunction<QueryRevisionDiffParameters, byte[]> QueryStashPatch { get; }
+
+		/// <summary>Query most recent stashed state.</summary>
+		IGitFunction<QueryStashTopParameters, RevisionData> QueryStashTop { get; }
+
+		/// <summary>Get patch representing stashed changes.</summary>
+		IGitFunction<QueryRevisionDiffParameters, Diff> QueryStashDiff { get; }
+
+		/// <summary>Get working directory status information.</summary>
+		IGitFunction<QueryStatusParameters, StatusData> QueryStatus { get; }
+
+		/// <summary>Get symbolic reference target.</summary>
+		IGitFunction<QuerySymbolicReferenceParameters, SymbolicReferenceData> QuerySymbolicReference { get; }
+
+		/// <summary>Get objects contained in a tree.</summary>
+		IGitFunction<QueryTreeContentParameters, IList<TreeContentData>> QueryTreeContent { get; }
+
+		/// <summary>Check if tag exists and get its position.</summary>
+		IGitFunction<QueryTagParameters, TagData> QueryTag { get; }
+
+		/// <summary>Query tag message.</summary>
+		IGitFunction<QueryTagMessageParameters, string> QueryTagMessage { get; }
+
+		/// <summary>Query tag list.</summary>
+		IGitFunction<QueryTagsParameters, IList<TagData>> QueryTags { get; }
+
+		/// <summary>Get user list.</summary>
+		IGitFunction<QueryUsersParameters, IList<UserData>> QueryUsers { get; }
+
+		/// <summary>Remove file from index and/or working directory.</summary>
+		IGitAction<RemoveFilesParameters> RemoveFiles { get; }
+
+		/// <summary>Remove reference on remote repository.</summary>
+		IGitAction<RemoveRemoteReferencesParameters> RemoveRemoteReferences { get; }
+
+		/// <summary>Forward-port local commits to the updated upstream head.</summary>
+		IGitAction<RebaseParameters> Rebase { get; }
+
+		/// <summary>Remove remote repository.</summary>
+		IGitAction<RemoveRemoteParameters> RemoveRemote { get; }
+
+		/// <summary>Rename local branch.</summary>
+		IGitAction<RenameBranchParameters> RenameBranch { get; }
+
+		/// <summary>Rename remote repository.</summary>
+		IGitAction<RenameRemoteParameters> RenameRemote { get; }
+
+		/// <summary>Reset HEAD.</summary>
+		IGitAction<ResetParameters> Reset { get; }
+
+		/// <summary>Resets files.</summary>
+		IGitAction<ResetFilesParameters> ResetFiles { get; }
+
+		/// <summary>Reset local branch.</summary>
+		IGitAction<ResetBranchParameters> ResetBranch { get; }
+
+		/// <summary>Performs a revert operation.</summary>
+		IGitAction<RevertParameters> Revert { get; }
+
+		/// <summary>Run merge tool to resolve conflicts.</summary>
+		IGitAction<RunMergeToolParameters> RunMergeTool { get; }
+
+		/// <summary>Apply stashed changes and do not remove stashed state.</summary>
+		IGitAction<StashApplyParameters> StashApply { get; }
+
+		/// <summary>Remove stashed state.</summary>
+		IGitAction<StashDropParameters> StashDrop { get; }
+
+		/// <summary>Clear stash.</summary>
+		IGitAction<StashClearParameters> StashClear { get; }
+
+		/// <summary>Apply stashed changes and remove stashed state.</summary>
+		IGitAction<StashPopParameters> StashPop { get; }
+
+		/// <summary>Stash changes in working directory.</summary>
+		IGitFunction<StashSaveParameters, bool> StashSave { get; }
+
+		/// <summary>Create new branch, checkout that branch and pop stashed state.</summary>
+		IGitAction<StashToBranchParameters> StashToBranch { get; }
+
+		/// <summary>Updates submodule.</summary>
+		IGitAction<SubmoduleUpdateParameters> UpdateSubmodule { get; }
+
+		/// <summary>Verify tags GPG signatures.</summary>
+		IGitAction<VerifyTagsParameters> VerifyTags { get; }
 	}
 }

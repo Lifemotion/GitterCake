@@ -1,7 +1,7 @@
 #region Copyright Notice
 /*
  * gitter - VCS repository management tool
- * Copyright (C) 2013  Popovskiy Maxim Vladimirovitch <amgine.gitter@gmail.com>
+ * Copyright (C) 2014  Popovskiy Maxim Vladimirovitch <amgine.gitter@gmail.com>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,10 @@ namespace gitter.Git
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Threading;
+	using System.Threading.Tasks;
+
+	using gitter.Framework;
 
 	public abstract class BaseRemoteReference : IRemoteReference
 	{
@@ -41,17 +45,16 @@ namespace gitter.Git
 
 		private readonly RemoteReferencesCollection _refs;
 		private readonly string _name;
-		private readonly string _hash;
+		private readonly Hash _hash;
 
 		private bool _deleted;
 
 		#endregion
 
-		internal BaseRemoteReference(RemoteReferencesCollection refs, string name, string hash)
+		internal BaseRemoteReference(RemoteReferencesCollection refs, string name, Hash hash)
 		{
 			Verify.Argument.IsNotNull(refs, "refs");
 			Verify.Argument.IsNeitherNullNorWhitespace(name, "name");
-			Verify.Argument.IsNeitherNullNorWhitespace(hash, "hash");
 
 			_refs = refs;
 			_name = name;
@@ -60,16 +63,38 @@ namespace gitter.Git
 
 		protected abstract void DeleteCore();
 
+		protected abstract Task DeleteCoreAsync(IProgress<OperationProgress> progress, CancellationToken cancellationToken);
+
 		public void Delete()
 		{
 			DeleteCore();
 			MarkAsDeleted();
 		}
 
+		public Task DeleteAsync(IProgress<OperationProgress> progress, CancellationToken cancellationToken)
+		{
+			return DeleteCoreAsync(progress, cancellationToken)
+				.ContinueWith(
+				t =>
+				{
+					if(t.IsCompleted)
+					{
+						MarkAsDeleted();
+					}
+					TaskUtility.PropagateFaultedStates(t);
+				},
+				CancellationToken.None,
+				TaskContinuationOptions.ExecuteSynchronously,
+				TaskScheduler.Default);
+		}
+
 		public void MarkAsDeleted()
 		{
-			_deleted = true;
-			InvokeDeleted();
+			if(!_deleted)
+			{
+				_deleted = true;
+				InvokeDeleted();
+			}
 		}
 
 		public bool IsDeleted
@@ -98,9 +123,9 @@ namespace gitter.Git
 			{
 				switch(ReferenceType)
 				{
-					case Git.ReferenceType.LocalBranch:
+					case ReferenceType.LocalBranch:
 						return GitConstants.LocalBranchPrefix + _name;
-					case Git.ReferenceType.Tag:
+					case ReferenceType.Tag:
 						return GitConstants.TagPrefix + _name;
 					default:
 						return _name;
@@ -108,7 +133,7 @@ namespace gitter.Git
 			}
 		}
 
-		public string Hash
+		public Hash Hash
 		{
 			get { return _hash; }
 		}
