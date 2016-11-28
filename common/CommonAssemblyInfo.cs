@@ -24,11 +24,11 @@ using System.Reflection;
 
 [assembly: AssemblyCompany("amgine")]
 [assembly: AssemblyProduct("GitterCake")]
-[assembly: AssemblyCopyright("Copyright © amgine 2012")]
+[assembly: AssemblyCopyright("Copyright © amgine 2012, Lifemotion 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
 [assembly: CLSCompliant(true)]
 
-[assembly: AssemblyFileVersion("1.0.14.0")]
-[assembly: AssemblyVersion("1.0.14.0")] 
+[assembly: AssemblyFileVersion("0.5.1")]
+[assembly: AssemblyVersion("0.5.1")] 
