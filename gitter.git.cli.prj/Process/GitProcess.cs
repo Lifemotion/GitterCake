@@ -74,7 +74,7 @@ namespace gitter.Git.AccessLayer.CLI
 						return realGitExe;
 					}
 				}
-				return gitExeFullPath;
+				//return gitExeFullPath;
 			}
 			string gitCmdFullPath = GetFullPath(GitCmd);
 			if(!string.IsNullOrWhiteSpace(gitCmdFullPath))

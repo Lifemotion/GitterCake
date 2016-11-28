@@ -1,7 +1,10 @@
-
-*.cache
+output
+debug
+release
+install
 bin
 obj
+*.cache
 *.tss
 *.suo
 *.user
