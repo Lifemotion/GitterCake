@@ -865,11 +865,7 @@
     <EmbeddedResource Include="Controls\ListBoxes\Extenders\UserColumnExtender.resx">
       <DependentUpon>UserColumnExtender.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.ru-RU.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.ru-RU.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
+
     <EmbeddedResource Include="Views\BlameView.resx">
       <DependentUpon>BlameView.cs</DependentUpon>
     </EmbeddedResource>

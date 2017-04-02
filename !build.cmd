@@ -1,3 +1,5 @@
-tools\vs-build-all.exe -release *
-
-pause
+@echo Building gitter...
+@set MSBUILD=%SYSTEMROOT%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe /verbosity:minimal /nologo
+@if exist "output\Release" @rd /s /q "output\Release"
+@%MSBUILD% GitterCake.sln /p:Configuration=release %*
+@pause
