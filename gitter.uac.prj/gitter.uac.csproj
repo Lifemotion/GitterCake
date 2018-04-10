@@ -35,7 +35,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>gitter.UAC.Program</StartupObject>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>..\common\key.snk</AssemblyOriginatorKeyFile>
     <ApplicationManifest>gitter.uac.manifest</ApplicationManifest>
   </PropertyGroup>

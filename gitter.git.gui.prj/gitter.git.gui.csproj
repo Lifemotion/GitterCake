@@ -49,7 +49,7 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>..\common\key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
@@ -865,7 +865,6 @@
     <EmbeddedResource Include="Controls\ListBoxes\Extenders\UserColumnExtender.resx">
       <DependentUpon>UserColumnExtender.cs</DependentUpon>
     </EmbeddedResource>
-
     <EmbeddedResource Include="Views\BlameView.resx">
       <DependentUpon>BlameView.cs</DependentUpon>
     </EmbeddedResource>

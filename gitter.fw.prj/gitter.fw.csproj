@@ -49,7 +49,7 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>..\common\key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
@@ -643,7 +643,6 @@
     <EmbeddedResource Include="Options\EssentialOptionsPage.resx">
       <DependentUpon>EssentialOptionsPage.cs</DependentUpon>
     </EmbeddedResource>
-
     <EmbeddedResource Include="Services\MessageBox\MessageBoxForm.resx">
       <DependentUpon>MessageBoxForm.cs</DependentUpon>
     </EmbeddedResource>

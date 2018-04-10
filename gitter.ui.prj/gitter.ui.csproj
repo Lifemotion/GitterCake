@@ -54,7 +54,7 @@
   <PropertyGroup>
     <StartupObject>gitter.Program</StartupObject>
     <ApplicationIcon>app.ico</ApplicationIcon>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>..\common\key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup />
@@ -210,7 +210,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-
   </ItemGroup>
   <ItemGroup>
     <None Include="..\common\key.snk">
